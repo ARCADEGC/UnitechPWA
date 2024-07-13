@@ -4,7 +4,15 @@ export const userRoleEnum = pgEnum("user_role_enum", ["ADMIN", "USER"]);
 
 export const order = pgTable("order", {
     id: uuid("id").unique().notNull().defaultRandom().primaryKey(),
+    name: text("name").notNull(),
     content: json("content"),
+    secretMessage: text("secret_message").notNull(),
+    author: uuid("author")
+        .notNull()
+        .references(() => User.id, {
+            onDelete: "cascade",
+            onUpdate: "restrict",
+        }),
 });
 
 export const User = pgTable("user", {

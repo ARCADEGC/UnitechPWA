@@ -34,16 +34,14 @@ async function Header() {
                 <nav>
                     <ul className="flex gap-x-6">
                         {!currentUser && (
-                            <>
-                                <li>
-                                    <Button
-                                        variant={"outline"}
-                                        asChild
-                                    >
-                                        <Link href={"/login"}>Login</Link>
-                                    </Button>
-                                </li>
-                            </>
+                            <li>
+                                <Button
+                                    variant={"outline"}
+                                    asChild
+                                >
+                                    <Link href={"/login"}>Login</Link>
+                                </Button>
+                            </li>
                         )}
                     </ul>
                 </nav>
