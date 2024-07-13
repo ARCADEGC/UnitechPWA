@@ -39,3 +39,9 @@ next-env.d.ts
 
 # Million Lint
 .million
+
+# Serwist
+public/sw.js
+
+# Storybook
+*storybook.log
