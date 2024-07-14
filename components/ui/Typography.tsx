@@ -79,7 +79,7 @@ const Typography = React.forwardRef<HTMLElement, TypographyProps>(
         },
         ref,
     ) => {
-        const Comp = asChild ? Slot : as ?? variantToTag[variant];
+        const Comp = asChild ? Slot : (as ?? variantToTag[variant]);
 
         return (
             <Comp
