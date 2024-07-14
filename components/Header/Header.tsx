@@ -10,6 +10,7 @@ import { Typography } from "@/components/ui/Typography";
 import { Button } from "@/components/ui/button";
 
 import { UserAvatar } from "@/components/Header/UserAvatar";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 
 async function Header() {
     const { user } = await validateSession();
@@ -45,6 +46,8 @@ async function Header() {
                         )}
                     </ul>
                 </nav>
+
+                <ModeToggle />
 
                 {currentUser && (
                     <UserAvatar

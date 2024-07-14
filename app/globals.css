@@ -4,65 +4,63 @@
 
 @layer base {
     :root {
-        --background: 0 0% 100%;
-        --foreground: 0 0% 3.9%;
+        --background: 0 0% 95%;
+        --foreground: 0 0% 3%;
 
         --card: 0 0% 100%;
-        --card-foreground: 0 0% 3.9%;
+        --card-foreground: 0 0% 3%;
 
-        --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 3.9%;
+        --popover: 0 0% 100%; /* TODO : Change this */
+        --popover-foreground: 0 0% 3.9%; /* TODO : Change this */
 
-        --primary: 0 0% 9%;
+        --primary: 0 0% 13%;
         --primary-foreground: 0 0% 98%;
 
-        --secondary: 0 0% 96.1%;
-        --secondary-foreground: 0 0% 9%;
+        --secondary: 0 0% 100%;
+        --secondary-foreground: 0 0% 3%;
 
-        --muted: 0 0% 96.1%;
-        --muted-foreground: 0 0% 45.1%;
+        --muted: 0 0% 95%;
+        --muted-foreground: 0 0% 50%;
 
-        --accent: 0 0% 96.1%;
-        --accent-foreground: 0 0% 9%;
+        --accent: 0 0% 96.1%; /* TODO : Change this */
+        --accent-foreground: 0 0% 9%; /* TODO : Change this */
 
-        --destructive: 0 84.2% 60.2%;
+        --destructive: 0 94% 67%;
         --destructive-foreground: 0 0% 98%;
 
         --border: 0 0% 89.8%;
-        --input: 0 0% 89.8%;
-        --ring: 0 0% 3.9%;
+        --ring: 0 0% 0%;
 
         --radius: 0.5rem;
     }
 
     .dark {
-        --background: 0 0% 3.9%;
+        --background: 0 0% 6.5%;
         --foreground: 0 0% 98%;
 
-        --card: 0 0% 3.9%;
+        --card: 0 0% 12.5%;
         --card-foreground: 0 0% 98%;
 
-        --popover: 0 0% 3.9%;
-        --popover-foreground: 0 0% 98%;
+        --popover: 0 0% 3.9%; /* TODO : Change this */
+        --popover-foreground: 0 0% 98%; /* TODO : Change this */
 
         --primary: 0 0% 98%;
-        --primary-foreground: 0 0% 9%;
+        --primary-foreground: 0 0% 3%;
 
-        --secondary: 0 0% 14.9%;
+        --secondary: 0 0% 17%;
         --secondary-foreground: 0 0% 98%;
 
-        --muted: 0 0% 14.9%;
-        --muted-foreground: 0 0% 63.9%;
+        --muted: 0 0% 20%;
+        --muted-foreground: 0 0% 64%;
 
-        --accent: 0 0% 14.9%;
+        --accent: 0 0% 14%;
         --accent-foreground: 0 0% 98%;
 
-        --destructive: 0 62.8% 30.6%;
+        --destructive: 0 55% 50%;
         --destructive-foreground: 0 0% 98%;
 
         --border: 0 0% 14.9%;
-        --input: 0 0% 14.9%;
-        --ring: 0 0% 83.1%;
+        --ring: 0 0% 100%;
     }
 }
 
