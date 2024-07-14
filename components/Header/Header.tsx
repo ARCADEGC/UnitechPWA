@@ -24,12 +24,14 @@ async function Header() {
 
     return (
         <header className="flex justify-between pb-3 pt-4 [grid-column:content]">
-            <Typography
-                variant="h2"
-                as="h1"
-            >
-                Unitech
-            </Typography>
+            <Link href={"/dashboard"}>
+                <Typography
+                    variant="h2"
+                    as="h1"
+                >
+                    Unitech
+                </Typography>
+            </Link>
 
             <div className="flex gap-6">
                 <nav>
