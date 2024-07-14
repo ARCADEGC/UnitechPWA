@@ -12,7 +12,7 @@ function NotFound() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1), delay: 0.3 }}
-            className="flex h-svh w-full flex-col items-center justify-center [grid-column:page]"
+            className="flex h-[80svh] w-full flex-col items-center justify-center [grid-column:page]"
         >
             <Typography
                 variant="h1"
@@ -30,10 +30,10 @@ function NotFound() {
                     asChild
                 >
                     <Link
-                        href="/"
+                        href="/dashboard"
                         className="text-muted transition-colors hover:text-foreground"
                     >
-                        Return Home
+                        Return to Dashboard
                     </Link>
                 </Typography>
             </Button>
@@ -41,4 +41,4 @@ function NotFound() {
     );
 }
 
-export default NotFound;
+export { NotFound };

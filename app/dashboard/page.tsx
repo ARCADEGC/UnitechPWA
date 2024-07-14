@@ -1,7 +1,7 @@
-import { eq } from "drizzle-orm";
+import Link from "next/link";
 
 import { validateSession } from "@/auth";
-import { db } from "@/db/migrate";
+import { getAdminOrders, getUserById, getUserNameById, getUserOrders } from "@/db/db";
 
 import {
     Card,
@@ -12,8 +12,6 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-import { Header } from "@/components/Header/Header";
-
 export default async function Home() {
     const { user } = await validateSession();
 
@@ -21,60 +19,42 @@ export default async function Home() {
         userRole: "ADMIN" | "USER" | null | undefined = null;
 
     if (user) {
-        const currentUser = await db.query.User.findFirst({
-            where: (table) => eq(table.id, user.id),
-            columns: {
-                role: true,
-            },
-        });
+        const currentUser = await getUserById(user.id);
 
         userRole = currentUser?.role;
 
         if (userRole === "ADMIN") {
-            orders = await db.query.order.findMany();
+            orders = await getAdminOrders();
         }
 
         if (userRole === "USER") {
-            orders = await db.query.order.findMany({
-                where: (table) => eq(table.author, user.id),
-                columns: {
-                    id: true,
-                    name: true,
-                    content: true,
-                    author: true,
-                },
-            });
+            orders = await getUserOrders(user.id);
         }
-    }
-
-    async function getUserName(authorId: string) {
-        const user = await db.query.User.findFirst({
-            where: (table) => eq(table.id, authorId),
-        });
-
-        return user?.name ?? null;
     }
 
     return (
         <main className="[grid-column:content]">
-            <Header />
-
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {orders?.map((order) => (
-                    <Card key={order.id}>
-                        <CardHeader>
-                            <CardTitle>{order.name}</CardTitle>
-                            {userRole === "ADMIN" && (
-                                <CardDescription>{order.secretMessage}</CardDescription>
-                            )}
-                        </CardHeader>
-                        <CardContent>
-                            <p className="line-clamp-3">{JSON.stringify(order.content)}</p>
-                        </CardContent>
-                        <CardFooter>
-                            <p>{getUserName(order.author)}</p>
-                        </CardFooter>
-                    </Card>
+                    <Link
+                        href={`/dashboard/${order.id}`}
+                        key={order.id}
+                    >
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>{order.name}</CardTitle>
+                                {userRole === "ADMIN" && (
+                                    <CardDescription>{order.secretMessage}</CardDescription>
+                                )}
+                            </CardHeader>
+                            <CardContent>
+                                <p className="line-clamp-3">{JSON.stringify(order.content)}</p>
+                            </CardContent>
+                            <CardFooter>
+                                <p>{getUserNameById(order.author)}</p>
+                            </CardFooter>
+                        </Card>
+                    </Link>
                 ))}
             </div>
         </main>
