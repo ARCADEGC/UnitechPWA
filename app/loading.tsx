@@ -16,7 +16,7 @@ function Loading() {
                 <Typography
                     variant="h1"
                     as="p"
-                    className="animate-low-pulse bg-gradient-to-br from-foreground to-muted to-95% bg-clip-text p-4 text-transparent"
+                    className="animate-low-pulse bg-gradient-to-br from-foreground from-40% to-muted bg-clip-text p-4 text-transparent"
                 >
                     Loading...
                 </Typography>
