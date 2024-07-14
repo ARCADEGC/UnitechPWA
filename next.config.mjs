@@ -1,5 +1,6 @@
 import withSerwistInit from "@serwist/next";
 import MillionLint from "@million/lint";
+
 /** @type {import('next').NextConfig} */
 
 const withSerwist = withSerwistInit({
