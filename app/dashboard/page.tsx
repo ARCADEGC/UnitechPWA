@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { validateSession } from "@/auth";
-import { getAdminOrders, getUserById, getUserNameById, getUserOrders } from "@/db/db";
+import { getUserById, getUserNameById, getOrdersByIdAndRole } from "@/db/db";
 
 import {
     Card,
@@ -12,24 +12,20 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
+import { PromiseType } from "@/types/helpers";
+
 export default async function Home() {
     const { user } = await validateSession();
 
-    let orders,
-        userRole: "ADMIN" | "USER" | null | undefined = null;
+    let userRole: boolean = false;
+    let orders: PromiseType<typeof getOrdersByIdAndRole> = [];
 
     if (user) {
         const currentUser = await getUserById(user.id);
 
-        userRole = currentUser?.role;
+        userRole = currentUser?.role ?? false;
 
-        if (userRole === "ADMIN") {
-            orders = await getAdminOrders();
-        }
-
-        if (userRole === "USER") {
-            orders = await getUserOrders(user.id);
-        }
+        orders = await getOrdersByIdAndRole(user.id, userRole);
     }
 
     return (
@@ -43,8 +39,10 @@ export default async function Home() {
                         <Card>
                             <CardHeader>
                                 <CardTitle>{order.name}</CardTitle>
-                                {userRole === "ADMIN" && (
-                                    <CardDescription>{order.secretMessage}</CardDescription>
+                                {"secretMessage" in order && userRole && (
+                                    <CardDescription>
+                                        {order.secretMessage as string}
+                                    </CardDescription>
                                 )}
                             </CardHeader>
                             <CardContent>

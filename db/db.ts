@@ -28,39 +28,43 @@ export async function getUserById(id: string) {
     });
 }
 
-export async function getAdminOrders() {
-    return await db.query.order.findMany();
+// . ||--------------------------------------------------------------------------------||
+// . ||                                   Get Orders                                   ||
+// . ||--------------------------------------------------------------------------------||
+
+export async function getOrdersByIdAndRole(id: string, role: boolean) {
+    return role ?
+            await db.query.order.findMany()
+        :   await db.query.order.findMany({
+                where: (table) => eq(table.author, id),
+                columns: {
+                    id: true,
+                    name: true,
+                    content: true,
+                    author: true,
+                },
+            });
 }
 
-export async function getAdminOrderById(id: string) {
-    return await db.query.order.findMany({
-        where: (table) => eq(table.id, id),
-    });
+export async function getOrderByIdAndRole(id: string, role: boolean) {
+    return role ?
+            await db.query.order.findFirst({
+                where: (table) => eq(table.id, id),
+            })
+        :   await db.query.order.findFirst({
+                where: (table) => eq(table.id, id),
+                columns: {
+                    id: true,
+                    name: true,
+                    content: true,
+                    author: true,
+                },
+            });
 }
 
-export async function getUserOrders(userId: string) {
-    return await db.query.order.findMany({
-        where: (table) => eq(table.author, userId),
-        columns: {
-            id: true,
-            name: true,
-            content: true,
-            author: true,
-        },
-    });
-}
-
-export async function getUserOrderById(id: string) {
-    return await db.query.order.findMany({
-        where: (table) => eq(table.id, id),
-        columns: {
-            id: true,
-            name: true,
-            content: true,
-            author: true,
-        },
-    });
-}
+// . ||--------------------------------------------------------------------------------||
+// . ||                                Helper funtions                                ||
+// . ||--------------------------------------------------------------------------------||
 
 export async function getUserNameById(userId: string) {
     const user = await db.query.User.findFirst({

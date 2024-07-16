@@ -6,14 +6,14 @@ import { createUser } from "@/db/db";
 // const baseUser = {
 //     name: "user",
 //     email: "user@email.com",
-//     password: "pass",
+//     password: "password",
 // };
 
 // const baseAdmin = {
 //     name: "admin",
 //     email: "admin@email.com",
-//     password: "root",
-//     role: "ADMIN",
+//     password: "password",
+//     role: true,
 // };
 
 const newUser = {

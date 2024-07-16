@@ -1,9 +1,11 @@
 import { validateSession } from "@/auth";
-import { getAdminOrderById, getUserById, getUserOrderById } from "@/db/db";
+import { getUserById, getOrderByIdAndRole } from "@/db/db";
 
 import { NotFound } from "@/app/dashboard/[id]/NotFound";
 
 import { PromiseType } from "@/types/helpers";
+
+import { Input } from "@/components/ui/input";
 
 async function Home({ params }: { params: { id: string } }) {
     const { user } = await validateSession();
@@ -11,27 +13,23 @@ async function Home({ params }: { params: { id: string } }) {
     if (!user) return null;
 
     const currentUser = await getUserById(user.id);
-    const userRole = currentUser?.role;
+    const userRole = currentUser?.role ?? false;
 
-    let currentOrder: PromiseType<typeof getAdminOrderById> | PromiseType<typeof getUserOrderById> =
-        [];
+    let currentOrder: PromiseType<typeof getOrderByIdAndRole> = undefined;
 
-    if (userRole === "ADMIN") {
-        currentOrder = await getAdminOrderById(params.id);
-    }
+    currentOrder = await getOrderByIdAndRole(params.id, userRole);
 
-    if (userRole === "USER") {
-        currentOrder = await getUserOrderById(params.id);
-    }
-
-    if (currentOrder.length === 0) return <NotFound />;
+    if (!currentOrder) return <NotFound />;
 
     return (
         <div>
-            {currentOrder.map((order) =>
-                Object.entries(order).map(([key, value]) => (
-                    <p key={key}>{typeof value === "string" ? value : JSON.stringify(value)}</p>
-                )),
+            <Input defaultValue={currentOrder.name} />
+
+            <Input defaultValue={JSON.stringify(currentOrder.content)}></Input>
+            <Input defaultValue={currentOrder.author}></Input>
+
+            {"secretMessage" in currentOrder && userRole && (
+                <Input defaultValue={currentOrder.secretMessage as string}></Input>
             )}
         </div>
     );
