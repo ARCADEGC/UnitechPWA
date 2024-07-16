@@ -23,7 +23,7 @@ function UserAvatar({
 }: {
     avatarInitials: string;
     username: TUser["name"];
-    role?: TUser["role"];
+    role?: boolean;
 }) {
     return (
         <>
