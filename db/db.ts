@@ -4,8 +4,8 @@ import "@/lib/loadEnv";
 import { eq } from "drizzle-orm";
 import { db } from "@/db/migrate";
 
-import { User } from "@/db/schema";
-import type { TUser } from "@/types/dbSchemas";
+import { order, User } from "@/db/schema";
+import type { TOrder, TUser } from "@/types/dbSchemas";
 
 export async function getUsers() {
     return await db.select().from(User);
@@ -46,25 +46,21 @@ export async function getOrdersByIdAndRole(id: string, role: boolean) {
             });
 }
 
-export async function getOrderByIdAndRole(id: string, role: boolean) {
-    return role ?
-            await db.query.order.findFirst({
-                where: (table) => eq(table.id, id),
-            })
-        :   await db.query.order.findFirst({
-                where: (table) => eq(table.id, id),
-                columns: {
-                    id: true,
-                    name: true,
-                    content: true,
-                    author: true,
-                },
-            });
+export async function getOrderByIdAndRole(id: string, role: boolean): Promise<TOrder | undefined> {
+    const order = await db.query.order.findFirst({
+        where: (table) => eq(table.id, id),
+    });
+
+    if (!order) return undefined;
+
+    if (!role) order.secretMessage = "";
+
+    return order;
 }
 
-// . ||--------------------------------------------------------------------------------||
+// . ||-------------------------------------------------------------------------------||
 // . ||                                Helper funtions                                ||
-// . ||--------------------------------------------------------------------------------||
+// . ||-------------------------------------------------------------------------------||
 
 export async function getUserNameById(userId: string) {
     const user = await db.query.User.findFirst({
@@ -72,4 +68,22 @@ export async function getUserNameById(userId: string) {
     });
 
     return user?.name ?? null;
+}
+
+// . ||--------------------------------------------------------------------------------||
+// . ||                                  Order Changes                                 ||
+// . ||--------------------------------------------------------------------------------||
+
+export async function updateOrder(content: TOrder, role: boolean) {
+    return role ?
+            await db
+                .update(order)
+                .set(content)
+                .where(eq(order.id, content.id ?? ""))
+                .returning()
+        :   await db
+                .update(order)
+                .set({ author: content.author, name: content.name, content: content.content })
+                .where(eq(order.id, content.id ?? ""))
+                .returning();
 }

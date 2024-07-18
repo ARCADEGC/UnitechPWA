@@ -10,7 +10,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@/db/migrate";
 
-import type { TRegisterProps, TLoginProps } from "@/types/authSchemas";
+import type { TLoginProps /* TRegisterProps */ } from "@/types/authSchemas";
 
 const ONE_MONTH = 60 * 60 * 24 * 30;
 
