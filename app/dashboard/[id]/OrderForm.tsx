@@ -4,8 +4,10 @@ import React, { useRef, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
+import SignatureCanvas from "react-signature-canvas";
 
-import { Eraser, Save } from "lucide-react";
+import { CheckCircle, Eraser, Save } from "lucide-react";
 
 import { updateOrder } from "@/db/db";
 
@@ -27,8 +29,6 @@ import { DeleteOrderButton } from "@/app/dashboard/[id]/DeteteOrderButton";
 
 import { TOrder } from "@/types/dbSchemas";
 
-import SignatureCanvas from "react-signature-canvas";
-
 const formSchema = z.object({
     name: z.string().min(2, {
         message: "Name must be at least 2 characters.",
@@ -45,6 +45,7 @@ type TOrderFormProps = {
 
 function OrderForm({ order, role }: TOrderFormProps) {
     let sigCanvasRef = useRef<SignatureCanvas>(null);
+    const router = useRouter();
 
     useEffect(() => {
         order?.signature ?
@@ -64,17 +65,29 @@ function OrderForm({ order, role }: TOrderFormProps) {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            await updateOrder(
+            const promise = updateOrder(
                 {
                     ...values,
                     id: order?.id,
                     signature: sigCanvasRef.current?.toData(),
                 },
                 role,
-            );
-            return toast("Successfully updated.");
+            )
+                .then(() => router.refresh())
+                .finally(() =>
+                    setTimeout(() => {
+                        toast.promise(promise, {
+                            loading: "Updating order...",
+                            success: () => {
+                                return "Order updated successfully.";
+                            },
+                        });
+                    }, 300),
+                );
         } catch {
-            return toast("Something went wrong. Please wait or try refreshing the page.");
+            return toast.error("Something went wrong", {
+                description: "Please wait or try again",
+            });
         }
     }
 

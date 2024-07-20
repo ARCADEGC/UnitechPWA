@@ -13,11 +13,13 @@ function CreateNewButton({ id, name }: { id: string; name?: string }) {
     async function onClickCreateOrder(order: { id: string; name?: string }) {
         try {
             const newOrderId = await CreateOrder(order);
-            toast("Successfully created new order.");
             router.push(`/dashboard/${newOrderId}`);
             router.refresh();
+            setTimeout(() => toast.success("Order created successfully."), 500);
         } catch {
-            toast("Something went wrong. Please wait or try refreshing the page.");
+            toast.error("Something went wrong", {
+                description: "Please wait or try refreshing the page",
+            });
         }
     }
 
