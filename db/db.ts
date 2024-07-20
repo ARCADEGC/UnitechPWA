@@ -6,6 +6,7 @@ import { db } from "@/db/migrate";
 
 import { order, User } from "@/db/schema";
 import type { TOrder, TUser } from "@/types/dbSchemas";
+import { rejects } from "assert";
 
 export async function getUsers() {
     return await db.select().from(User);
@@ -86,4 +87,43 @@ export async function updateOrder(content: TOrder, role: boolean) {
                 .set({ author: content.author, name: content.name, content: content.content })
                 .where(eq(order.id, content.id ?? ""))
                 .returning();
+}
+
+// . ||--------------------------------------------------------------------------------||
+// . ||                                  Create Order                                  ||
+// . ||--------------------------------------------------------------------------------||
+
+export async function CreateOrder({
+    id,
+    name = "New Name",
+}: {
+    id: string;
+    name?: string;
+}): Promise<string | boolean> {
+    try {
+        const newOrder = await db
+            .insert(order)
+            .values({ name: name, author: id, secretMessage: "", content: {} })
+            .returning({ id: order.id });
+        const newOrderId = newOrder[0].id;
+
+        !newOrderId && new Error();
+
+        return newOrderId;
+    } catch {
+        return false;
+    }
+}
+
+// . ||--------------------------------------------------------------------------------||
+// . ||                                  Delete Order                                  ||
+// . ||--------------------------------------------------------------------------------||
+
+export async function deleteOrder(orderId: string): Promise<boolean> {
+    try {
+        await db.delete(order).where(eq(order.id, orderId)).execute();
+        return true;
+    } catch {
+        return false;
+    }
 }

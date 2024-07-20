@@ -12,24 +12,29 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-import { PromiseType } from "@/types/helpers";
+import { CreateNewButton } from "@/app/dashboard/CreateNewButton";
 
 export default async function Home() {
     const { user } = await validateSession();
 
+    if (!user) return null;
+
     let userRole: boolean = false;
-    let orders: PromiseType<typeof getOrdersByIdAndRole> = [];
 
-    if (user) {
-        const currentUser = await getUserById(user.id);
+    const currentUser = await getUserById(user.id);
+    userRole = currentUser?.role ?? false;
 
-        userRole = currentUser?.role ?? false;
-
-        orders = await getOrdersByIdAndRole(user.id, userRole);
-    }
+    const orders = await getOrdersByIdAndRole(user.id, userRole);
 
     return (
-        <main className="[grid-column:content]">
+        <main className="grid gap-4 [grid-column:content]">
+            {userRole && (
+                <CreateNewButton
+                    id={user.id}
+                    name="New Order"
+                />
+            )}
+
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {orders?.map((order) => (
                     <Link
