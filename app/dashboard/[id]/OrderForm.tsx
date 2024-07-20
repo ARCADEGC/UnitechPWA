@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { Save } from "lucide-react";
+
 import { updateOrder } from "@/db/db";
 
 import { Button } from "@/components/ui/button";
@@ -18,6 +20,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+
+import { DeleteOrderButton } from "@/app/dashboard/[id]/DeteteOrderButton";
 
 import { TOrder } from "@/types/dbSchemas";
 
@@ -105,7 +109,18 @@ function OrderForm({ order, role }: TOrderFormProps) {
                         )}
                     />
                 )}
-                <Button type="submit">Submit</Button>
+
+                <div className="flex w-full items-center justify-between gap-x-2">
+                    <DeleteOrderButton order={order} />
+
+                    <Button
+                        type="submit"
+                        className="flex items-center gap-x-2"
+                    >
+                        <Save className="size-4" />
+                        Submit
+                    </Button>
+                </div>
             </form>
         </Form>
     );
