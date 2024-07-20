@@ -1,10 +1,11 @@
 "use client";
 
+import React, { useRef, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Save } from "lucide-react";
+import { Eraser, Save } from "lucide-react";
 
 import { updateOrder } from "@/db/db";
 
@@ -20,10 +21,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { Label } from "@/components/ui/label";
 
 import { DeleteOrderButton } from "@/app/dashboard/[id]/DeteteOrderButton";
 
 import { TOrder } from "@/types/dbSchemas";
+
+import SignatureCanvas from "react-signature-canvas";
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -40,6 +44,14 @@ type TOrderFormProps = {
 };
 
 function OrderForm({ order, role }: TOrderFormProps) {
+    let sigCanvasRef = useRef<SignatureCanvas>(null);
+
+    useEffect(() => {
+        order?.signature ?
+            sigCanvasRef.current?.fromData(order.signature as SignaturePad.Point[][])
+        :   sigCanvasRef.current?.clear();
+    }, [order]);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -56,6 +68,7 @@ function OrderForm({ order, role }: TOrderFormProps) {
                 {
                     ...values,
                     id: order?.id,
+                    signature: sigCanvasRef.current?.toData(),
                 },
                 role,
             );
@@ -109,6 +122,29 @@ function OrderForm({ order, role }: TOrderFormProps) {
                         )}
                     />
                 )}
+
+                <div className="relative w-fit max-sm:w-full">
+                    <Label>Signature</Label>
+
+                    <SignatureCanvas
+                        ref={sigCanvasRef}
+                        canvasProps={{
+                            className: "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
+                        }}
+                        penColor="#000"
+                        clearOnResize={false}
+                    />
+
+                    <Button
+                        type="button"
+                        size={"icon"}
+                        onClick={() => sigCanvasRef.current?.clear()}
+                        variant={"secondary"}
+                        className="absolute -bottom-2 -right-2"
+                    >
+                        <Eraser className="size-4" />
+                    </Button>
+                </div>
 
                 <div className="flex w-full items-center justify-between gap-x-2">
                     <DeleteOrderButton order={order} />

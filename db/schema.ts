@@ -11,6 +11,7 @@ export const order = pgTable("order", {
             onDelete: "cascade",
             onUpdate: "restrict",
         }),
+    signature: json("signature"),
 });
 
 export const User = pgTable("user", {
