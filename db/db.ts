@@ -6,7 +6,6 @@ import { db } from "@/db/migrate";
 
 import { order, User } from "@/db/schema";
 import type { TOrder, TUser } from "@/types/dbSchemas";
-import { rejects } from "assert";
 
 export async function getUsers() {
     return await db.select().from(User);
@@ -69,6 +68,14 @@ export async function getUserNameById(userId: string) {
     });
 
     return user?.name ?? null;
+}
+
+export async function getIdByUserName(userName: string) {
+    const user = await db.query.User.findFirst({
+        where: (table) => eq(table.name, userName),
+    });
+
+    return user?.id ?? null;
 }
 
 // . ||--------------------------------------------------------------------------------||

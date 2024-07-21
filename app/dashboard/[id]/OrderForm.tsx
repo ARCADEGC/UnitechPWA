@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -24,10 +24,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 import { DeleteOrderButton } from "@/app/dashboard/[id]/DeteteOrderButton";
 
-import { TOrder } from "@/types/dbSchemas";
+import { TOrder, TUser } from "@/types/dbSchemas";
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -62,6 +69,30 @@ function OrderForm({ order, userRole }: TOrderFormProps) {
             secretMessage: order?.secretMessage ?? "",
         },
     });
+
+    useEffect(() => {
+        order?.signature ?
+            sigCanvasRef.current?.fromData(order.signature as SignaturePad.Point[][])
+        :   sigCanvasRef.current?.clear();
+    }, [order]);
+
+    useEffect(() => {
+        const getAssignee = async () => {
+            const assignedUser = (await getUserNameById(order.author)) ?? "";
+            form.setValue("assignee", assignedUser);
+        };
+
+        getAssignee();
+    }, [order.author]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const userList = await getUsers();
+            setUsers(userList);
+        };
+
+        fetchUsers();
+    }, []);
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
