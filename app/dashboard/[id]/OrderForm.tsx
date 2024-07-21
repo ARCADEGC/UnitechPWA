@@ -51,7 +51,7 @@ type TOrderFormProps = {
     userRole: boolean;
 };
 
-function OrderForm({ order, userRole }: TOrderFormProps) {
+const OrderForm = ({ order, userRole }: TOrderFormProps) => {
     const [users, setUsers] = useState<TUser[]>([]);
 
     let sigCanvasRef = useRef<SignatureCanvas>(null);
@@ -97,7 +97,6 @@ function OrderForm({ order, userRole }: TOrderFormProps) {
     }, []);
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values, await getIdByUserName(values.assignee));
         try {
             const promise = updateOrder(
                 {
@@ -146,6 +145,7 @@ function OrderForm({ order, userRole }: TOrderFormProps) {
                                 <FormControl>
                                     <Input
                                         placeholder="order name"
+                                        autoComplete="on"
                                         {...field}
                                     />
                                 </FormControl>
@@ -247,6 +247,6 @@ function OrderForm({ order, userRole }: TOrderFormProps) {
             </Form>
         </motion.div>
     );
-}
+};
 
-export { OrderForm };
+export default OrderForm;

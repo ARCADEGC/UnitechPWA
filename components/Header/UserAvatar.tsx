@@ -16,8 +16,6 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 import { logOut } from "@/actions/auth.actions";
 
-import type { TUser } from "@/types/dbSchemas";
-
 const MemoizedAvatar = memo(Avatar);
 
 const MemoizedDropdownMenuTrigger = memo(DropdownMenuTrigger);
@@ -30,7 +28,7 @@ function UserAvatar({
     userRole = false,
 }: {
     avatarInitials: string;
-    username: TUser["name"];
+    username: string;
     userRole: boolean;
 }) {
     return (

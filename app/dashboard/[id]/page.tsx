@@ -1,9 +1,12 @@
+import React, { Suspense, lazy } from "react";
+
 import { validateSession } from "@/auth";
 import { getUserById, getOrderByIdAndRole } from "@/db/db";
 
 import { NotFound } from "@/app/dashboard/[id]/NotFound";
+import Loading from "@/app/loading";
 
-import { OrderForm } from "@/app/dashboard/[id]/OrderForm";
+const OrderFormWithNoSSR = lazy(() => import("@/app/dashboard/[id]/OrderForm"));
 
 async function Home({ params }: { params: { id: string } }) {
     const { user } = await validateSession();
@@ -18,10 +21,12 @@ async function Home({ params }: { params: { id: string } }) {
     if (!currentOrder) return <NotFound />;
 
     return (
-        <OrderForm
-            order={currentOrder}
-            userRole={userRole}
-        />
+        <Suspense fallback={<Loading />}>
+            <OrderFormWithNoSSR
+                order={currentOrder}
+                userRole={userRole}
+            />
+        </Suspense>
     );
 }
 
