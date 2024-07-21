@@ -5,7 +5,7 @@ export const order = pgTable("order", {
     name: text("name").notNull(),
     content: json("content"),
     secretMessage: text("secret_message").notNull(),
-    author: uuid("author")
+    assignee: uuid("assignee")
         .notNull()
         .references(() => User.id, {
             onDelete: "cascade",

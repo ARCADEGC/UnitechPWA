@@ -36,12 +36,12 @@ export async function getOrdersByIdAndRole(id: string, role: boolean) {
     return role ?
             await db.query.order.findMany()
         :   await db.query.order.findMany({
-                where: (table) => eq(table.author, id),
+                where: (table) => eq(table.assignee, id),
                 columns: {
                     id: true,
                     name: true,
                     content: true,
-                    author: true,
+                    assignee: true,
                 },
             });
 }
@@ -91,7 +91,7 @@ export async function updateOrder(content: TOrder, role: boolean) {
                 .returning()
         :   await db
                 .update(order)
-                .set({ author: content.author, name: content.name, content: content.content })
+                .set({ assignee: content.assignee, name: content.name, content: content.content })
                 .where(eq(order.id, content.id ?? ""))
                 .returning();
 }
@@ -110,7 +110,7 @@ export async function CreateOrder({
     try {
         const newOrder = await db
             .insert(order)
-            .values({ name: name, author: id, secretMessage: "", content: {} })
+            .values({ name: name, assignee: id, secretMessage: "", content: {} })
             .returning({ id: order.id });
         const newOrderId = newOrder[0].id;
 
