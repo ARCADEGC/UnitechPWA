@@ -8,8 +8,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
     return !user ?
             redirect("/")
-        :   <div className="[grid-column:content]">
+        :   <div className="grid grid-cols-[inherit] [grid-column:page]">
                 <Header />
-                {children}
+                <section className="py-8 [grid-column:content]">{children}</section>
             </div>;
 }

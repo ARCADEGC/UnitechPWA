@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 
 import { CreateNewButton } from "@/app/dashboard/CreateNewButton";
+import { NoOrderFound } from "@/app/dashboard/NoOrderFound";
 
 export default async function Home() {
     const { user } = await validateSession();
@@ -26,38 +27,47 @@ export default async function Home() {
 
     return (
         <main className="grid gap-4 [grid-column:content]">
-            {userRole && (
-                <CreateNewButton
-                    id={user.id}
-                    name="New Order"
+            {orders.length !== 0 ?
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    {userRole && (
+                        <CreateNewButton
+                            id={user.id}
+                            name="New Order"
+                            asCard
+                        />
+                    )}
+                    {orders?.map((order) => (
+                        <Link
+                            href={`/dashboard/${order.id}`}
+                            key={order.id}
+                            className="group/cardLink"
+                        >
+                            <Card className="transition-colors group-hover/cardLink:bg-muted">
+                                <CardHeader>
+                                    <CardTitle className="transition-[letter-spacing] group-hover/cardLink:tracking-wider">
+                                        {order.name}
+                                    </CardTitle>
+                                    {"secretMessage" in order && userRole && (
+                                        <CardDescription>
+                                            {order.secretMessage as string}
+                                        </CardDescription>
+                                    )}
+                                </CardHeader>
+                                <CardContent>
+                                    <p className="line-clamp-3">{JSON.stringify(order.content)}</p>
+                                </CardContent>
+                                <CardFooter>
+                                    <p>{getUserNameById(order.assignee)}</p>
+                                </CardFooter>
+                            </Card>
+                        </Link>
+                    ))}
+                </div>
+            :   <NoOrderFound
+                    userId={user.id}
+                    userRole={userRole}
                 />
-            )}
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {orders?.map((order) => (
-                    <Link
-                        href={`/dashboard/${order.id}`}
-                        key={order.id}
-                    >
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>{order.name}</CardTitle>
-                                {"secretMessage" in order && userRole && (
-                                    <CardDescription>
-                                        {order.secretMessage as string}
-                                    </CardDescription>
-                                )}
-                            </CardHeader>
-                            <CardContent>
-                                <p className="line-clamp-3">{JSON.stringify(order.content)}</p>
-                            </CardContent>
-                            <CardFooter>
-                                <p>{getUserNameById(order.assignee)}</p>
-                            </CardFooter>
-                        </Card>
-                    </Link>
-                ))}
-            </div>
+            }
         </main>
     );
 }

@@ -23,43 +23,45 @@ async function Header() {
         :   null;
 
     return (
-        <header className="flex justify-between pb-3 pt-4 [grid-column:content]">
-            <Link href={"/dashboard"}>
-                <Typography
-                    variant="h2"
-                    as="h1"
-                >
-                    Unitech
-                </Typography>
-            </Link>
+        <div className="grid w-full grid-cols-[inherit] border-b [grid-column:page]">
+            <header className="flex justify-between pb-3 pt-4 [grid-column:content]">
+                <Link href={"/dashboard"}>
+                    <Typography
+                        variant="h2"
+                        as="h1"
+                    >
+                        Unitech
+                    </Typography>
+                </Link>
 
-            <div className="flex gap-6">
-                <nav>
-                    <ul className="flex gap-x-6">
-                        {!currentUser && (
-                            <li>
-                                <Button
-                                    variant={"outline"}
-                                    asChild
-                                >
-                                    <Link href={"/login"}>Login</Link>
-                                </Button>
-                            </li>
-                        )}
-                    </ul>
-                </nav>
+                <div className="flex gap-6">
+                    <nav>
+                        <ul className="flex gap-x-6">
+                            {!currentUser && (
+                                <li>
+                                    <Button
+                                        variant={"outline"}
+                                        asChild
+                                    >
+                                        <Link href={"/login"}>Login</Link>
+                                    </Button>
+                                </li>
+                            )}
+                        </ul>
+                    </nav>
 
-                <ModeToggle />
+                    <ModeToggle />
 
-                {currentUser && (
-                    <UserAvatar
-                        avatarInitials={getInitials(currentUser.name)}
-                        username={currentUser.name}
-                        userRole={currentUser?.role ?? false}
-                    />
-                )}
-            </div>
-        </header>
+                    {currentUser && (
+                        <UserAvatar
+                            avatarInitials={getInitials(currentUser.name)}
+                            username={currentUser.name}
+                            userRole={currentUser?.role ?? false}
+                        />
+                    )}
+                </div>
+            </header>
+        </div>
     );
 }
 
