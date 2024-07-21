@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -9,7 +9,7 @@ import SignatureCanvas from "react-signature-canvas";
 
 import { Eraser, Save } from "lucide-react";
 
-import { updateOrder } from "@/db/db";
+import { getIdByUserName, getUserNameById, getUsers, updateOrder } from "@/db/db";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,18 +24,25 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 import { DeleteOrderButton } from "@/app/dashboard/[id]/DeteteOrderButton";
 
-import { TOrder } from "@/types/dbSchemas";
+import { TOrder, TUser } from "@/types/dbSchemas";
 
 const formSchema = z.object({
     name: z.string().min(2, {
         message: "Name must be at least 2 characters.",
     }),
     content: z.object({}),
-    author: z.string(),
     secretMessage: z.string(),
+    assignee: z.string(),
 });
 
 type TOrderFormProps = {
@@ -44,6 +51,8 @@ type TOrderFormProps = {
 };
 
 function OrderForm({ order, userRole }: TOrderFormProps) {
+    const [users, setUsers] = useState<TUser[]>([]);
+
     let sigCanvasRef = useRef<SignatureCanvas>(null);
     const router = useRouter();
 
@@ -58,18 +67,43 @@ function OrderForm({ order, userRole }: TOrderFormProps) {
         defaultValues: {
             name: order?.name ?? "",
             content: order?.content ?? {},
-            author: order?.author ?? "",
             secretMessage: order?.secretMessage ?? "",
         },
     });
 
+    useEffect(() => {
+        order?.signature ?
+            sigCanvasRef.current?.fromData(order.signature as SignaturePad.Point[][])
+        :   sigCanvasRef.current?.clear();
+    }, [order]);
+
+    useEffect(() => {
+        const getAssignee = async () => {
+            const assignedUser = (await getUserNameById(order.assignee)) ?? "";
+            form.setValue("assignee", assignedUser);
+        };
+
+        getAssignee();
+    }, [order.assignee]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const userList = await getUsers();
+            setUsers(userList);
+        };
+
+        fetchUsers();
+    }, []);
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        console.log(values, await getIdByUserName(values.assignee));
         try {
             const promise = updateOrder(
                 {
                     ...values,
                     id: order?.id,
                     signature: sigCanvasRef.current?.toData(),
+                    assignee: (await getIdByUserName(values.assignee)) ?? "",
                 },
                 userRole,
             )
@@ -79,7 +113,7 @@ function OrderForm({ order, userRole }: TOrderFormProps) {
                         toast.promise(promise, {
                             loading: "Updating order...",
                             success: () => {
-                                return "Order updated successfully.";
+                                return "Order updated successfully";
                             },
                         });
                     }, 300),
@@ -158,6 +192,39 @@ function OrderForm({ order, userRole }: TOrderFormProps) {
                         <Eraser className="size-4" />
                     </Button>
                 </div>
+
+                <FormField
+                    control={form.control}
+                    name="assignee"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Assignee</FormLabel>
+                            <Select
+                                onValueChange={field.onChange}
+                                value={form.watch("assignee")}
+                                disabled={!userRole}
+                            >
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a assignee" />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    {users.map((user) => (
+                                        <SelectItem
+                                            key={user.id}
+                                            value={user.name}
+                                        >
+                                            {user.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
 
                 <div className="flex w-full items-center justify-between gap-x-2">
                     <DeleteOrderButton order={order} />

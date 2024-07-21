@@ -52,7 +52,7 @@ export default async function Home() {
                                 <p className="line-clamp-3">{JSON.stringify(order.content)}</p>
                             </CardContent>
                             <CardFooter>
-                                <p>{getUserNameById(order.author)}</p>
+                                <p>{getUserNameById(order.assignee)}</p>
                             </CardFooter>
                         </Card>
                     </Link>

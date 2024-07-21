@@ -48,13 +48,13 @@ function LoginForm() {
             });
 
             if (response.success) {
-                toast("Successfully logged in");
+                toast.success("Successfully logged in");
                 router.push("/");
             } else {
                 throw new Error("There was an error whilst trying to log you in");
             }
         } catch (error) {
-            toast(error instanceof Error ? error.message : "An unexpected error occurred");
+            toast.error(error instanceof Error ? error.message : "An unexpected error occurred");
         }
     }
 
