@@ -91,7 +91,12 @@ export async function updateOrder(content: TOrder, role: boolean) {
                 .returning()
         :   await db
                 .update(order)
-                .set({ assignee: content.assignee, name: content.name, content: content.content })
+                .set({
+                    assignee: content.assignee,
+                    name: content.name,
+                    content: content.content,
+                    signature: content.signature,
+                })
                 .where(eq(order.id, content.id ?? ""))
                 .returning();
 }
