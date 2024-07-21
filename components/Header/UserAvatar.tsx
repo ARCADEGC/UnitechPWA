@@ -1,5 +1,7 @@
 "use client";
 
+import React, { memo } from "react";
+
 import { LogOut } from "lucide-react";
 
 import {
@@ -16,29 +18,35 @@ import { logOut } from "@/actions/auth.actions";
 
 import type { TUser } from "@/types/dbSchemas";
 
+const MemoizedAvatar = memo(Avatar);
+
+const MemoizedDropdownMenuTrigger = memo(DropdownMenuTrigger);
+
+const MemoizedDropdownMenu = memo(DropdownMenu);
+
 function UserAvatar({
     avatarInitials,
     username,
-    role,
+    userRole = false,
 }: {
     avatarInitials: string;
     username: TUser["name"];
-    role?: boolean;
+    userRole: boolean;
 }) {
     return (
         <>
-            <DropdownMenu>
-                <DropdownMenuTrigger className="rounded-full">
-                    <Avatar>
+            <MemoizedDropdownMenu>
+                <MemoizedDropdownMenuTrigger className="rounded-full">
+                    <MemoizedAvatar>
                         <AvatarFallback>{avatarInitials}</AvatarFallback>
-                    </Avatar>
-                </DropdownMenuTrigger>
+                    </MemoizedAvatar>
+                </MemoizedDropdownMenuTrigger>
 
                 <DropdownMenuContent>
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>{username}</DropdownMenuItem>
-                    {role && <DropdownMenuItem>{role}</DropdownMenuItem>}
+                    <DropdownMenuItem>{userRole ? "Admin" : "User"}</DropdownMenuItem>
 
                     <DropdownMenuSeparator />
 
@@ -50,7 +58,7 @@ function UserAvatar({
                         Log Out
                     </DropdownMenuItem>
                 </DropdownMenuContent>
-            </DropdownMenu>
+            </MemoizedDropdownMenu>
         </>
     );
 }

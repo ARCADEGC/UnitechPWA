@@ -68,7 +68,7 @@ export default async function RootLayout({
                 >
                     {children}
 
-                    <Toaster />
+                    <Toaster richColors />
                 </ThemeProvider>
             </body>
         </html>

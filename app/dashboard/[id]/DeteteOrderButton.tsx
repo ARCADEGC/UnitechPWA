@@ -27,28 +27,38 @@ function DeleteOrderButton({ order }: { order: TOrder }) {
 
     async function DeleteOrder() {
         try {
-            await deleteOrder(order?.id ?? "");
-            toast("Order deleted successfully");
-            router.push("/dashboard");
-            router.refresh();
+            const promise = deleteOrder(order?.id ?? "")
+                .then(() => router.push("/dashboard"))
+                .then(() => router.refresh())
+                .finally(() => {
+                    setTimeout(() => {
+                        toast.promise(promise, {
+                            loading: "Deleting order...",
+                            success: () => {
+                                return "Order deleted successfully";
+                            },
+                        });
+                    }, 500);
+                });
         } catch {
-            toast("There was an error deleting the order");
+            toast.error("There was an error deleting the order", {
+                description: "Please wait or try refreshing the page",
+            });
         }
     }
 
     return (
         <AlertDialog>
-            <Button
-                variant={"destructive"}
-                className="flex items-center gap-x-2"
-                type="button"
-                asChild
-            >
-                <AlertDialogTrigger>
+            <AlertDialogTrigger asChild>
+                <Button
+                    variant={"destructive"}
+                    className="flex items-center gap-x-2"
+                    type="button"
+                >
                     <Trash className="size-4" />
                     Delete Order
-                </AlertDialogTrigger>
-            </Button>
+                </Button>
+            </AlertDialogTrigger>
 
             <AlertDialogContent>
                 <AlertDialogHeader>
@@ -60,18 +70,18 @@ function DeleteOrderButton({ order }: { order: TOrder }) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <Button
-                        variant={"destructive"}
-                        asChild
-                    >
-                        <AlertDialogAction
-                            onClick={DeleteOrder}
+
+                    <AlertDialogAction className="bg-transparent px-0">
+                        <Button
+                            variant={"destructive"}
                             className="flex items-center gap-x-2"
+                            type="button"
+                            onClick={DeleteOrder}
                         >
                             <Trash className="size-4" />
                             Delete
-                        </AlertDialogAction>
-                    </Button>
+                        </Button>
+                    </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
