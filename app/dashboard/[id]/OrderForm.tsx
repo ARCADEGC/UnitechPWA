@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import SignatureCanvas from "react-signature-canvas";
+import { motion, cubicBezier } from "framer-motion";
 
 import { Eraser, Save } from "lucide-react";
 
@@ -126,119 +127,125 @@ function OrderForm({ order, userRole }: TOrderFormProps) {
     }
 
     return (
-        <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="mx-auto max-w-prose space-y-8"
-            >
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Name</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder="order name"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                {userRole && (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) }}
+        >
+            <Form {...form}>
+                <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="mx-auto max-w-prose space-y-8"
+                >
                     <FormField
                         control={form.control}
-                        name="secretMessage"
+                        name="name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Secret</FormLabel>
+                                <FormLabel>Name</FormLabel>
                                 <FormControl>
                                     <Input
-                                        placeholder="secret message"
+                                        placeholder="order name"
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormDescription>
-                                    Only users with enhanced priveleges can see this message.
-                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-                )}
 
-                <div className="relative w-fit max-sm:w-full">
-                    <Label>Signature</Label>
+                    {userRole && (
+                        <FormField
+                            control={form.control}
+                            name="secretMessage"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Secret</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="secret message"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormDescription>
+                                        Only users with enhanced priveleges can see this message.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    )}
 
-                    <SignatureCanvas
-                        ref={sigCanvasRef}
-                        canvasProps={{
-                            className: "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
-                        }}
-                        penColor="#000"
-                        clearOnResize={false}
+                    <div className="relative w-fit max-sm:w-full">
+                        <Label>Signature</Label>
+
+                        <SignatureCanvas
+                            ref={sigCanvasRef}
+                            canvasProps={{
+                                className: "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
+                            }}
+                            penColor="#000"
+                            clearOnResize={false}
+                        />
+
+                        <Button
+                            type="button"
+                            size={"icon"}
+                            onClick={() => sigCanvasRef.current?.clear()}
+                            variant={"secondary"}
+                            className="absolute -bottom-2 -right-2"
+                        >
+                            <Eraser className="size-4" />
+                        </Button>
+                    </div>
+
+                    <FormField
+                        control={form.control}
+                        name="assignee"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Assignee</FormLabel>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    value={form.watch("assignee")}
+                                    disabled={!userRole}
+                                >
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select a assignee" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {users.map((user) => (
+                                            <SelectItem
+                                                key={user.id}
+                                                value={user.name}
+                                            >
+                                                {user.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
                     />
 
-                    <Button
-                        type="button"
-                        size={"icon"}
-                        onClick={() => sigCanvasRef.current?.clear()}
-                        variant={"secondary"}
-                        className="absolute -bottom-2 -right-2"
-                    >
-                        <Eraser className="size-4" />
-                    </Button>
-                </div>
+                    <div className="flex w-full items-center justify-between gap-x-2">
+                        <DeleteOrderButton order={order} />
 
-                <FormField
-                    control={form.control}
-                    name="assignee"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Assignee</FormLabel>
-                            <Select
-                                onValueChange={field.onChange}
-                                value={form.watch("assignee")}
-                                disabled={!userRole}
-                            >
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select a assignee" />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    {users.map((user) => (
-                                        <SelectItem
-                                            key={user.id}
-                                            value={user.name}
-                                        >
-                                            {user.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <div className="flex w-full items-center justify-between gap-x-2">
-                    <DeleteOrderButton order={order} />
-
-                    <Button
-                        type="submit"
-                        className="flex items-center gap-x-2"
-                    >
-                        <Save className="size-4" />
-                        Submit
-                    </Button>
-                </div>
-            </form>
-        </Form>
+                        <Button
+                            type="submit"
+                            className="flex items-center gap-x-2"
+                        >
+                            <Save className="size-4" />
+                            Submit
+                        </Button>
+                    </div>
+                </form>
+            </Form>
+        </motion.div>
     );
 }
 
