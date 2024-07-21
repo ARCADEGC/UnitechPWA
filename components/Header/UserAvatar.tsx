@@ -27,11 +27,11 @@ const MemoizedDropdownMenu = memo(DropdownMenu);
 function UserAvatar({
     avatarInitials,
     username,
-    role,
+    userRole = false,
 }: {
     avatarInitials: string;
     username: TUser["name"];
-    role?: boolean;
+    userRole: boolean;
 }) {
     return (
         <>
@@ -46,7 +46,7 @@ function UserAvatar({
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>{username}</DropdownMenuItem>
-                    <DropdownMenuItem>{role ? "Admin" : "User"}</DropdownMenuItem>
+                    <DropdownMenuItem>{userRole ? "Admin" : "User"}</DropdownMenuItem>
 
                     <DropdownMenuSeparator />
 

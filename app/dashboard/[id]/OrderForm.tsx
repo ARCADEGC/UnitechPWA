@@ -7,7 +7,7 @@ import { z } from "zod";
 import { useRouter } from "next/navigation";
 import SignatureCanvas from "react-signature-canvas";
 
-import { CheckCircle, Eraser, Save } from "lucide-react";
+import { Eraser, Save } from "lucide-react";
 
 import { updateOrder } from "@/db/db";
 
@@ -40,10 +40,10 @@ const formSchema = z.object({
 
 type TOrderFormProps = {
     order: TOrder;
-    role: boolean;
+    userRole: boolean;
 };
 
-function OrderForm({ order, role }: TOrderFormProps) {
+function OrderForm({ order, userRole }: TOrderFormProps) {
     let sigCanvasRef = useRef<SignatureCanvas>(null);
     const router = useRouter();
 
@@ -71,7 +71,7 @@ function OrderForm({ order, role }: TOrderFormProps) {
                     id: order?.id,
                     signature: sigCanvasRef.current?.toData(),
                 },
-                role,
+                userRole,
             )
                 .then(() => router.refresh())
                 .finally(() =>
@@ -114,7 +114,7 @@ function OrderForm({ order, role }: TOrderFormProps) {
                     )}
                 />
 
-                {role && (
+                {userRole && (
                     <FormField
                         control={form.control}
                         name="secretMessage"

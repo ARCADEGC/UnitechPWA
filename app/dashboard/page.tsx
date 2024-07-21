@@ -19,10 +19,8 @@ export default async function Home() {
 
     if (!user) return null;
 
-    let userRole: boolean = false;
-
     const currentUser = await getUserById(user.id);
-    userRole = currentUser?.role ?? false;
+    const userRole = currentUser?.role ?? false;
 
     const orders = await getOrdersByIdAndRole(user.id, userRole);
 

@@ -55,7 +55,7 @@ async function Header() {
                     <UserAvatar
                         avatarInitials={getInitials(currentUser.name)}
                         username={currentUser.name}
-                        role={currentUser?.role ?? false}
+                        userRole={currentUser?.role ?? false}
                     />
                 )}
             </div>

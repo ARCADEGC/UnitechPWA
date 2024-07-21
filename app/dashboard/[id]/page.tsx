@@ -20,7 +20,7 @@ async function Home({ params }: { params: { id: string } }) {
     return (
         <OrderForm
             order={currentOrder}
-            role={userRole}
+            userRole={userRole}
         />
     );
 }
