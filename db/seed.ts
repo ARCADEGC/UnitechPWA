@@ -3,6 +3,13 @@ import { genSalt, hash } from "bcryptjs";
 
 import { createUser } from "@/db/db";
 
+type TUserSeed = {
+    name: string;
+    email: string;
+    password: string;
+    role?: boolean;
+};
+
 // const baseUser = {
 //     name: "user",
 //     email: "user@email.com",
@@ -16,7 +23,7 @@ import { createUser } from "@/db/db";
 //     role: true,
 // };
 
-const newUser = {
+const newUser: TUserSeed = {
     name: "user",
     email: "user@email.com",
     password: "password",
@@ -35,6 +42,7 @@ async function main() {
         email: newUser.email,
         password: hashedPassword,
         salt: salt,
+        role: newUser?.role ?? false,
     });
 
     process.exit();
