@@ -49,7 +49,7 @@ function DeleteOrderButton({ order }: { order: TOrder }) {
 
     return (
         <AlertDialog>
-            <AlertDialogTrigger asChild>
+            <AlertDialogTrigger>
                 <Button
                     variant={"destructive"}
                     className="flex items-center gap-x-2"
