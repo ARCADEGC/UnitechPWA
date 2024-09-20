@@ -22,9 +22,9 @@ export const formHeaderSchema = z.object({
 
 export const formNewPCKSchema = z.object({
     shipmentZoneOne: z.string().optional(),
-    shipmentZoneTwo: z.number().optional(),
-    shipmentZoneThree: z.number().optional(),
-    shipmentZoneFour: z.number().optional(),
+    shipmentZoneTwo: z.string().optional(),
+    shipmentZoneThree: z.string().optional(),
+    shipmentZoneFour: z.string().optional(),
     completeInstallationLockers: z.number().optional(),
     completeAtypical: z.number().optional(),
     basicLockers: z.number().optional(),
