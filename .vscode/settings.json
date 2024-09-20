@@ -8,5 +8,7 @@
         "**/Thumbs.db": true,
         "**/node_modules": true
     },
-    "cSpell.words": ["Unitech"]
+    "cSpell.words": ["Unitech"],
+    "pieces.cloudCapabilities": "Blended",
+    "pieces.telemetry": true
 }
