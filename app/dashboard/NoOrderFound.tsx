@@ -29,12 +29,7 @@ function NoOrderFound({ userRole, userId }: { userRole: boolean; userId: string 
                 {userRole ? "Create a new order" : "Wait to be assigned a task"}
             </Typography>
 
-            {userRole && (
-                <CreateNewButton
-                    id={userId}
-                    name="New Order"
-                />
-            )}
+            {userRole && <CreateNewButton userId={userId} />}
         </motion.div>
     );
 }
