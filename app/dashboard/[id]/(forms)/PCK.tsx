@@ -382,7 +382,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                 className="space-y-8"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1), delay: 0.3 }}
+                transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) }}
             >
                 <div className="flex items-baseline justify-between gap-x-8">
                     <Typography variant="h2">Shipment Zones</Typography>
@@ -559,11 +559,6 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
 }
 
 export default PCK;
-
-// shipmentZoneOne: Number(order?.shipmentZoneOne ?? 0),
-// shipmentZoneTwo: Number(order?.shipmentZoneTwo ?? 0),
-// shipmentZoneThree: Number(order?.shipmentZoneThree ?? 0),
-// shipmentZoneFour: Number(order?.shipmentZoneFour ?? 0),
 
 // completeInstallationLockers: Number(order?.completeInstallationLockers ?? 0),
 // completeAtypical: Number(order?.completeAtypical ?? 0),

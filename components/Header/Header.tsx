@@ -23,7 +23,7 @@ async function Header() {
         :   null;
 
     return (
-        <div className="grid w-full grid-cols-[inherit] border-b [grid-column:page]">
+        <div className="grid w-full grid-cols-[inherit] border-b [grid-column:page] print:hidden">
             <header className="flex justify-between pb-3 pt-4 [grid-column:content]">
                 <Link href={"/dashboard"}>
                     <Typography

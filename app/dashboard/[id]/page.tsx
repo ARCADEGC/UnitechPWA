@@ -72,9 +72,9 @@ async function Home({ params }: { params: { id: string } }) {
 
             <Tabs
                 defaultValue="pck"
-                className="mt-8 w-full space-y-8"
+                className="mx-auto mt-8 w-full max-w-prose space-y-8"
             >
-                <TabsList className="w-full *:w-full">
+                <TabsList className="w-full *:w-full print:hidden">
                     <TabsTrigger value="pck">PCK</TabsTrigger>
                     <TabsTrigger value="pp2">PP 2</TabsTrigger>
                 </TabsList>
@@ -86,7 +86,9 @@ async function Home({ params }: { params: { id: string } }) {
 
             <Separator className="my-16" />
 
-            <DeleteOrderButton currentOrder={currentOrder} />
+            <div className="mx-auto max-w-prose print:hidden">
+                <DeleteOrderButton currentOrder={currentOrder} />
+            </div>
         </Suspense>
     );
 }

@@ -16,8 +16,8 @@ export const formHeaderSchema = z.object({
     email: z.string(),
     assignee: z.string(),
     dueDate: z.date(),
-    orderNumber: z.number().int(),
-    ikeaNumber: z.number().int(),
+    orderNumber: z.string(),
+    ikeaNumber: z.string(),
 });
 
 export const formNewPCKSchema = z.object({

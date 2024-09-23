@@ -55,8 +55,8 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
             email: orderHeader.email,
             assignee: orderHeader.assignee,
             dueDate: orderHeader.dueDate,
-            orderNumber: orderHeader.orderNumber,
-            ikeaNumber: orderHeader.ikeaNumber,
+            orderNumber: String(orderHeader.orderNumber),
+            ikeaNumber: String(orderHeader.ikeaNumber),
         },
         mode: "all",
     });
@@ -86,8 +86,8 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                 phone: values.phone,
                 email: values.email,
                 dueDate: values.dueDate,
-                orderNumber: values.orderNumber,
-                ikeaNumber: values.ikeaNumber,
+                orderNumber: Number(values.orderNumber),
+                ikeaNumber: Number(values.ikeaNumber),
                 customer: values.customer,
                 assignee: (await getIdByUserName(values.assignee as string)) ?? "", // TODO duplicate names
             };
@@ -132,7 +132,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
         <Form {...form}>
             <motion.form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8"
+                className="mx-auto max-w-prose space-y-8"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1), delay: 0.3 }}
@@ -287,23 +287,44 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                     )}
                 />
 
-                <FormField
-                    control={form.control}
-                    name="orderNumber"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Order Number</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder="order number"
-                                    autoComplete="on"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <div className="grid grid-cols-[1fr_auto] items-end gap-x-2">
+                    <FormField
+                        control={form.control}
+                        name="orderNumber"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Order Number</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="order number"
+                                        autoComplete="on"
+                                        type="number"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="ikeaNumber"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <Input
+                                        placeholder="order number"
+                                        autoComplete="on"
+                                        type="number"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
             </motion.form>
         </Form>
     );
