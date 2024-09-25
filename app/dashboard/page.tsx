@@ -31,8 +31,7 @@ export default async function Home() {
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {userRole && (
                         <CreateNewButton
-                            id={user.id}
-                            name="New Order"
+                            userId={user.id}
                             asCard
                         />
                     )}
@@ -45,7 +44,7 @@ export default async function Home() {
                             <Card className="transition-colors group-hover/cardLink:bg-muted">
                                 <CardHeader>
                                     <CardTitle className="transition-[letter-spacing] group-hover/cardLink:tracking-wider">
-                                        {order.name}
+                                        {/* {order.name} */}
                                     </CardTitle>
                                     {"secretMessage" in order && userRole && (
                                         <CardDescription>
@@ -54,10 +53,12 @@ export default async function Home() {
                                     )}
                                 </CardHeader>
                                 <CardContent>
-                                    <p className="line-clamp-3">{JSON.stringify(order.content)}</p>
+                                    <p className="line-clamp-3">
+                                        {/* {JSON.stringify(order.orderHeader.assignee)} */}
+                                    </p>
                                 </CardContent>
                                 <CardFooter>
-                                    <p>{getUserNameById(order.assignee)}</p>
+                                    {/* <p>{getUserNameById(order.orderHeader.assignee)}</p> */}
                                 </CardFooter>
                             </Card>
                         </Link>

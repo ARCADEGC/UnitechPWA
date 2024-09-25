@@ -14,6 +14,8 @@ const nextConfig = {
     },
 };
 
-export default MillionLint.next({
-    rsc: true,
-})(withSerwist(nextConfig));
+// export default MillionLint.next({
+//     rsc: true,
+// })(withSerwist(nextConfig));
+
+export default withSerwist(nextConfig);

@@ -10,20 +10,12 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Typography } from "@/components/ui/Typography";
 
-function CreateNewButton({
-    id,
-    name,
-    asCard = false,
-}: {
-    id: string;
-    name?: string;
-    asCard?: boolean;
-}) {
+function CreateNewButton({ userId, asCard = false }: { userId: string; asCard?: boolean }) {
     const router = useRouter();
 
-    async function onClickCreateOrder(order: { id: string; name?: string }) {
+    async function onClickCreateOrder(userId: string) {
         try {
-            const newOrderId = await CreateOrder(order);
+            const newOrderId = await CreateOrder(userId);
             router.push(`/dashboard/${newOrderId}`);
             router.refresh();
             setTimeout(() => toast.success("Order created successfully."), 500);
@@ -38,7 +30,7 @@ function CreateNewButton({
             <Button
                 variant={"outline"}
                 className="group/createNewCard h-full"
-                onClick={() => onClickCreateOrder({ id, name })}
+                onClick={() => onClickCreateOrder(userId)}
             >
                 <Typography
                     variant="h4"
@@ -49,7 +41,7 @@ function CreateNewButton({
                     Create New Order
                 </Typography>
             </Button>
-        :   <Button onClick={() => onClickCreateOrder({ id, name })}>Create New Order</Button>;
+        :   <Button onClick={() => onClickCreateOrder(userId)}>Create New Order</Button>;
 }
 
 export { CreateNewButton };

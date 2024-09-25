@@ -22,42 +22,30 @@ import { toast } from "sonner";
 
 import { TOrder } from "@/types/dbSchemas";
 
-function DeleteOrderButton({ order }: { order: TOrder }) {
+function DeleteOrderButton({ currentOrder }: { currentOrder: TOrder }) {
     const router = useRouter();
 
     async function DeleteOrder() {
-        try {
-            const promise = deleteOrder(order?.id ?? "")
-                .then(() => router.push("/dashboard"))
-                .then(() => router.refresh())
-                .finally(() => {
-                    setTimeout(() => {
-                        toast.promise(promise, {
-                            loading: "Deleting order...",
-                            success: () => {
-                                return "Order deleted successfully";
-                            },
-                        });
-                    }, 500);
-                });
-        } catch {
-            toast.error("There was an error deleting the order", {
-                description: "Please wait or try refreshing the page",
-            });
-        }
+        const promise = deleteOrder(currentOrder)
+            .then(() => router.push("/dashboard"))
+            .then(() => router.refresh());
+
+        toast.promise(promise, {
+            loading: "Deleting order...",
+            success: () => {
+                return "Order deleted successfully";
+            },
+            error: () => {
+                return "There was an error deleting the order";
+            },
+        });
     }
 
     return (
         <AlertDialog>
-            <AlertDialogTrigger>
-                <Button
-                    variant={"destructive"}
-                    className="flex items-center gap-x-2"
-                    type="button"
-                >
-                    <Trash className="size-4" />
-                    Delete Order
-                </Button>
+            <AlertDialogTrigger className="mb-[35svh] flex h-9 items-center justify-center gap-x-2 whitespace-nowrap rounded-md bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground shadow-sm transition-colors hover:bg-destructive/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
+                <Trash className="size-4" />
+                Delete Order
             </AlertDialogTrigger>
 
             <AlertDialogContent>
