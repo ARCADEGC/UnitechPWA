@@ -43,7 +43,7 @@ function Unit({
             as={as}
             asChild={asChild}
             disableSelect={disableSelect}
-            className={cn("!mt-0 text-xs text-muted-foreground", className)}
+            className={cn("!mt-0 text-xs text-muted-foreground print:text-black", className)}
             {...props}
         >
             {value}

@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
+import { cn } from "@/lib/utils";
+
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -61,7 +63,11 @@ export default async function RootLayout({
                 ></link>
             </head>
 
-            <body className="grid grid-cols-[[page-start]_minmax(var(--inline-padding),_1fr)_[content-start]_min(100%_-_var(--inline-padding)_*_2,_1400px)_[content-end]_minmax(var(--inline-padding),_1fr)_[page-end]] bg-background font-serif transition-colors [--inline-padding:_1rem]">
+            <body
+                className={cn(
+                    "grid grid-cols-[[page-start]_minmax(var(--inline-padding),_1fr)_[content-start]_min(100%_-_var(--inline-padding)_*_2,_1400px)_[content-end]_minmax(var(--inline-padding),_1fr)_[page-end]] bg-background font-serif transition-colors [--inline-padding:_1rem]",
+                )}
+            >
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="light"

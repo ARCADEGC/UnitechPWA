@@ -32,6 +32,7 @@ import { Typography } from "@/components/ui/Typography";
 import { Switch } from "@/components/ui/switch";
 
 import { formNewPCKSchema } from "@/types/orderForm";
+import { cn } from "@/lib/utils";
 
 type TPCKProps = {
     orderNewPCK: TOrderNewPCK;
@@ -484,6 +485,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -512,6 +516,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -540,6 +547,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -568,6 +578,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -618,6 +631,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -646,6 +662,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -700,6 +719,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -728,6 +750,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -756,6 +781,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -854,6 +882,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -882,6 +913,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -910,6 +944,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -938,6 +975,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -966,6 +1006,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -994,6 +1037,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1022,6 +1068,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1050,6 +1099,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1078,6 +1130,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1106,6 +1161,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1134,6 +1192,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1162,6 +1223,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1190,6 +1254,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1218,6 +1285,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        className={cn(
+                                            field.value == "0.00" ? "text-muted-foreground" : "",
+                                        )}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1227,6 +1297,23 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         )}
                     />
                 </div>
+
+                <div className="flex items-baseline justify-between gap-x-8">
+                    <Typography variant="h2">Installation</Typography>
+                    <Unit
+                        value={
+                            Math.floor(
+                                Number(form.getValues().bail ?? 0) *
+                                    Number(form.getValues().tax ? 1.12 : 1.21) *
+                                    100,
+                            ) / 100
+                        }
+                        className="text-xl font-medium tracking-wider text-foreground"
+                        unit=",-"
+                    />
+                </div>
+
+                <Separator className="!mt-0 mb-8" />
 
                 <div className="grid gap-8 sm:grid-cols-2">
                     <FormField
@@ -1257,7 +1344,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                             <FormItem>
                                 <FormLabel>Tax</FormLabel>
 
-                                <FormControl>
+                                <FormControl className="print:hidden">
                                     <div className="flex gap-x-2">
                                         <Typography
                                             variant="muted"
@@ -1277,7 +1364,12 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         </Typography>
                                     </div>
                                 </FormControl>
-                                <FormDescription>Let the tax be 12% instead of 21%</FormDescription>
+                                <Typography className="hidden text-black print:block">
+                                    {field.value ? "12%" : "21%"}
+                                </Typography>
+                                <FormDescription className="print:hidden">
+                                    Let the tax be 12% instead of 21%
+                                </FormDescription>
 
                                 <FormMessage />
                             </FormItem>
@@ -1311,7 +1403,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                     size={"icon"}
                                     onClick={() => sigCanvasRef.current?.clear()}
                                     variant={"secondary"}
-                                    className="absolute -bottom-2 -right-2"
+                                    className="absolute -bottom-2 -right-2 print:hidden"
                                 >
                                     <Eraser className="size-4" />
                                 </Button>
