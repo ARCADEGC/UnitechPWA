@@ -125,7 +125,6 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
     });
 
     async function onSubmit(values: z.infer<typeof formNewPCKSchema>) {
-        console.log(values);
         try {
             const updatedOrder: TOrderNewPCK = {
                 shipmentZoneOne: String(
@@ -213,7 +212,6 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                     return "Order updated successfully";
                 },
                 error: () => {
-                    console.log(promise);
                     return "Something went wrong";
                 },
             });
@@ -600,7 +598,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
 
                 <Separator className="!mt-0 mb-8" />
 
-                <div className="grid gap-8">
+                <div className="grid gap-x-4 gap-y-8 sm:grid-cols-2">
                     <FormField
                         control={form.control}
                         name="completeInstallationLockers"
@@ -682,7 +680,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
 
                 <Separator className="!mt-0 mb-8" />
 
-                <div className="grid gap-8">
+                <div className="grid gap-x-4 gap-y-8 sm:grid-cols-2">
                     <FormField
                         control={form.control}
                         name="basicLockers"
@@ -836,7 +834,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
 
                 <Separator className="!mt-0 mb-8" />
 
-                <div className="grid gap-8">
+                <div className="grid gap-x-4 gap-y-8 sm:grid-cols-2">
                     <FormField
                         control={form.control}
                         name="installationDigester"
@@ -1230,14 +1228,34 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                     />
                 </div>
 
-                <div className="grid gap-8">
+                <div className="grid gap-8 sm:grid-cols-2">
+                    <FormField
+                        control={form.control}
+                        name="bail"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Bail</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
                     <FormField
                         control={form.control}
                         name="tax"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Tax</FormLabel>
-                                <FormDescription>Let the tax be 12% instead of 21%</FormDescription>
 
                                 <FormControl>
                                     <div className="flex gap-x-2">
@@ -1259,27 +1277,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         </Typography>
                                     </div>
                                 </FormControl>
-
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="bail"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Bail</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="number"
-                                        min="0"
-                                        step=".01"
-                                        onFocus={(event) => event.currentTarget.select()}
-                                        {...field}
-                                    />
-                                </FormControl>
+                                <FormDescription>Let the tax be 12% instead of 21%</FormDescription>
 
                                 <FormMessage />
                             </FormItem>
@@ -1329,7 +1327,3 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
 }
 
 export default PCK;
-
-// tax: order?.tax ?? false,
-// bail: order?.bail ?? undefined,
-// signature: order?.signature ?? null,
