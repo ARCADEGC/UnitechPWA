@@ -15,6 +15,7 @@ import { DeleteOrderButton } from "./DeteteOrderButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/formTabs";
 import { User } from "lucia";
 import { Separator } from "@/components/ui/separator";
+import { Typography } from "@/components/ui/Typography";
 
 // const OrderFormWithNoSSR = lazy(() => import("@/app/dashboard/[id]/OrderForm"));
 
@@ -74,6 +75,13 @@ async function Home({ params }: { params: { id: string } }) {
 
     return (
         <Suspense fallback={<Loading />}>
+            <Typography
+                variant="h1"
+                as="p"
+                className="mb-8 hidden text-black print:block"
+            >
+                Unitech
+            </Typography>
             {orderHeader ?
                 <FormHeader
                     orderHeader={orderHeader}

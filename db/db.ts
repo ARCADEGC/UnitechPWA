@@ -89,7 +89,11 @@ export async function getOrderHeaderByIdAndRoleOrUser(
         where: (table) => eq(table.id, id),
     });
 
-    if ((orderHeader?.assignee !== userId && !role) || !orderHeader) return undefined;
+    if (!orderHeader) return undefined;
+
+    if (role) return orderHeader;
+
+    if (orderHeader?.assignee !== userId) return undefined;
 
     return orderHeader;
 }
@@ -99,16 +103,23 @@ export async function getOrderNewPCKByIdAndRoleOrUser(
     role: boolean,
     userId: string,
 ): Promise<TOrderNewPCK | undefined> {
-    const assignee = await db.query.OrderHeader.findFirst({
-        columns: { assignee: true },
-        where: (table) => eq(table.id, id),
-    });
+    // TODO : Check if user has access to this order
+    // const assignee = await db.query.OrderHeader.findFirst({
+    //     columns: { assignee: true },
+    //     where: (table) => eq(table.id, id),
+    // });
 
     const orderNewPCK = await db.query.OrderNewPCK.findFirst({
         where: (table) => eq(table.id, id),
     });
 
-    if ((assignee?.assignee !== userId && !role) || !orderNewPCK) return undefined;
+    // if (!orderNewPCK) return undefined;
+
+    // if (role) return orderNewPCK;
+
+    // if (assignee?.assignee === userId) return orderNewPCK;
+
+    // return undefined;
 
     return orderNewPCK;
 }
@@ -118,16 +129,17 @@ export async function getOrderPP2ByIdAndRoleOrUser(
     role: boolean,
     userId: string,
 ): Promise<TOrderPP2 | undefined> {
-    const assignee = await db.query.OrderHeader.findFirst({
-        columns: { assignee: true },
-        where: (table) => eq(table.id, id),
-    });
+    // TODO : Check if user has access to this order
+    // const assignee = await db.query.OrderHeader.findFirst({
+    //     columns: { assignee: true },
+    //     where: (table) => eq(table.id, id),
+    // });
 
     const OrderPP2 = await db.query.OrderPP2.findFirst({
         where: (table) => eq(table.id, id),
     });
 
-    if ((assignee?.assignee !== userId && !role) || !OrderPP2) return undefined;
+    // if ((assignee?.assignee !== userId && !role) || !OrderPP2) return undefined;
 
     return OrderPP2;
 }
@@ -137,17 +149,18 @@ export async function getOrderList1ByIdAndRoleOrUser(
     role: boolean,
     userId: string,
 ): Promise<TOrderNewPCK | string | undefined> {
-    const assignee = await db.query.OrderHeader.findFirst({
-        columns: { assignee: true },
-        where: (table) => eq(table.id, id),
-    });
+    // TODO : Check if user has access to this order
+    // const assignee = await db.query.OrderHeader.findFirst({
+    //     columns: { assignee: true },
+    //     where: (table) => eq(table.id, id),
+    // });
 
     const OrderList1 = await db.query.OrderListOne.findFirst({
         where: (table) => eq(table.id, id),
     });
 
-    if ((assignee?.assignee !== userId && !role) || !OrderList1)
-        return "You do not have access to this order";
+    // if ((assignee?.assignee !== userId && !role) || !OrderList1)
+    //     return "You do not have access to this order";
 
     return OrderList1;
 }
