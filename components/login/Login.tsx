@@ -38,7 +38,7 @@ function LoginForm() {
         try {
             const userSalt = await getUserSaltByEmail(values.email);
 
-            if (!userSalt) throw new Error("Invalid Username or Password");
+            if (!userSalt) throw new Error("Neplatné uživatelské jméno nebo heslo");
 
             const passwordHash = await hash(values.password, userSalt[0]?.salt);
 
@@ -48,13 +48,13 @@ function LoginForm() {
             });
 
             if (response.success) {
-                toast.success("Successfully logged in");
+                toast.success("Úspěšně jste se přihlásili");
                 router.push("/");
             } else {
-                throw new Error("There was an error whilst trying to log you in");
+                throw new Error("Nastala chyba při přihlášení");
             }
         } catch (error) {
-            toast.error(error instanceof Error ? error.message : "An unexpected error occurred");
+            toast.error(error instanceof Error ? error.message : "Neočekávaná chyba");
         }
     }
 
@@ -88,7 +88,7 @@ function LoginForm() {
                     name="password"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Password</FormLabel>
+                            <FormLabel>Heslo</FormLabel>
                             <FormControl>
                                 <Input
                                     type="password"
@@ -106,10 +106,10 @@ function LoginForm() {
                         variant={"outline"}
                         asChild
                     >
-                        <Link href="/">Go back</Link>
+                        <Link href="/">Jít zpět</Link>
                     </Button>
 
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit">Přihlásit se</Button>
                 </div>
             </form>
         </Form>

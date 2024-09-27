@@ -17,8 +17,8 @@ function LoginCard() {
         >
             <Card className="mx-auto w-full max-w-[32ch]">
                 <CardHeader>
-                    <Typography variant="h2">Login</Typography>
-                    <CardDescription>Log into your account</CardDescription>
+                    <Typography variant="h2">Přihlášeni</Typography>
+                    <CardDescription>Přihlašte se do svého účtu</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <LoginForm />

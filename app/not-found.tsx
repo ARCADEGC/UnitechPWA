@@ -19,7 +19,7 @@ function NotFound() {
                 as="p"
                 className="bg-gradient-to-br from-foreground from-40% to-muted bg-clip-text p-4 text-transparent"
             >
-                Not Found
+                Nepodařilo se najít stránku
             </Typography>
             <Button
                 variant={"link"}
@@ -33,7 +33,7 @@ function NotFound() {
                         href="/"
                         className="text-muted transition-colors hover:text-foreground"
                     >
-                        Return Home
+                        Vrátit se
                     </Link>
                 </Typography>
             </Button>

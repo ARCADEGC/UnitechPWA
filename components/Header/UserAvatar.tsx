@@ -41,10 +41,10 @@ function UserAvatar({
                 </MemoizedDropdownMenuTrigger>
 
                 <DropdownMenuContent>
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuLabel>Můj účet</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>{username}</DropdownMenuItem>
-                    <DropdownMenuItem>{userRole ? "Admin" : "User"}</DropdownMenuItem>
+                    <DropdownMenuItem>{userRole ? "Administrátor" : "Montér"}</DropdownMenuItem>
 
                     <DropdownMenuSeparator />
 
@@ -53,7 +53,7 @@ function UserAvatar({
                         onClick={() => logOut()}
                     >
                         <LogOut className="size-4 stroke-muted-foreground" />
-                        Log Out
+                        Odhlásit se
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </MemoizedDropdownMenu>

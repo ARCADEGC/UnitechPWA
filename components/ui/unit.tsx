@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Typography } from "@/components/ui/Typography";
 
 type TUnitProps = {
-    value: string | number | undefined;
+    value?: string | number | undefined;
     unit?: string;
     per?: string;
     variant?:

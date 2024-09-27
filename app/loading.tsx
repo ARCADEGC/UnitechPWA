@@ -18,7 +18,7 @@ function Loading() {
                     as="p"
                     className="animate-low-pulse bg-gradient-to-br from-foreground from-40% to-muted bg-clip-text p-4 text-transparent"
                 >
-                    Loading...
+                    Načítání...
                 </Typography>
             </div>
         </motion.div>

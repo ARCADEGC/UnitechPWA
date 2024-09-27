@@ -19,14 +19,14 @@ function NoOrderFound({ userRole, userId }: { userRole: boolean; userId: string 
                 as="h2"
                 className="tracking-wide"
             >
-                No orders found
+                Žádné objednávky
             </Typography>
 
             <Typography
                 variant="muted"
                 className="mb-8 mt-2 text-xl"
             >
-                {userRole ? "Create a new order" : "Wait to be assigned a task"}
+                {userRole ? "Vytvořit novou objednávku" : "Vyčkejte na přiřazení objednávky"}
             </Typography>
 
             {userRole && <CreateNewButton userId={userId} />}

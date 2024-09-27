@@ -54,7 +54,7 @@ async function Home({ params }: { params: { id: string } }) {
                     userRole={userRole}
                     referenceDate={currentOrder?.referenceDate}
                 />
-            :   <div>There was an error fetching order new PCK. Please try again.</div>;
+            :   <div>Nastala chyba při načítání objednávky PCK. Zkuste to prosím znovu.</div>;
     }
 
     async function tabChangeToPP2(user: User) {
@@ -70,7 +70,7 @@ async function Home({ params }: { params: { id: string } }) {
                     userRole={userRole}
                     referenceDate={currentOrder?.referenceDate}
                 />
-            :   <div>There was an error fetching order new PP 2. Please try again.</div>;
+            :   <div>Nastala chyba při načítání objednávky PP 2. Zkuste to prosím znovu.</div>;
     }
 
     return (
@@ -87,7 +87,7 @@ async function Home({ params }: { params: { id: string } }) {
                     orderHeader={orderHeader}
                     userRole={userRole}
                 />
-            :   <div>There was an error fetching order header. Please try again.</div>}
+            :   <div>Nastala chyba při načítání objednávky. Zkuste to prosím znovu.</div>}
 
             {/* <OrderFormWithNoSSR
                 order={currentOrder}
