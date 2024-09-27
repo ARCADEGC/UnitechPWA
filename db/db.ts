@@ -4,8 +4,17 @@ import "@/lib/loadEnv";
 import { and, desc, eq, lte, sql } from "drizzle-orm";
 import { db } from "@/db/migrate";
 
-import { order, User, Prices, AdminPrices, OrderHeader, OrderNewPCK, OrderPP2 } from "@/db/schema";
-import type { TOrder, TOrderHeader, TOrderNewPCK, TUser } from "@/types/dbSchemas";
+import {
+    order,
+    User,
+    Prices,
+    AdminPrices,
+    OrderHeader,
+    OrderNewPCK,
+    OrderPP2,
+    OrderListOne,
+} from "@/db/schema";
+import type { TOrder, TOrderHeader, TOrderNewPCK, TOrderPP2, TUser } from "@/types/dbSchemas";
 import { randomUUID } from "crypto";
 import { toast } from "sonner";
 
@@ -115,7 +124,7 @@ export async function getOrderPP2ByIdAndRoleOrUser(
     id: string,
     role: boolean,
     userId: string,
-): Promise<TOrderNewPCK | string | undefined> {
+): Promise<TOrderPP2 | undefined> {
     const assignee = await db.query.OrderHeader.findFirst({
         columns: { assignee: true },
         where: (table) => eq(table.id, id),
@@ -125,10 +134,29 @@ export async function getOrderPP2ByIdAndRoleOrUser(
         where: (table) => eq(table.id, id),
     });
 
-    if ((assignee?.assignee !== userId && !role) || !OrderPP2)
-        return "You do not have access to this order";
+    if ((assignee?.assignee !== userId && !role) || !OrderPP2) return undefined;
 
     return OrderPP2;
+}
+
+export async function getOrderList1ByIdAndRoleOrUser(
+    id: string,
+    role: boolean,
+    userId: string,
+): Promise<TOrderNewPCK | string | undefined> {
+    const assignee = await db.query.OrderHeader.findFirst({
+        columns: { assignee: true },
+        where: (table) => eq(table.id, id),
+    });
+
+    const OrderList1 = await db.query.OrderListOne.findFirst({
+        where: (table) => eq(table.id, id),
+    });
+
+    if ((assignee?.assignee !== userId && !role) || !OrderList1)
+        return "You do not have access to this order";
+
+    return OrderList1;
 }
 
 // . ||-------------------------------------------------------------------------------||
@@ -190,6 +218,19 @@ export async function updateOrderNewPCK(
         .update(OrderNewPCK)
         .set(role ? content : content)
         .where(eq(OrderNewPCK.id, orderNewPCKId))
+        .execute();
+}
+
+export async function updateOrderPP2(
+    orderPP2Id: string,
+    content: TOrderNewPCK,
+    role: boolean,
+): Promise<void> {
+    // TODO user validation
+    await db
+        .update(OrderPP2)
+        .set(role ? content : content)
+        .where(eq(OrderPP2.id, orderPP2Id))
         .execute();
 }
 
@@ -268,8 +309,9 @@ export async function CreateOrder(userId: string): Promise<string | boolean> {
         const newOrderHeaderId = await CreateOrderHeader(userId);
         const newOrderNewPCKId = await CreateOrderNewPCK();
         const newOrderNewPP2Id = await CreateOrderNewPP2();
+        const newOrderNewList1Id = await CreateOrderNewList1();
 
-        if (!newOrderHeaderId || !newOrderNewPCKId || !newOrderNewPP2Id)
+        if (!newOrderHeaderId || !newOrderNewPCKId || !newOrderNewPP2Id || !newOrderNewList1Id)
             new Error("Failed to gather all the required elements");
 
         const newOrder = await db
@@ -278,23 +320,24 @@ export async function CreateOrder(userId: string): Promise<string | boolean> {
                 orderHeader: newOrderHeaderId.toString(),
                 orderNewPCK: newOrderNewPCKId.toString(),
                 orderPP2: newOrderNewPP2Id.toString(),
+                orderListOne: newOrderNewList1Id.toString(),
                 referenceDate: new Date(),
             })
             .returning({ id: order.id });
 
         const newOrderId = newOrder[0].id;
 
-        console.log(newOrderId, newOrderHeaderId, newOrderNewPCKId, newOrderNewPP2Id);
-
         if (
             !newOrderId &&
             newOrderHeaderId !== false &&
             newOrderNewPCKId !== false &&
-            newOrderNewPP2Id !== false
+            newOrderNewPP2Id !== false &&
+            newOrderNewList1Id !== false
         ) {
             await db.delete(OrderHeader).where(eq(OrderHeader.id, newOrderHeaderId)).execute();
             await db.delete(OrderNewPCK).where(eq(OrderNewPCK.id, newOrderNewPCKId)).execute();
             await db.delete(OrderPP2).where(eq(OrderPP2.id, newOrderNewPP2Id)).execute();
+            await db.delete(OrderListOne).where(eq(OrderListOne.id, newOrderNewList1Id)).execute();
         }
 
         return newOrderId;
@@ -312,7 +355,7 @@ async function CreateOrderHeader(userId: string) {
             .values({
                 customer: "test",
                 address: "test",
-                phone: "test",
+                phone: "123123123",
                 email: "test",
                 assignee: userId,
                 dueDate: new Date(),
@@ -342,8 +385,6 @@ async function CreateOrderNewPCK() {
 
         const newOrderHeaderId = newOrderHeader[0].id;
 
-        console.log("new pck: ", newOrderHeaderId);
-
         !newOrderHeaderId && new Error("Failed to create new PCK");
 
         return newOrderHeaderId;
@@ -356,16 +397,30 @@ async function CreateOrderNewPP2() {
     try {
         const newOrderHeader = await db
             .insert(OrderPP2)
-            .values({})
+            .values({
+                date: new Date(),
+            })
             .returning({ id: OrderHeader.id });
 
         const newOrderHeaderId = newOrderHeader[0].id;
 
-        console.log("new pp2: ", newOrderHeaderId);
-
         !newOrderHeaderId && new Error("Failed to create PP2");
 
         return newOrderHeaderId;
+    } catch {
+        return false;
+    }
+}
+
+async function CreateOrderNewList1() {
+    try {
+        const newList1 = await db.insert(OrderListOne).values({}).returning({ id: OrderHeader.id });
+
+        const newOderListOneId = newList1[0].id;
+
+        !newOderListOneId && new Error("Failed to create New List1");
+
+        return newOderListOneId;
     } catch {
         return false;
     }
@@ -383,6 +438,7 @@ export async function deleteOrder(currentOrder: TOrder) {
     await db.delete(OrderHeader).where(eq(OrderHeader.id, currentOrder.orderHeader)).returning();
     await db.delete(OrderNewPCK).where(eq(OrderNewPCK.id, currentOrder.orderNewPCK)).returning();
     await db.delete(OrderPP2).where(eq(OrderPP2.id, currentOrder.orderPP2)).returning();
+    await db.delete(OrderListOne).where(eq(OrderListOne.id, currentOrder.orderListOne)).returning();
 }
 
 // . ||--------------------------------------------------------------------------------||
