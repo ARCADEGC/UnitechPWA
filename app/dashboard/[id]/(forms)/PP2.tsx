@@ -1013,7 +1013,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     <Button
                                         type="button"
                                         size={"icon"}
-                                        onClick={() => workerSigCanvasRef.current?.clear()}
+                                        onClick={() => custommerSigCanvasRef.current?.clear()}
                                         variant={"secondary"}
                                         className="absolute -bottom-2 -right-2 print:hidden"
                                     >
