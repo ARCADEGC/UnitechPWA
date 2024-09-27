@@ -1,7 +1,14 @@
 import Link from "next/link";
 
 import { validateSession } from "@/auth";
-import { getUserById, getUserNameById, getOrdersByIdAndRole } from "@/db/db";
+import {
+    getUserById,
+    getUserNameById,
+    getOrdersByIdAndRole,
+    getNameFromHeaderByOrderId,
+    getOrderNumberFromHeaderByOrderId,
+    getOrderAssigneeByOrderId,
+} from "@/db/db";
 
 import {
     Card,
@@ -44,21 +51,22 @@ export default async function Home() {
                             <Card className="transition-colors group-hover/cardLink:bg-muted">
                                 <CardHeader>
                                     <CardTitle className="transition-[letter-spacing] group-hover/cardLink:tracking-wider">
-                                        {/* {order.name} */}
+                                        {getNameFromHeaderByOrderId(order.orderHeader)}
                                     </CardTitle>
-                                    {"secretMessage" in order && userRole && (
-                                        <CardDescription>
-                                            {order.secretMessage as string}
-                                        </CardDescription>
-                                    )}
+                                    <CardDescription>
+                                        {getOrderNumberFromHeaderByOrderId(order.orderHeader)}
+                                    </CardDescription>
                                 </CardHeader>
-                                <CardContent>
-                                    <p className="line-clamp-3">
-                                        {/* {JSON.stringify(order.orderHeader.assignee)} */}
-                                    </p>
-                                </CardContent>
+                                {/* <CardContent>
+                                    <p className="line-clamp-3"></p>
+                                </CardContent> */}
                                 <CardFooter>
-                                    {/* <p>{getUserNameById(order.orderHeader.assignee)}</p> */}
+                                    <p>
+                                        {getOrderAssigneeByOrderId(order.orderHeader).then(
+                                            (userUUID) =>
+                                                userUUID ? getUserNameById(userUUID) : "",
+                                        )}
+                                    </p>
                                 </CardFooter>
                             </Card>
                         </Link>

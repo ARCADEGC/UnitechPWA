@@ -54,11 +54,7 @@ export async function getOrdersByIdAndRole(id: string, role: boolean) {
         where: (table) => eq(table.assignee, id),
     });
 
-    console.log(OrderHeaders);
-
     const orders = await db.query.order.findMany();
-
-    console.log(orders);
 
     const filteredOrders = [
         ...orders.filter((order) => OrderHeaders.some((header) => header.id === order.orderHeader)),
@@ -68,7 +64,6 @@ export async function getOrdersByIdAndRole(id: string, role: boolean) {
 }
 
 export async function getOrderByIdAndRole(id: string, role: boolean): Promise<TOrder | undefined> {
-    console.log(">");
     const fetchedOrder =
         role ?
             await db.query.order.findFirst({
@@ -77,8 +72,6 @@ export async function getOrderByIdAndRole(id: string, role: boolean): Promise<TO
         :   await db.query.order.findFirst({
                 where: (table) => eq(table.id, id),
             });
-
-    console.log(fetchedOrder);
 
     if (!fetchedOrder) return undefined;
 
@@ -177,6 +170,33 @@ export async function getIdByUserName(userName: string) {
     });
 
     return user?.id ?? null;
+}
+
+export async function getNameFromHeaderByOrderId(orderId: string) {
+    const orderHeader = await db.query.OrderHeader.findFirst({
+        columns: { customer: true },
+        where: (table) => eq(table.id, orderId),
+    });
+
+    return orderHeader?.customer;
+}
+
+export async function getOrderNumberFromHeaderByOrderId(orderId: string) {
+    const orderHeader = await db.query.OrderHeader.findFirst({
+        columns: { orderNumber: true, ikeaNumber: true },
+        where: (table) => eq(table.id, orderId),
+    });
+
+    return `${orderHeader?.orderNumber} / ${orderHeader?.ikeaNumber}`;
+}
+
+export async function getOrderAssigneeByOrderId(orderId: string) {
+    const orderHeader = await db.query.OrderHeader.findFirst({
+        columns: { assignee: true },
+        where: (table) => eq(table.id, orderId),
+    });
+
+    return orderHeader?.assignee;
 }
 
 // . ||--------------------------------------------------------------------------------||
@@ -348,7 +368,6 @@ export async function CreateOrder(userId: string): Promise<string | boolean> {
 }
 
 async function CreateOrderHeader(userId: string) {
-    console.log(userId);
     try {
         const newOrderHeader = await db
             .insert(OrderHeader)
@@ -365,8 +384,6 @@ async function CreateOrderHeader(userId: string) {
             .returning({ id: OrderHeader.id });
 
         const newOrderHeaderId = newOrderHeader[0].id;
-
-        console.log("header: ", newOrderHeaderId);
 
         !newOrderHeaderId && new Error("Failed to create Header");
 

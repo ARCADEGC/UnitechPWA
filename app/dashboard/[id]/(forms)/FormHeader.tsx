@@ -100,7 +100,6 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                     return "Order updated successfully";
                 },
                 error: () => {
-                    console.log(promise);
                     return "Something went wrong";
                 },
             });
@@ -135,7 +134,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                 className="mx-auto max-w-prose space-y-8"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1), delay: 0.3 }}
+                transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) }}
             >
                 <FormField
                     control={form.control}
@@ -173,119 +172,124 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                     )}
                 />
 
-                <FormField
-                    control={form.control}
-                    name="dueDate"
-                    render={({ field }) => (
-                        <FormItem className="grid">
-                            <FormLabel>Due Date</FormLabel>
-                            <FormControl>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <FormControl>
-                                            <Button
-                                                variant={"outline"}
-                                                className={cn(
-                                                    "w-[240px] pl-3 text-left font-normal",
-                                                    !field.value && "text-muted-foreground",
-                                                )}
-                                            >
-                                                {field.value ?
-                                                    format(field.value, "PPP")
-                                                :   <span>Pick a date</span>}
-                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                            </Button>
-                                        </FormControl>
-                                    </PopoverTrigger>
-                                    <PopoverContent
-                                        className="w-auto p-0"
-                                        align="start"
-                                    >
-                                        <Calendar
-                                            mode="single"
-                                            selected={field.value}
-                                            onSelect={field.onChange}
-                                            disabled={(date) =>
-                                                date < new Date() || date < new Date("1900-01-01")
-                                            }
-                                            initialFocus
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={form.control}
-                    name="assignee"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Assigned Team</FormLabel>
-                            <Select
-                                onValueChange={field.onChange}
-                                value={form.watch("assignee")}
-                                disabled={!userRole}
-                            >
+                <div className="grid items-end gap-x-2 sm:grid-cols-[auto_1fr]">
+                    <FormField
+                        control={form.control}
+                        name="dueDate"
+                        render={({ field }) => (
+                            <FormItem className="grid">
+                                <FormLabel>Due Date</FormLabel>
                                 <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select a assignee" />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    {users.map((user) => (
-                                        <SelectItem
-                                            key={user.id}
-                                            value={user.name}
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <FormControl>
+                                                <Button
+                                                    variant={"outline"}
+                                                    className={cn(
+                                                        "w-[240px] pl-3 text-left font-normal",
+                                                        !field.value && "text-muted-foreground",
+                                                    )}
+                                                >
+                                                    {field.value ?
+                                                        format(field.value, "PPP")
+                                                    :   <span>Pick a date</span>}
+                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                </Button>
+                                            </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent
+                                            className="w-auto p-0"
+                                            align="start"
                                         >
-                                            {user.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                                            <Calendar
+                                                mode="single"
+                                                selected={field.value}
+                                                onSelect={field.onChange}
+                                                disabled={(date) =>
+                                                    date < new Date() ||
+                                                    date < new Date("1900-01-01")
+                                                }
+                                                initialFocus
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                    <FormField
+                        control={form.control}
+                        name="assignee"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Assigned Team</FormLabel>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    value={form.watch("assignee")}
+                                    disabled={!userRole}
+                                >
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select a assignee" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {users.map((user) => (
+                                            <SelectItem
+                                                key={user.id}
+                                                value={user.name}
+                                            >
+                                                {user.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
 
-                <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Phone</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder="order phone"
-                                    autoComplete="on"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
 
-                <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder="order email"
-                                    autoComplete="on"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <div className="grid items-end gap-x-2 sm:grid-cols-[16ch_1fr]">
+                    <FormField
+                        control={form.control}
+                        name="phone"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Phone</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="order phone"
+                                        autoComplete="on"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Email</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="order email"
+                                        autoComplete="on"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
 
                 <div className="grid grid-cols-[1fr_auto] items-end gap-x-2">
                     <FormField
