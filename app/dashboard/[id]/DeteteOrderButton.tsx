@@ -31,12 +31,12 @@ function DeleteOrderButton({ currentOrder }: { currentOrder: TOrder }) {
             .then(() => router.refresh());
 
         toast.promise(promise, {
-            loading: "Deleting order...",
+            loading: "Mazání objednávky...",
             success: () => {
-                return "Order deleted successfully";
+                return "Objednávka smazána úspěšně";
             },
             error: () => {
-                return "There was an error deleting the order";
+                return "Nastala chyba při mazání objednávky";
             },
         });
     }
@@ -45,15 +45,15 @@ function DeleteOrderButton({ currentOrder }: { currentOrder: TOrder }) {
         <AlertDialog>
             <AlertDialogTrigger className="mb-[35svh] flex h-9 items-center justify-center gap-x-2 whitespace-nowrap rounded-md bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground shadow-sm transition-colors hover:bg-destructive/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
                 <Trash className="size-4" />
-                Delete Order
+                Smazat objednávku
             </AlertDialogTrigger>
 
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogTitle>Jste si opravdu jisti?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your account and
-                        remove your data from our servers.
+                        Tato akci nelze vrátit zpět. Permanentrně smažete objednávku a odstraníte
+                        data z našich serverů.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -67,7 +67,7 @@ function DeleteOrderButton({ currentOrder }: { currentOrder: TOrder }) {
                             onClick={DeleteOrder}
                         >
                             <Trash className="size-4" />
-                            Delete
+                            Smazat
                         </Button>
                     </AlertDialogAction>
                 </AlertDialogFooter>

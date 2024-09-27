@@ -43,7 +43,7 @@ async function Header() {
                                         variant={"outline"}
                                         asChild
                                     >
-                                        <Link href={"/login"}>Login</Link>
+                                        <Link href={"/login"}>Přihlásit se</Link>
                                     </Button>
                                 </li>
                             )}

@@ -19,10 +19,10 @@ function LoginRequest() {
                 variant="h3"
                 as="p"
             >
-                It would seem like you are not logged in.
+                Vypadá to že nejste přihlášeni
             </Typography>
             <Button asChild>
-                <Link href="login">Login here</Link>
+                <Link href="login">Přihlásit se</Link>
             </Button>
         </motion.main>
     );

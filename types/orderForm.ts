@@ -4,13 +4,13 @@ import { z } from "zod";
 
 export const formHeaderSchema = z.object({
     customer: z.string().min(2, {
-        message: "Name must be at least 2 characters.",
+        message: "Zákazník musí mít minimálně 2 znaky.",
     }),
     address: z.string().min(3, {
-        message: "Address must be at least 5 characters.",
+        message: "Adresa musí mít minimálně 3 znaky.",
     }),
     phone: z.string().min(9, {
-        message: "Phone must be at least 9 characters.",
+        message: "Telefon musí mít minimálně 9 čísel.",
     }),
     // email: z.string().email({
     //     message: "Invalid email address.",

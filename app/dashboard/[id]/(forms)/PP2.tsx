@@ -40,6 +40,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Typography } from "@/components/ui/Typography";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
+import { Unit } from "@/components/ui/unit";
 
 type TPP2Props = {
     orderPP2: TOrderPP2;
@@ -148,17 +149,17 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
             const promise = updateOrderPP2(orderPP2.id as string, updatedOrder, userRole);
 
             toast.promise(promise, {
-                loading: "Updating order...",
+                loading: "Aktualizování objednávky...",
                 success: () => {
-                    return "Order updated successfully";
+                    return "Objednávka aktualizována úspěšně";
                 },
                 error: () => {
-                    return "Something went wrong";
+                    return "Něco se pokazilo";
                 },
             });
         } catch {
-            return toast.error("Something went wrong", {
-                description: "Please wait or try again",
+            return toast.error("Něco se pokazilo", {
+                description: "Prosím počkejte nebo to zkuste znovu",
             });
         }
     }
@@ -227,7 +228,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                         />
                                     </FormControl>
                                     <FormLabel className="!mt-0 text-sm font-normal">
-                                        Install another service
+                                        Je vyžadována další služba (domontáž)?
                                     </FormLabel>
                                 </FormItem>
                             );
@@ -245,7 +246,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                 name="timeToFinish"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Time To Finish</FormLabel>
+                                        <FormLabel>Čas potřebný k dokončení</FormLabel>
 
                                         <FormControl>
                                             <Input
@@ -280,7 +281,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                         />
                                     </FormControl>
                                     <FormLabel className="!mt-0 text-sm font-normal">
-                                        Contact with Ikea
+                                        Kontakt s IKEA (kurýr popř. reklamace)
                                     </FormLabel>
                                 </FormItem>
                             );
@@ -298,7 +299,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                 name="numOfReturn"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Number of Return</FormLabel>
+                                        <FormLabel>Číslo reklamace (SAMS)</FormLabel>
 
                                         <FormControl>
                                             <Input
@@ -327,7 +328,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             return (
                                 <FormItem>
                                     <FormLabel className="!mt-0 text-sm font-normal">
-                                        Finished
+                                        Zakázka dokončena
                                     </FormLabel>
                                     <Select
                                         onValueChange={field.onChange}
@@ -339,9 +340,9 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="no">Impossible</SelectItem>
-                                            <SelectItem value="yes">Yes</SelectItem>
-                                            <SelectItem value="canceled">Canceled</SelectItem>
+                                            <SelectItem value="yes">Ano</SelectItem>
+                                            <SelectItem value="no">Nebylo možné</SelectItem>
+                                            <SelectItem value="canceled">Zrušeno</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </FormItem>
@@ -360,10 +361,13 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                 name="reasonOfImposibility"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Reason of Impossibility</FormLabel>
+                                        <FormLabel>Nebylo možné dokončení</FormLabel>
 
                                         <FormControl>
-                                            <Textarea {...field} />
+                                            <Textarea
+                                                placeholder="důvod"
+                                                {...field}
+                                            />
                                         </FormControl>
 
                                         <FormMessage />
@@ -384,10 +388,13 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                 name="reasonOfCancelation"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Reason of Cancelation</FormLabel>
+                                        <FormLabel>Zakázka zrušena</FormLabel>
 
                                         <FormControl>
-                                            <Textarea {...field} />
+                                            <Textarea
+                                                placeholder="důvod"
+                                                {...field}
+                                            />
                                         </FormControl>
 
                                         <FormMessage />
@@ -412,25 +419,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
-                                    Water Connection
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="couplingsAndKitchenAdjustment"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-3">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
-                                <FormLabel className="!mt-0 text-sm font-normal">
-                                    Couplings and Kitchen Adjustment
+                                    Provedeno připojení vody
                                 </FormLabel>
                             </FormItem>
                         )}
@@ -448,25 +437,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
-                                    Test Dishwasher Faucet
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="viewCutsOk"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-3">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
-                                <FormLabel className="!mt-0 text-sm font-normal">
-                                    View Cuts Ok
+                                    Zkouška myčky, baterie
                                 </FormLabel>
                             </FormItem>
                         )}
@@ -485,25 +456,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
-                                    Electrical Appliances Plugged In
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="cleaningOfKitchenInstallationArea"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-3">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
-                                <FormLabel className="!mt-0 text-sm font-normal">
-                                    Cleaning of Kitchen and Installation Area
+                                    El. spotřebiče zapojeny
                                 </FormLabel>
                             </FormItem>
                         )}
@@ -521,25 +474,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
-                                    Electrical Test Appliances
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="previousDamageToApartment"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-3">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
-                                <FormLabel className="!mt-0 text-sm font-normal">
-                                    Previous Damage to Apartment
+                                    Zkouška el. spotřebičů
                                 </FormLabel>
                             </FormItem>
                         )}
@@ -557,7 +492,79 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
-                                    Sealing of Worktops
+                                    Utěsnění pracovní desky
+                                </FormLabel>
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="couplingsAndKitchenAdjustment"
+                        render={({ field }) => (
+                            <FormItem className="flex items-center gap-x-3">
+                                <FormControl>
+                                    <Checkbox
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <FormLabel className="!mt-0 text-sm font-normal">
+                                    Spáry a seřízení kuchyně v pořádku
+                                </FormLabel>
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="viewCutsOk"
+                        render={({ field }) => (
+                            <FormItem className="flex items-center gap-x-3">
+                                <FormControl>
+                                    <Checkbox
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <FormLabel className="!mt-0 text-sm font-normal">
+                                    Pohledové řezy OK
+                                </FormLabel>
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="cleaningOfKitchenInstallationArea"
+                        render={({ field }) => (
+                            <FormItem className="flex items-center gap-x-3">
+                                <FormControl>
+                                    <Checkbox
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <FormLabel className="!mt-0 text-sm font-normal">
+                                    Úklid kuchyně a prostoru montáže
+                                </FormLabel>
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="previousDamageToApartment"
+                        render={({ field }) => (
+                            <FormItem className="flex items-center gap-x-3">
+                                <FormControl>
+                                    <Checkbox
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <FormLabel className="!mt-0 text-sm font-normal">
+                                    Předchozí poškození bytu
                                 </FormLabel>
                             </FormItem>
                         )}
@@ -575,7 +582,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
-                                    Damage to Flat During Installation
+                                    Poškození bytu při montáži
                                 </FormLabel>
                             </FormItem>
                         )}
@@ -587,7 +594,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                     name="comment"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Comment</FormLabel>
+                            <FormLabel>Komentář</FormLabel>
                             <FormControl>
                                 <Textarea {...field} />
                             </FormControl>
@@ -597,12 +604,12 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     variant="muted"
                                     className="print:hidden"
                                 >
-                                    For custommer review please go{" "}
+                                    Pro recenzi spokojenosti zákazníka klikněte{" "}
                                     <Typography
                                         variant="anchor"
                                         asChild
                                     >
-                                        <Link href={""}>here</Link>
+                                        <Link href={""}>zde</Link>
                                     </Typography>
                                     .
                                 </Typography>
@@ -618,7 +625,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                     name="date"
                     render={({ field }) => (
                         <FormItem className="grid">
-                            <FormLabel>Date</FormLabel>
+                            <FormLabel>Datum </FormLabel>
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <FormControl>
@@ -658,7 +665,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                 />
 
                 <div className="flex items-baseline justify-between gap-x-8">
-                    <Typography variant="h2">Specification</Typography>
+                    <Typography variant="h2">Specifikace služby </Typography>
                 </div>
 
                 <Separator className="!mt-0 mb-8" />
@@ -670,7 +677,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="upperLocker"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Upper Locker</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Montáž horních skříněk </FormLabel>
+                                        <Unit unit="bm" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -691,7 +701,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="lowerLocker"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Lower Locker</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Montáž spodních skříněk </FormLabel>
+                                        <Unit unit="bm" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -712,7 +725,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="highLocker"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>High Locker</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Montáž vysokých skříněk </FormLabel>
+                                        <Unit unit="bm" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -733,7 +749,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="milledJoint"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Milled Joint</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Frézovaný spoj </FormLabel>
+                                        <Unit unit="ks" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -754,7 +773,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="worktop"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Worktop</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Pracovní desky </FormLabel>
+                                        <Unit unit="bm" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -775,7 +797,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="tailoredWorktop"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Tailored Worktop</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Pracovní desky na míru </FormLabel>
+                                        <Unit unit="bm" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -796,7 +821,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="wallPanel"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Wall Panel</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Nástěnné panely </FormLabel>
+                                        <Unit unit="bm" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -817,7 +845,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="atypical"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Atypical</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Atypické práce </FormLabel>
+                                        <Unit unit="hod" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -838,7 +869,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="unnecessary"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Unnecessary</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Marný výjezd </FormLabel>
+                                        <Unit unit="obj" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -859,7 +893,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="kitchen"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Kitchen</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Zaměření PD/kuchyně </FormLabel>
+                                        <Unit unit="obj" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -884,7 +921,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="lights"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Lights</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Osvětlění </FormLabel>
+                                        <Unit unit="ks" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -905,7 +945,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="ikea"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Ikea</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Spotřebič IKEA </FormLabel>
+                                        <Unit unit="ks" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -926,7 +969,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="nonIkea"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Non Ikea</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Spotřebič mimo IKEA </FormLabel>
+                                        <Unit unit="ks" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -947,7 +993,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="ikeaGas"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Ikea Gas</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Spotřebič IKEA plyn </FormLabel>
+                                        <Unit unit="ks" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -968,7 +1017,10 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                             name="nonIkeaGas"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Non Ikea Gas</FormLabel>
+                                    <div className="flex items-baseline gap-x-2">
+                                        <FormLabel>Spotřebič mimo IKEA plyn </FormLabel>
+                                        <Unit unit="ks" />
+                                    </div>
                                     <FormControl>
                                         <Input
                                             type="number"
@@ -994,7 +1046,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                         name="custommerSignature"
                         render={({ field }) => (
                             <FormItem className="w-fit">
-                                <FormLabel>Custommer Signature</FormLabel>
+                                <FormLabel>Podpis zákazníka </FormLabel>
 
                                 <div className="relative w-fit max-sm:w-full">
                                     <FormControl>
@@ -1031,7 +1083,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                         name="workerSignature"
                         render={({ field }) => (
                             <FormItem className="w-fit">
-                                <FormLabel>Workers Signature</FormLabel>
+                                <FormLabel>Podpis servisního partnera </FormLabel>
 
                                 <div className="relative w-fit max-sm:w-full">
                                     <FormControl>

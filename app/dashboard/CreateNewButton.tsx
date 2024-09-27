@@ -18,10 +18,10 @@ function CreateNewButton({ userId, asCard = false }: { userId: string; asCard?: 
             const newOrderId = await CreateOrder(userId);
             router.push(`/dashboard/${newOrderId}`);
             router.refresh();
-            setTimeout(() => toast.success("Order created successfully."), 500);
+            setTimeout(() => toast.success("Objednávka vytvořena úspěšně."), 500);
         } catch {
-            toast.error("Something went wrong", {
-                description: "Please wait or try refreshing the page",
+            toast.error("Něco se pokazilo", {
+                description: "Prosím počkejte nebo zkuste obnovit stránku",
             });
         }
     }
@@ -38,10 +38,10 @@ function CreateNewButton({ userId, asCard = false }: { userId: string; asCard?: 
                     className="flex items-center gap-2 tracking-wide text-muted-foreground transition-colors group-hover/createNewCard:text-foreground"
                 >
                     <Plus className="size-6" />
-                    Create New Order
+                    Vytvořit novou objednávku
                 </Typography>
             </Button>
-        :   <Button onClick={() => onClickCreateOrder(userId)}>Create New Order</Button>;
+        :   <Button onClick={() => onClickCreateOrder(userId)}>Vytvořit novou objednávku</Button>;
 }
 
 export { CreateNewButton };

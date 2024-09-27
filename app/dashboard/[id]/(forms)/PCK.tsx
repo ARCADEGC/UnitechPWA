@@ -208,17 +208,17 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
             const promise = updateOrderNewPCK(orderNewPCK.id as string, updatedOrder, userRole);
 
             toast.promise(promise, {
-                loading: "Updating order...",
+                loading: "Aktualizování objednávky...",
                 success: () => {
-                    return "Order updated successfully";
+                    return "Objednávka aktualizována úspěšně";
                 },
                 error: () => {
-                    return "Something went wrong";
+                    return "Něco se pokazilo";
                 },
             });
         } catch {
-            return toast.error("Something went wrong", {
-                description: "Please wait or try again",
+            return toast.error("Něco se pokazilo", {
+                description: "Prosím počkejte nebo to zkuste znovu",
             });
         }
     }
@@ -415,7 +415,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                     ),
                 );
             } else {
-                toast.error("No reference date");
+                toast.error("Žádné referenční datum");
             }
         };
         fetchPrice();
@@ -432,13 +432,13 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
         <Form {...form}>
             <motion.form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8"
+                className="space-y-12"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) }}
             >
                 <div className="flex items-baseline justify-between gap-x-8">
-                    <Typography variant="h2">Shipment Zones</Typography>
+                    <Typography variant="h2">Doprava montérů</Typography>
                     <Unit
                         value={String(
                             calculateShipmentZoneTotal(
@@ -463,7 +463,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                     />
                 </div>
 
-                <Separator className="!mt-0 mb-8" />
+                <Separator className="!mt-0" />
 
                 <div className="grid gap-8 sm:grid-cols-2">
                     <FormField
@@ -472,9 +472,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Shipment Zone One</FormLabel>
+                                    <FormLabel>Zóna 1</FormLabel>
                                     <Unit
-                                        value={shipmentZoneOnePrice ?? "No price found"}
+                                        value={shipmentZoneOnePrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -503,9 +503,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Shipment Zone Two</FormLabel>
+                                    <FormLabel>Zóna 2</FormLabel>
                                     <Unit
-                                        value={shipmentZoneTwoPrice ?? "No price found"}
+                                        value={shipmentZoneTwoPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -534,9 +534,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Shipment Zone Three</FormLabel>
+                                    <FormLabel>Zóna 3</FormLabel>
                                     <Unit
-                                        value={shipmentZoneThreePrice ?? "No price found"}
+                                        value={shipmentZoneThreePrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -565,9 +565,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Shipment Zone Four</FormLabel>
+                                    <FormLabel>Zóna 4</FormLabel>
                                     <Unit
-                                        value={shipmentZoneFourPrice ?? "No price found"}
+                                        value={shipmentZoneFourPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -592,7 +592,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                 </div>
 
                 <div className="flex items-baseline justify-between gap-x-8">
-                    <Typography variant="h2">Complete Installation</Typography>
+                    <Typography variant="h2">Kompletní instalace Method</Typography>
                     <Unit
                         value={String(
                             calculateShipmentZoneTotal(
@@ -618,9 +618,11 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Complete Installation Lockers</FormLabel>
+                                    <FormLabel>Montáž skříněk</FormLabel>
                                     <Unit
-                                        value={completeInstallationLockersPrice ?? "No price found"}
+                                        value={
+                                            completeInstallationLockersPrice ?? "NCena nenalezena"
+                                        }
                                         unit="czk"
                                         per="ks"
                                     />
@@ -649,9 +651,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Complete Atypical</FormLabel>
+                                    <FormLabel>Atypické práce nad 2h</FormLabel>
                                     <Unit
-                                        value={completeAtypicalPrice ?? "No price found"}
+                                        value={completeAtypicalPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -676,7 +678,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                 </div>
 
                 <div className="flex items-baseline justify-between gap-x-8">
-                    <Typography variant="h2">Basic Products</Typography>
+                    <Typography variant="h2">Základní instalace Method</Typography>
                     <Unit
                         value={String(
                             calculateShipmentZoneTotal(
@@ -706,9 +708,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Basic Lockers</FormLabel>
+                                    <FormLabel>Montáž skříněk</FormLabel>
                                     <Unit
-                                        value={basicLockersPrice ?? "No price found"}
+                                        value={basicLockersPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -737,9 +739,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Basic Millered</FormLabel>
+                                    <FormLabel>Frézovaný spoj</FormLabel>
                                     <Unit
-                                        value={basicMilledPrice ?? "No price found"}
+                                        value={basicMilledPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -768,9 +770,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Basic Atypical</FormLabel>
+                                    <FormLabel>Atypické práce nad 2h</FormLabel>
                                     <Unit
-                                        value={basicAtypicalPrice ?? "No price found"}
+                                        value={basicAtypicalPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -795,7 +797,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                 </div>
 
                 <div className="flex items-baseline justify-between gap-x-8">
-                    <Typography variant="h2">Installation</Typography>
+                    <Typography variant="h2">Instalace</Typography>
                     <Unit
                         value={String(
                             calculateShipmentZoneTotal(
@@ -869,9 +871,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Installation Digester</FormLabel>
+                                    <FormLabel>Digestoř</FormLabel>
                                     <Unit
-                                        value={installationDigesterPrice ?? "No price found"}
+                                        value={installationDigesterPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -900,9 +902,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Installation HOB</FormLabel>
+                                    <FormLabel>Varná deska</FormLabel>
                                     <Unit
-                                        value={installationHobPrice ?? "No price found"}
+                                        value={installationHobPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -931,9 +933,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Installation Gas HOB</FormLabel>
+                                    <FormLabel>Varná deska plyn</FormLabel>
                                     <Unit
-                                        value={installationGasHobPrice ?? "No price found"}
+                                        value={installationGasHobPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -962,9 +964,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Installation Lights</FormLabel>
+                                    <FormLabel>Světla</FormLabel>
                                     <Unit
-                                        value={installationLightsPrice ?? "No price found"}
+                                        value={installationLightsPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -993,9 +995,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Installation Microwave</FormLabel>
+                                    <FormLabel>Mikrovlnná trouba</FormLabel>
                                     <Unit
-                                        value={installationMicrowavePrice ?? "No price found"}
+                                        value={installationMicrowavePrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -1024,9 +1026,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Installation Freezer</FormLabel>
+                                    <FormLabel>Chladnička / Mrazák</FormLabel>
                                     <Unit
-                                        value={installationFreezerPrice ?? "No price found"}
+                                        value={installationFreezerPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -1055,9 +1057,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Installation Dishwasher</FormLabel>
+                                    <FormLabel>Myčka</FormLabel>
                                     <Unit
-                                        value={installationDishwasherPrice ?? "No price found"}
+                                        value={installationDishwasherPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -1086,9 +1088,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Installation Oven</FormLabel>
+                                    <FormLabel>Trouba</FormLabel>
                                     <Unit
-                                        value={installationOvenPrice ?? "No price found"}
+                                        value={installationOvenPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -1117,9 +1119,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Installation Faucet</FormLabel>
+                                    <FormLabel>Baterie a dřez</FormLabel>
                                     <Unit
-                                        value={installationFaucetPrice ?? "No price found"}
+                                        value={installationFaucetPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -1148,9 +1150,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Installation Millered Joint</FormLabel>
+                                    <FormLabel>Frézovaný spoj</FormLabel>
                                     <Unit
-                                        value={installationMilledJointPrice ?? "No price found"}
+                                        value={installationMilledJointPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -1179,9 +1181,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Installation Worktop</FormLabel>
+                                    <FormLabel>Pracovní deska </FormLabel>
                                     <Unit
-                                        value={installationWorktopPrice ?? "No price found"}
+                                        value={installationWorktopPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -1210,9 +1212,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Installation Wall Panel</FormLabel>
+                                    <FormLabel>Nástěnný panel </FormLabel>
                                     <Unit
-                                        value={installationWallPanelPrice ?? "No price found"}
+                                        value={installationWallPanelPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -1241,9 +1243,9 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Appliance Outside of Ikea</FormLabel>
+                                    <FormLabel>Spotřebič mimo IKEA</FormLabel>
                                     <Unit
-                                        value={applianceOutsideOfIkeaPrice ?? "No price found"}
+                                        value={applianceOutsideOfIkeaPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -1268,13 +1270,13 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
 
                     <FormField
                         control={form.control}
-                        name="installationFreezer"
+                        name="gasApplianceOutsideOfIkea"
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex items-baseline gap-x-2">
-                                    <FormLabel>Installation Freezer</FormLabel>
+                                    <FormLabel>Plyn. Spotř. Mimo IKEA </FormLabel>
                                     <Unit
-                                        value={installationFreezerPrice ?? "No price found"}
+                                        value={gasApplianceOutsideOfIkeaPrice ?? "NCena nenalezena"}
                                         unit="czk"
                                         per="ks"
                                     />
@@ -1299,7 +1301,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                 </div>
 
                 <div className="flex items-baseline justify-between gap-x-8">
-                    <Typography variant="h2">Installation</Typography>
+                    <Typography variant="h2">Kauce</Typography>
                     <Unit
                         value={
                             Math.floor(
@@ -1321,7 +1323,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         name="bail"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Bail</FormLabel>
+                                <FormLabel>Kauce</FormLabel>
                                 <FormControl>
                                     <Input
                                         type="number"
@@ -1342,7 +1344,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         name="tax"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Tax</FormLabel>
+                                <FormLabel>Daň</FormLabel>
 
                                 <FormControl className="print:hidden">
                                     <div className="flex gap-x-2">
@@ -1368,7 +1370,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                     {field.value ? "12%" : "21%"}
                                 </Typography>
                                 <FormDescription className="print:hidden">
-                                    Let the tax be 12% instead of 21%
+                                    Ať je daň 12 % místo 21 %
                                 </FormDescription>
 
                                 <FormMessage />
@@ -1382,7 +1384,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                     name="signature"
                     render={({ field }) => (
                         <FormItem className="ml-auto w-fit">
-                            <FormLabel>Signature</FormLabel>
+                            <FormLabel>Podpis</FormLabel>
 
                             <div className="relative w-fit max-sm:w-full">
                                 <FormControl>

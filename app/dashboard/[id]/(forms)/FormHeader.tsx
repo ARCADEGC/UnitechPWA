@@ -95,17 +95,17 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
             const promise = updateOrderHeader(orderHeader.id as string, updatedOrder, userRole);
 
             toast.promise(promise, {
-                loading: "Updating order...",
+                loading: "Aktualizování objednávky...",
                 success: () => {
-                    return "Order updated successfully";
+                    return "Objednávka aktualizována úspěšně";
                 },
                 error: () => {
-                    return "Something went wrong";
+                    return "Něco se pokazilo";
                 },
             });
         } catch {
-            return toast.error("Something went wrong", {
-                description: "Please wait or try again",
+            return toast.error("Něco se pokazilo", {
+                description: "Prosím počkejte nebo zkuste znovu",
             });
         }
     }
@@ -141,7 +141,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                     name="customer"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Customer</FormLabel>
+                            <FormLabel>Zákazník</FormLabel>
                             <FormControl>
                                 <Input
                                     placeholder="order name"
@@ -159,7 +159,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                     name="address"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Address</FormLabel>
+                            <FormLabel>Adresa</FormLabel>
                             <FormControl>
                                 <Input
                                     placeholder="order address"
@@ -178,7 +178,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                         name="dueDate"
                         render={({ field }) => (
                             <FormItem className="grid">
-                                <FormLabel>Due Date</FormLabel>
+                                <FormLabel>Termín</FormLabel>
                                 <FormControl>
                                     <Popover>
                                         <PopoverTrigger asChild>
@@ -224,7 +224,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                         name="assignee"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Assigned Team</FormLabel>
+                                <FormLabel>Přiřazený tým</FormLabel>
                                 <Select
                                     onValueChange={field.onChange}
                                     value={form.watch("assignee")}
@@ -259,7 +259,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                         name="phone"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Phone</FormLabel>
+                                <FormLabel>Telefon</FormLabel>
                                 <FormControl>
                                     <Input
                                         placeholder="order phone"
@@ -297,7 +297,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                         name="orderNumber"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Order Number</FormLabel>
+                                <FormLabel>Číslo objednávky</FormLabel>
                                 <FormControl>
                                     <Input
                                         placeholder="order number"

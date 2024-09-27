@@ -345,7 +345,7 @@ export async function CreateOrder(userId: string): Promise<string | boolean> {
         const newOrderNewList1Id = await CreateOrderNewList1();
 
         if (!newOrderHeaderId || !newOrderNewPCKId || !newOrderNewPP2Id || !newOrderNewList1Id)
-            new Error("Failed to gather all the required elements");
+            new Error("Nepodařilo se vytvořit všechny požadované prvky");
 
         const newOrder = await db
             .insert(order)
@@ -398,7 +398,7 @@ async function CreateOrderHeader(userId: string) {
 
         const newOrderHeaderId = newOrderHeader[0].id;
 
-        !newOrderHeaderId && new Error("Failed to create Header");
+        !newOrderHeaderId && new Error("Nepodařilo se vytvořit hlavičku objednávky");
 
         return newOrderHeaderId;
     } catch {
@@ -415,7 +415,7 @@ async function CreateOrderNewPCK() {
 
         const newOrderHeaderId = newOrderHeader[0].id;
 
-        !newOrderHeaderId && new Error("Failed to create new PCK");
+        !newOrderHeaderId && new Error("Nepodařilo se vytvořit nový PCK");
 
         return newOrderHeaderId;
     } catch {
@@ -434,7 +434,7 @@ async function CreateOrderNewPP2() {
 
         const newOrderHeaderId = newOrderHeader[0].id;
 
-        !newOrderHeaderId && new Error("Failed to create PP2");
+        !newOrderHeaderId && new Error("Nepodařilo se vytvořit PP2");
 
         return newOrderHeaderId;
     } catch {
@@ -448,7 +448,7 @@ async function CreateOrderNewList1() {
 
         const newOderListOneId = newList1[0].id;
 
-        !newOderListOneId && new Error("Failed to create New List1");
+        !newOderListOneId && new Error("Nepodařilo se vytvořit nový List1");
 
         return newOderListOneId;
     } catch {
