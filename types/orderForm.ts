@@ -1,3 +1,5 @@
+import { date } from "drizzle-orm/pg-core";
+import { update } from "lodash";
 import { z } from "zod";
 
 export const formHeaderSchema = z.object({
@@ -21,31 +23,32 @@ export const formHeaderSchema = z.object({
 });
 
 export const formNewPCKSchema = z.object({
+    // TODO: Should be a number
     shipmentZoneOne: z.string().optional(),
     shipmentZoneTwo: z.string().optional(),
     shipmentZoneThree: z.string().optional(),
     shipmentZoneFour: z.string().optional(),
-    completeInstallationLockers: z.number().optional(),
-    completeAtypical: z.number().optional(),
-    basicLockers: z.number().optional(),
-    basicMilled: z.number().optional(),
-    basicAtypical: z.number().optional(),
-    installationDigester: z.number().optional(),
-    installationHob: z.number().optional(),
-    installationGasHob: z.number().optional(),
-    installationLights: z.number().optional(),
-    installationMicrowave: z.number().optional(),
-    installationFreezer: z.number().optional(),
-    installationDishwasher: z.number().optional(),
-    installationOven: z.number().optional(),
-    installationFaucet: z.number().optional(),
-    installationMilledJoint: z.number().optional(),
-    installationWorktop: z.number().optional(),
-    installationWallPanel: z.number().optional(),
-    applianceOutsideOfIkea: z.number().optional(),
-    gasApplianceOutsideOfIkea: z.number().optional(),
+    completeInstallationLockers: z.string().optional(),
+    completeAtypical: z.string().optional(),
+    basicLockers: z.string().optional(),
+    basicMilled: z.string().optional(),
+    basicAtypical: z.string().optional(),
+    installationDigester: z.string().optional(),
+    installationHob: z.string().optional(),
+    installationGasHob: z.string().optional(),
+    installationLights: z.string().optional(),
+    installationMicrowave: z.string().optional(),
+    installationFreezer: z.string().optional(),
+    installationDishwasher: z.string().optional(),
+    installationOven: z.string().optional(),
+    installationFaucet: z.string().optional(),
+    installationMilledJoint: z.string().optional(),
+    installationWorktop: z.string().optional(),
+    installationWallPanel: z.string().optional(),
+    applianceOutsideOfIkea: z.string().optional(),
+    gasApplianceOutsideOfIkea: z.string().optional(),
     tax: z.boolean().optional(),
-    bail: z.number().optional(),
+    bail: z.string().optional(),
     signature: z.any().optional(),
 });
 
@@ -68,4 +71,24 @@ export const formPP2Schema = z.object({
     sealingOfWorktops: z.boolean().optional(),
     damageToFlatDuringInstallation: z.boolean().optional(),
     comment: z.string().optional(),
+
+    upperLocker: z.string().optional(),
+    lowerLocker: z.string().optional(),
+    highLocker: z.string().optional(),
+    milledJoint: z.string().optional(),
+    worktop: z.string().optional(),
+    tailoredWorktop: z.string().optional(),
+    wallPanel: z.string().optional(),
+    atypical: z.string().optional(),
+    unnecessary: z.string().optional(),
+    kitchen: z.string().optional(),
+    lights: z.string().optional(),
+    ikea: z.string().optional(),
+    nonIkea: z.string().optional(),
+    ikeaGas: z.string().optional(),
+    nonIkeaGas: z.string().optional(),
+
+    date: z.date(),
+    workerSignature: z.any().optional(),
+    custommerSignature: z.any().optional(),
 });

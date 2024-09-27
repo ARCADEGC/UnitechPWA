@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -28,6 +29,7 @@ import { TOrderNewPCK } from "@/types/dbSchemas";
 import { Unit } from "@/components/ui/unit";
 import { Separator } from "@/components/ui/separator";
 import { Typography } from "@/components/ui/Typography";
+import { Switch } from "@/components/ui/switch";
 
 import { formNewPCKSchema } from "@/types/orderForm";
 
@@ -47,31 +49,31 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
 
     const [completeInstallationLockersPrice, setCompleteInstallationLockersPrice] = useState<
         number | undefined
-    >(undefined);
+    >(0);
     const [completeAtypicalPrice, setCompleteAtypicalPrice] = useState<number | undefined>(0);
 
-    const [basicLockersPrice, setBasicLockersPrice] = useState<number | undefined>(undefined);
-    const [basicMilledPrice, setBasicMilledPrice] = useState<number | undefined>(undefined);
-    const [basicAtypicalPrice, setBasicAtypicalPrice] = useState<number | undefined>(undefined);
+    const [basicLockersPrice, setBasicLockersPrice] = useState<number | undefined>(0);
+    const [basicMilledPrice, setBasicMilledPrice] = useState<number | undefined>(0);
+    const [basicAtypicalPrice, setBasicAtypicalPrice] = useState<number | undefined>(0);
 
     const [installationDigesterPrice, setInstallationDigesterPrice] = useState<number | undefined>(
         0,
     );
-    const [installationHobPrice, setInstallationHobPrice] = useState<number | undefined>(undefined);
+    const [installationHobPrice, setInstallationHobPrice] = useState<number | undefined>(0);
     const [installationGasHobPrice, setInstallationGasHobPrice] = useState<number | undefined>(0);
     const [installationLightsPrice, setInstallationLightsPrice] = useState<number | undefined>(0);
     const [installationMicrowavePrice, setInstallationMicrowavePrice] = useState<
         number | undefined
-    >(undefined);
+    >(0);
     const [installationFreezerPrice, setInstallationFreezerPrice] = useState<number | undefined>(0);
     const [installationDishwasherPrice, setInstallationDishwasherPrice] = useState<
         number | undefined
-    >(undefined);
+    >(0);
     const [installationOvenPrice, setInstallationOvenPrice] = useState<number | undefined>(0);
     const [installationFaucetPrice, setInstallationFaucetPrice] = useState<number | undefined>(0);
     const [installationMilledJointPrice, setInstallationMilledJointPrice] = useState<
         number | undefined
-    >(undefined);
+    >(0);
     const [installationWorktopPrice, setInstallationWorktopPrice] = useState<number | undefined>(0);
     const [installationWallPanelPrice, setInstallationWallPanelPrice] = useState<
         number | undefined
@@ -92,69 +94,114 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
             shipmentZoneThree: String(orderNewPCK.shipmentZoneThree),
             shipmentZoneFour: String(orderNewPCK.shipmentZoneFour),
 
-            completeInstallationLockers: Number(orderNewPCK.completeInstallationLockers),
-            completeAtypical: Number(orderNewPCK.completeAtypical),
+            completeInstallationLockers: String(orderNewPCK.completeInstallationLockers),
+            completeAtypical: String(orderNewPCK.completeAtypical),
 
-            basicLockers: Number(orderNewPCK.basicLockers),
-            basicMilled: Number(orderNewPCK.basicMilled),
-            basicAtypical: Number(orderNewPCK.basicAtypical),
+            basicLockers: String(orderNewPCK.basicLockers),
+            basicMilled: String(orderNewPCK.basicMilled),
+            basicAtypical: String(orderNewPCK.basicAtypical),
 
-            installationDigester: Number(orderNewPCK.installationDigester),
-            installationHob: Number(orderNewPCK.installationHob),
-            installationGasHob: Number(orderNewPCK.installationGasHob),
-            installationLights: Number(orderNewPCK.installationLights),
-            installationMicrowave: Number(orderNewPCK.installationMicrowave),
-            installationFreezer: Number(orderNewPCK.installationFreezer),
-            installationDishwasher: Number(orderNewPCK.installationDishwasher),
-            installationOven: Number(orderNewPCK.installationOven),
-            installationFaucet: Number(orderNewPCK.installationFaucet),
-            installationMilledJoint: Number(orderNewPCK.installationMilledJoint),
-            installationWorktop: Number(orderNewPCK.installationWorktop),
-            installationWallPanel: Number(orderNewPCK.installationWallPanel),
+            installationDigester: String(orderNewPCK.installationDigester),
+            installationHob: String(orderNewPCK.installationHob),
+            installationGasHob: String(orderNewPCK.installationGasHob),
+            installationLights: String(orderNewPCK.installationLights),
+            installationMicrowave: String(orderNewPCK.installationMicrowave),
+            installationFreezer: String(orderNewPCK.installationFreezer),
+            installationDishwasher: String(orderNewPCK.installationDishwasher),
+            installationOven: String(orderNewPCK.installationOven),
+            installationFaucet: String(orderNewPCK.installationFaucet),
+            installationMilledJoint: String(orderNewPCK.installationMilledJoint),
+            installationWorktop: String(orderNewPCK.installationWorktop),
+            installationWallPanel: String(orderNewPCK.installationWallPanel),
 
-            applianceOutsideOfIkea: Number(orderNewPCK.applianceOutsideOfIkea),
-            gasApplianceOutsideOfIkea: Number(orderNewPCK.gasApplianceOutsideOfIkea),
+            applianceOutsideOfIkea: String(orderNewPCK.applianceOutsideOfIkea),
+            gasApplianceOutsideOfIkea: String(orderNewPCK.gasApplianceOutsideOfIkea),
 
             tax: !!orderNewPCK.tax,
-            bail: Number(orderNewPCK.bail),
+            bail: String(orderNewPCK.bail),
             signature: orderNewPCK.signature,
         },
         mode: "all",
     });
 
     async function onSubmit(values: z.infer<typeof formNewPCKSchema>) {
+        console.log(values);
         try {
             const updatedOrder: TOrderNewPCK = {
-                shipmentZoneOne: String(values.shipmentZoneOne),
-                shipmentZoneTwo: String(values.shipmentZoneTwo),
-                shipmentZoneThree: String(values.shipmentZoneThree),
-                shipmentZoneFour: String(values.shipmentZoneFour),
+                shipmentZoneOne: String(
+                    values.shipmentZoneOne === "null" ? 0 : values.shipmentZoneOne,
+                ),
+                shipmentZoneTwo: String(
+                    values.shipmentZoneTwo === "null" ? 0 : values.shipmentZoneTwo,
+                ),
+                shipmentZoneThree: String(
+                    values.shipmentZoneThree === "null" ? 0 : values.shipmentZoneThree,
+                ),
+                shipmentZoneFour: String(
+                    values.shipmentZoneFour === "null" ? 0 : values.shipmentZoneFour,
+                ),
 
-                completeInstallationLockers: String(values.completeInstallationLockers),
-                completeAtypical: String(values.completeAtypical),
+                completeInstallationLockers: String(
+                    values.completeInstallationLockers === "null" ?
+                        0
+                    :   values.completeInstallationLockers,
+                ),
+                completeAtypical: String(
+                    values.completeAtypical === "null" ? 0 : values.completeAtypical,
+                ),
 
-                basicLockers: String(values.basicLockers),
-                basicMilled: String(values.basicMilled),
-                basicAtypical: String(values.basicAtypical),
+                basicLockers: String(values.basicLockers === "null" ? 0 : values.basicLockers),
+                basicMilled: String(values.basicMilled === "null" ? 0 : values.basicMilled),
+                basicAtypical: String(values.basicAtypical === "null" ? 0 : values.basicAtypical),
 
-                installationDigester: String(values.installationDigester),
-                installationHob: String(values.installationHob),
-                installationGasHob: String(values.installationGasHob),
-                installationLights: String(values.installationLights),
-                installationMicrowave: String(values.installationMicrowave),
-                installationFreezer: String(values.installationFreezer),
-                installationDishwasher: String(values.installationDishwasher),
-                installationOven: String(values.installationOven),
-                installationFaucet: String(values.installationFaucet),
-                installationMilledJoint: String(values.installationMilledJoint),
-                installationWorktop: String(values.installationWorktop),
-                installationWallPanel: String(values.installationWallPanel),
+                installationDigester: String(
+                    values.installationDigester === "null" ? 0 : values.installationDigester,
+                ),
+                installationHob: String(
+                    values.installationHob === "null" ? 0 : values.installationHob,
+                ),
+                installationGasHob: String(
+                    values.installationGasHob === "null" ? 0 : values.installationGasHob,
+                ),
+                installationLights: String(
+                    values.installationLights === "null" ? 0 : values.installationLights,
+                ),
+                installationMicrowave: String(
+                    values.installationMicrowave === "null" ? 0 : values.installationMicrowave,
+                ),
+                installationFreezer: String(
+                    values.installationFreezer === "null" ? 0 : values.installationFreezer,
+                ),
+                installationDishwasher: String(
+                    values.installationDishwasher === "null" ? 0 : values.installationDishwasher,
+                ),
+                installationOven: String(
+                    values.installationOven === "null" ? 0 : values.installationOven,
+                ),
+                installationFaucet: String(
+                    values.installationFaucet === "null" ? 0 : values.installationFaucet,
+                ),
+                installationMilledJoint: String(
+                    values.installationMilledJoint === "null" ? 0 : values.installationMilledJoint,
+                ),
+                installationWorktop: String(
+                    values.installationWorktop === "null" ? 0 : values.installationWorktop,
+                ),
+                installationWallPanel: String(
+                    values.installationWallPanel === "null" ? 0 : values.installationWallPanel,
+                ),
 
-                applianceOutsideOfIkea: String(values.applianceOutsideOfIkea),
-                gasApplianceOutsideOfIkea: String(values.gasApplianceOutsideOfIkea),
+                applianceOutsideOfIkea: String(
+                    values.applianceOutsideOfIkea === "null" ? 0 : values.applianceOutsideOfIkea,
+                ),
+                gasApplianceOutsideOfIkea: String(
+                    values.gasApplianceOutsideOfIkea === "null" ?
+                        0
+                    :   values.gasApplianceOutsideOfIkea,
+                ),
 
                 tax: values.tax,
-                bail: String(values.bail),
+                bail: String(values.bail === "null" ? 0 : values.bail),
                 signature: sigCanvasRef.current?.toData() as SignaturePad.Point[][],
             };
 
@@ -327,7 +374,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                 );
                 setInstallationFaucetPrice(
                     Number(
-                        await getPriceAtDate("installation_faucet", referenceDate).then(
+                        await getPriceAtDate("installation_sink", referenceDate).then(
                             (price) => price?.price,
                         ),
                     ),
@@ -375,6 +422,13 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
         fetchPrice();
     }, []);
 
+    const calculateShipmentZoneTotal = (
+        price: number | undefined,
+        quantity: string | undefined,
+    ): number => {
+        return (Number(price) || 0) * (Number(quantity) || 0);
+    };
+
     return (
         <Form {...form}>
             <motion.form
@@ -388,19 +442,28 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                     <Typography variant="h2">Shipment Zones</Typography>
                     <Unit
                         value={String(
-                            (Number(shipmentZoneOnePrice) ?? 0) *
-                                Number(form.getValues().shipmentZoneOne) +
-                                (Number(shipmentZoneTwoPrice) ?? 0) *
-                                    Number(form.getValues().shipmentZoneTwo) +
-                                (Number(shipmentZoneThreePrice) ?? 0) *
-                                    Number(form.getValues().shipmentZoneThree) +
-                                (Number(shipmentZoneFourPrice) ?? 0) *
-                                    Number(form.getValues().shipmentZoneFour),
+                            calculateShipmentZoneTotal(
+                                shipmentZoneOnePrice,
+                                form.getValues().shipmentZoneOne,
+                            ) +
+                                calculateShipmentZoneTotal(
+                                    shipmentZoneTwoPrice,
+                                    form.getValues().shipmentZoneTwo,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    shipmentZoneThreePrice,
+                                    form.getValues().shipmentZoneThree,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    shipmentZoneFourPrice,
+                                    form.getValues().shipmentZoneFour,
+                                ),
                         )}
                         className="text-xl font-medium tracking-wider text-foreground"
                         unit=",-"
                     />
                 </div>
+
                 <Separator className="!mt-0 mb-8" />
 
                 <div className="grid gap-8 sm:grid-cols-2">
@@ -517,11 +580,718 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                     />
                 </div>
 
+                <div className="flex items-baseline justify-between gap-x-8">
+                    <Typography variant="h2">Complete Installation</Typography>
+                    <Unit
+                        value={String(
+                            calculateShipmentZoneTotal(
+                                completeInstallationLockersPrice,
+                                form.getValues().completeInstallationLockers,
+                            ) +
+                                calculateShipmentZoneTotal(
+                                    completeAtypicalPrice,
+                                    form.getValues().completeAtypical,
+                                ),
+                        )}
+                        className="text-xl font-medium tracking-wider text-foreground"
+                        unit=",-"
+                    />
+                </div>
+
+                <Separator className="!mt-0 mb-8" />
+
+                <div className="grid gap-8">
+                    <FormField
+                        control={form.control}
+                        name="completeInstallationLockers"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Complete Installation Lockers</FormLabel>
+                                    <Unit
+                                        value={completeInstallationLockersPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="completeAtypical"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Complete Atypical</FormLabel>
+                                    <Unit
+                                        value={completeAtypicalPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+
+                <div className="flex items-baseline justify-between gap-x-8">
+                    <Typography variant="h2">Basic Products</Typography>
+                    <Unit
+                        value={String(
+                            calculateShipmentZoneTotal(
+                                basicLockersPrice,
+                                form.getValues().basicLockers,
+                            ) +
+                                calculateShipmentZoneTotal(
+                                    basicMilledPrice,
+                                    form.getValues().basicMilled,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    basicAtypicalPrice,
+                                    form.getValues().basicAtypical,
+                                ),
+                        )}
+                        className="text-xl font-medium tracking-wider text-foreground"
+                        unit=",-"
+                    />
+                </div>
+
+                <Separator className="!mt-0 mb-8" />
+
+                <div className="grid gap-8">
+                    <FormField
+                        control={form.control}
+                        name="basicLockers"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Basic Lockers</FormLabel>
+                                    <Unit
+                                        value={basicLockersPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="basicMilled"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Basic Millered</FormLabel>
+                                    <Unit
+                                        value={basicMilledPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="basicAtypical"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Basic Atypical</FormLabel>
+                                    <Unit
+                                        value={basicAtypicalPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+
+                <div className="flex items-baseline justify-between gap-x-8">
+                    <Typography variant="h2">Installation</Typography>
+                    <Unit
+                        value={String(
+                            calculateShipmentZoneTotal(
+                                installationDigesterPrice,
+                                form.getValues().installationDigester,
+                            ) +
+                                calculateShipmentZoneTotal(
+                                    installationHobPrice,
+                                    form.getValues().installationHob,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    installationGasHobPrice,
+                                    form.getValues().installationGasHob,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    installationLightsPrice,
+                                    form.getValues().installationLights,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    installationMicrowavePrice,
+                                    form.getValues().installationMicrowave,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    installationFreezerPrice,
+                                    form.getValues().installationFreezer,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    installationDishwasherPrice,
+                                    form.getValues().installationDishwasher,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    installationOvenPrice,
+                                    form.getValues().installationOven,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    installationFaucetPrice,
+                                    form.getValues().installationFaucet,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    installationMilledJointPrice,
+                                    form.getValues().installationMilledJoint,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    installationWorktopPrice,
+                                    form.getValues().installationWorktop,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    installationWallPanelPrice,
+                                    form.getValues().installationWallPanel,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    applianceOutsideOfIkeaPrice,
+                                    form.getValues().applianceOutsideOfIkea,
+                                ) +
+                                calculateShipmentZoneTotal(
+                                    gasApplianceOutsideOfIkeaPrice,
+                                    form.getValues().gasApplianceOutsideOfIkea,
+                                ),
+                        )}
+                        className="text-xl font-medium tracking-wider text-foreground"
+                        unit=",-"
+                    />
+                </div>
+
+                <Separator className="!mt-0 mb-8" />
+
+                <div className="grid gap-8">
+                    <FormField
+                        control={form.control}
+                        name="installationDigester"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Installation Digester</FormLabel>
+                                    <Unit
+                                        value={installationDigesterPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="installationHob"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Installation HOB</FormLabel>
+                                    <Unit
+                                        value={installationHobPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="installationGasHob"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Installation Gas HOB</FormLabel>
+                                    <Unit
+                                        value={installationGasHobPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="installationLights"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Installation Lights</FormLabel>
+                                    <Unit
+                                        value={installationLightsPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="installationMicrowave"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Installation Microwave</FormLabel>
+                                    <Unit
+                                        value={installationMicrowavePrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="installationFreezer"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Installation Freezer</FormLabel>
+                                    <Unit
+                                        value={installationFreezerPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="installationDishwasher"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Installation Dishwasher</FormLabel>
+                                    <Unit
+                                        value={installationDishwasherPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="installationOven"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Installation Oven</FormLabel>
+                                    <Unit
+                                        value={installationOvenPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="installationFaucet"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Installation Faucet</FormLabel>
+                                    <Unit
+                                        value={installationFaucetPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="installationMilledJoint"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Installation Millered Joint</FormLabel>
+                                    <Unit
+                                        value={installationMilledJointPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="installationWorktop"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Installation Worktop</FormLabel>
+                                    <Unit
+                                        value={installationWorktopPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="installationWallPanel"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Installation Wall Panel</FormLabel>
+                                    <Unit
+                                        value={installationWallPanelPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="applianceOutsideOfIkea"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Appliance Outside of Ikea</FormLabel>
+                                    <Unit
+                                        value={applianceOutsideOfIkeaPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="installationFreezer"
+                        render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-baseline gap-x-2">
+                                    <FormLabel>Installation Freezer</FormLabel>
+                                    <Unit
+                                        value={installationFreezerPrice ?? "No price found"}
+                                        unit="czk"
+                                        per="ks"
+                                    />
+                                </div>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+
+                <div className="grid gap-8">
+                    <FormField
+                        control={form.control}
+                        name="tax"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Tax</FormLabel>
+                                <FormDescription>Let the tax be 12% instead of 21%</FormDescription>
+
+                                <FormControl>
+                                    <div className="flex gap-x-2">
+                                        <Typography
+                                            variant="muted"
+                                            as="p"
+                                        >
+                                            21%
+                                        </Typography>
+                                        <Switch
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                        <Typography
+                                            variant="muted"
+                                            as="p"
+                                        >
+                                            12%
+                                        </Typography>
+                                    </div>
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="bail"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Bail</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                        onFocus={(event) => event.currentTarget.select()}
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+
                 <FormField
                     control={form.control}
                     name="signature"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="ml-auto w-fit">
                             <FormLabel>Signature</FormLabel>
 
                             <div className="relative w-fit max-sm:w-full">
@@ -559,29 +1329,6 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
 }
 
 export default PCK;
-
-// completeInstallationLockers: Number(order?.completeInstallationLockers ?? 0),
-// completeAtypical: Number(order?.completeAtypical ?? 0),
-
-// basicLockers: Number(order?.basicLockers ?? 0),
-// basicMilled: Number(order?.basicMilled ?? 0),
-// basicAtypical: Number(order?.basicAtypical ?? 0),
-
-// installationDigester: Number(order?.installationDigester ?? 0),
-// installationHob: Number(order?.installationHob ?? 0),
-// installationGasHob: Number(order?.installationGasHob ?? 0),
-// installationLights: Number(order?.installationLights ?? 0),
-// installationMicrowave: Number(order?.installationMicrowave ?? 0),
-// installationFreezer: Number(order?.installationFreezer ?? 0),
-// installationDishwasher: Number(order?.installationDishwasher ?? 0),
-// installationOven: Number(order?.installationOven ?? 0),
-// installationFaucet: Number(order?.installationFaucet ?? 0),
-// installationMilledJoint: Number(order?.installationMilledJoint ?? 0),
-// installationWorktop: Number(order?.installationWorktop ?? 0),
-// installationWallPanel: Number(order?.installationWallPanel ?? 0),
-
-// applianceOutsideOfIkea: Number(order?.applianceOutsideOfIkea ?? 0),
-// gasApplianceOutsideOfIkea: Number(order?.gasApplianceOutsideOfIkea ?? 0),
 
 // tax: order?.tax ?? false,
 // bail: order?.bail ?? undefined,

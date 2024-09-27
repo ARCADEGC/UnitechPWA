@@ -6,6 +6,7 @@ import {
     getOrderByIdAndRole,
     getOrderHeaderByIdAndRoleOrUser,
     getOrderNewPCKByIdAndRoleOrUser,
+    getOrderPP2ByIdAndRoleOrUser,
 } from "@/db/db";
 
 import { NotFound } from "@/app/dashboard/[id]/NotFound";
@@ -19,6 +20,7 @@ import { Separator } from "@/components/ui/separator";
 
 const FormHeader = lazy(() => import("@/app/dashboard/[id]/(forms)/FormHeader"));
 const PCK = lazy(() => import("@/app/dashboard/[id]/(forms)/PCK"));
+const PP2 = lazy(() => import("@/app/dashboard/[id]/(forms)/PP2"));
 
 async function Home({ params }: { params: { id: string } }) {
     const { user } = await validateSession();
@@ -54,6 +56,22 @@ async function Home({ params }: { params: { id: string } }) {
             :   <div>There was an error fetching order new PCK. Please try again.</div>;
     }
 
+    async function tabChangeToPP2(user: User) {
+        const orderPP2 = await getOrderPP2ByIdAndRoleOrUser(
+            currentOrder?.orderPP2 ?? "",
+            userRole,
+            user.id,
+        );
+
+        return orderPP2 ?
+                <PP2
+                    orderPP2={orderPP2}
+                    userRole={userRole}
+                    referenceDate={currentOrder?.referenceDate}
+                />
+            :   <div>There was an error fetching order new PP 2. Please try again.</div>;
+    }
+
     return (
         <Suspense fallback={<Loading />}>
             {orderHeader ?
@@ -81,7 +99,7 @@ async function Home({ params }: { params: { id: string } }) {
 
                 <TabsContent value="pck">{tabChangeToPCK(user)}</TabsContent>
 
-                <TabsContent value="pp2"></TabsContent>
+                <TabsContent value="pp2">{tabChangeToPP2(user)}</TabsContent>
             </Tabs>
 
             <Separator className="my-16" />

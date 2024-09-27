@@ -25,6 +25,9 @@ export const order = pgTable("order", {
     orderPP2: uuid("order_pp2")
         .notNull()
         .references(() => OrderPP2.id),
+    orderListOne: uuid("order_list_one")
+        .notNull()
+        .references(() => OrderListOne.id),
 });
 
 export const OrderHeader = pgTable("order_header", {
@@ -134,6 +137,19 @@ export const OrderPP2 = pgTable("order_pp2", {
     nonIkea: numeric("non_ikea", { precision: 10, scale: 2 }),
     ikeaGas: numeric("ikea_gas", { precision: 10, scale: 2 }),
     nonIkeaGas: numeric("non_ikea_gas", { precision: 10, scale: 2 }),
+
+    date: timestamp("date").notNull(),
+    workerSignature: json("worker_signature"),
+    custommerSignature: json("custommer_signature"),
+});
+
+export const OrderListOne = pgTable("order_list_one", {
+    id: uuid("id").unique().notNull().defaultRandom().primaryKey(),
+
+    credit: numeric("credit", { precision: 10, scale: 2 }),
+    aboveFifty: numeric("above_fifty", { precision: 10, scale: 2 }),
+
+    material: numeric("material", { precision: 10, scale: 2 }),
 });
 
 export const User = pgTable("user", {
@@ -186,6 +202,10 @@ export const orderRelations = relations(order, ({ one }) => ({
         fields: [order.orderPP2],
         references: [OrderPP2.id],
     }),
+    orderListOne: one(OrderListOne, {
+        fields: [order.orderListOne],
+        references: [OrderListOne.id],
+    }),
 }));
 
 export const orderHeaderRelations = relations(OrderHeader, ({ one }) => ({
@@ -197,5 +217,9 @@ export const orderNewPCKRelations = relations(OrderNewPCK, ({ one }) => ({
 }));
 
 export const orderPP2Relations = relations(OrderPP2, ({ one }) => ({
+    orders: one(order),
+}));
+
+export const orderListOneRelations = relations(OrderListOne, ({ one }) => ({
     orders: one(order),
 }));
