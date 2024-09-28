@@ -7,6 +7,8 @@ import {
     getOrderHeaderByIdAndRoleOrUser,
     getOrderNewPCKByIdAndRoleOrUser,
     getOrderPP2ByIdAndRoleOrUser,
+    getOrderList1ByIdAndRoleOrUser,
+    getOrderPP2SpecificationsByIdAndRoleOrUser,
 } from "@/db/db";
 
 import { NotFound } from "@/app/dashboard/[id]/NotFound";
@@ -22,6 +24,7 @@ import { Typography } from "@/components/ui/Typography";
 const FormHeader = lazy(() => import("@/app/dashboard/[id]/(forms)/FormHeader"));
 const PCK = lazy(() => import("@/app/dashboard/[id]/(forms)/PCK"));
 const PP2 = lazy(() => import("@/app/dashboard/[id]/(forms)/PP2"));
+const List1 = lazy(() => import("@/app/dashboard/[id]/(forms)/List1"));
 
 async function Home({ params }: { params: { id: string } }) {
     const { user } = await validateSession();
@@ -73,6 +76,29 @@ async function Home({ params }: { params: { id: string } }) {
             :   <div>Nastala chyba při načítání objednávky PP 2. Zkuste to prosím znovu.</div>;
     }
 
+    async function tabChangeToList1(user: User) {
+        const orderList1 = await getOrderList1ByIdAndRoleOrUser(
+            currentOrder?.orderListOne ?? "",
+            userRole,
+            user.id,
+        );
+
+        const PP2Specifications = await getOrderPP2SpecificationsByIdAndRoleOrUser(
+            currentOrder?.orderPP2 ?? "",
+            userRole,
+            user.id,
+        );
+
+        return orderList1 && PP2Specifications ?
+                <List1
+                    orderList1={orderList1}
+                    userRole={userRole}
+                    referenceDate={currentOrder?.referenceDate}
+                    PP2Specifications={PP2Specifications}
+                />
+            :   <div>Nastala chyba při načítání objednávky List 1. Zkuste to prosím znovu.</div>;
+    }
+
     return (
         <Suspense fallback={<Loading />}>
             <Typography
@@ -103,11 +129,14 @@ async function Home({ params }: { params: { id: string } }) {
                 <TabsList className="w-full *:w-full print:hidden">
                     <TabsTrigger value="pck">PCK</TabsTrigger>
                     <TabsTrigger value="pp2">PP 2</TabsTrigger>
+                    <TabsTrigger value="list1">List 1</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="pck">{tabChangeToPCK(user)}</TabsContent>
 
                 <TabsContent value="pp2">{tabChangeToPP2(user)}</TabsContent>
+
+                <TabsContent value="list1">{tabChangeToList1(user)}</TabsContent>
             </Tabs>
 
             <Separator className="my-16" />

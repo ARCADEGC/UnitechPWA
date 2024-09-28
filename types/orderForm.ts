@@ -92,3 +92,10 @@ export const formPP2Schema = z.object({
     workerSignature: z.any().optional(),
     custommerSignature: z.any().optional(),
 });
+
+export const formList1Schema = z.object({
+    credit: z.string().optional(),
+    aboveFifty: z.string().optional(),
+
+    material: z.string().optional(),
+});
