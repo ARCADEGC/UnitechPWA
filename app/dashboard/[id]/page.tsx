@@ -1,4 +1,5 @@
 import React, { Suspense, lazy } from "react";
+import { User } from "lucia";
 
 import { validateSession } from "@/auth";
 import {
@@ -13,13 +14,12 @@ import {
 
 import { NotFound } from "@/app/dashboard/[id]/NotFound";
 import Loading from "@/app/loading";
-import { DeleteOrderButton } from "./DeteteOrderButton";
+import { PrintButton } from "./(buttons)/PrintButton";
+import { DeleteOrderButton } from "@/app/dashboard/[id]/(buttons)/DeteteOrderButton";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/formTabs";
-import { User } from "lucia";
 import { Separator } from "@/components/ui/separator";
 import { Typography } from "@/components/ui/Typography";
-
-// const OrderFormWithNoSSR = lazy(() => import("@/app/dashboard/[id]/OrderForm"));
 
 const FormHeader = lazy(() => import("@/app/dashboard/[id]/(forms)/FormHeader"));
 const PCK = lazy(() => import("@/app/dashboard/[id]/(forms)/PCK"));
@@ -141,8 +141,9 @@ async function Home({ params }: { params: { id: string } }) {
 
             <Separator className="my-16" />
 
-            <div className="mx-auto max-w-prose print:hidden">
+            <div className="mx-auto flex max-w-prose gap-8 print:hidden">
                 <DeleteOrderButton currentOrder={currentOrder} />
+                <PrintButton>Tisk</PrintButton>
             </div>
         </Suspense>
     );
