@@ -14,9 +14,18 @@ import {
     OrderPP2,
     OrderListOne,
 } from "@/db/schema";
-import type { TOrder, TOrderHeader, TOrderNewPCK, TOrderPP2, TUser } from "@/types/dbSchemas";
+import type {
+    TOrder,
+    TOrderHeader,
+    TOrderListOne,
+    TOrderNewPCK,
+    TOrderPP2,
+    TOrderPP2Specifications,
+    TUser,
+} from "@/types/dbSchemas";
 import { randomUUID } from "crypto";
 import { toast } from "sonner";
+import { lucia, validateSession } from "@/auth";
 
 // . ||--------------------------------------------------------------------------------||
 // . ||                                     Users                                      ||
@@ -148,7 +157,7 @@ export async function getOrderList1ByIdAndRoleOrUser(
     id: string,
     role: boolean,
     userId: string,
-): Promise<TOrderNewPCK | string | undefined> {
+): Promise<TOrderNewPCK | undefined> {
     // TODO : Check if user has access to this order
     // const assignee = await db.query.OrderHeader.findFirst({
     //     columns: { assignee: true },
@@ -163,6 +172,44 @@ export async function getOrderList1ByIdAndRoleOrUser(
     //     return "You do not have access to this order";
 
     return OrderList1;
+}
+
+export async function getOrderPP2SpecificationsByIdAndRoleOrUser(
+    id: string,
+    role: boolean,
+    userId: string,
+): Promise<TOrderPP2Specifications | undefined> {
+    // TODO : Check if user has access to this order
+    // const assignee = await db.query.OrderHeader.findFirst({
+    //     columns: { assignee: true },
+    //     where: (table) => eq(table.id, id),
+    // });
+
+    const OrderPP2 = await db.query.OrderPP2.findFirst({
+        columns: {
+            highLocker: true,
+            lowerLocker: true,
+            upperLocker: true,
+            milledJoint: true,
+            tailoredWorktop: true,
+            worktop: true,
+            wallPanel: true,
+            atypical: true,
+            unnecessary: true,
+            kitchen: true,
+
+            lights: true,
+            ikea: true,
+            ikeaGas: true,
+            nonIkea: true,
+            nonIkeaGas: true,
+        },
+        where: (table) => eq(table.id, id),
+    });
+
+    // if ((assignee?.assignee !== userId && !role) || !OrderPP2) return undefined;
+
+    return OrderPP2;
 }
 
 // . ||-------------------------------------------------------------------------------||
@@ -264,6 +311,19 @@ export async function updateOrderPP2(
         .update(OrderPP2)
         .set(role ? content : content)
         .where(eq(OrderPP2.id, orderPP2Id))
+        .execute();
+}
+
+export async function updateOrderList1(
+    orderList1Id: string,
+    content: TOrderListOne,
+    role: boolean,
+): Promise<void> {
+    // TODO user validation
+    await db
+        .update(OrderListOne)
+        .set(role ? content : content)
+        .where(eq(OrderListOne.id, orderList1Id))
         .execute();
 }
 
@@ -522,6 +582,15 @@ export async function seedAdminPrices(prices: { name: string; price: number }[])
 }
 
 export async function getAdminPriceAtDate(productName: string, date: Date) {
+    const { user } = await validateSession();
+
+    if (!user) return null;
+
+    const currentUser = await getUserById(user.id);
+    const userRole = currentUser?.role ?? false;
+
+    if (!userRole) return null;
+
     const price = await db.query.AdminPrices.findFirst({
         orderBy: (table) => desc(table.validFrom),
         where: (table) => and(eq(table.name, productName), lte(table.validFrom, date)),
