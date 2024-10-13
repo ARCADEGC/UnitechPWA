@@ -29,7 +29,7 @@ function CreateNewButton({ userId, asCard = false }: { userId: string; asCard?: 
     return asCard ?
             <Button
                 variant={"outline"}
-                className="group/createNewCard h-full"
+                className="group/createNewCard h-full min-h-32"
                 onClick={() => onClickCreateOrder(userId)}
             >
                 <Typography
