@@ -596,7 +596,16 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                         <FormItem>
                             <FormLabel>Komentář</FormLabel>
                             <FormControl>
-                                <Textarea {...field} />
+                                <Textarea
+                                    onInput={(e) => {
+                                        const textarea = e.target as HTMLTextAreaElement;
+                                        textarea.style.height = "auto";
+                                        textarea.style.height = textarea.scrollHeight + "px";
+                                    }}
+                                    placeholder="Napište sem komentář k objednávce"
+                                    className="resize-none"
+                                    {...field}
+                                />
                             </FormControl>
 
                             <FormDescription>
