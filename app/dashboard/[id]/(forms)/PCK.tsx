@@ -428,6 +428,60 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
         return (Number(price) || 0) * (Number(quantity) || 0);
     };
 
+    const shipmentPrice =
+        calculateShipmentZoneTotal(shipmentZoneOnePrice, form.getValues().shipmentZoneOne) +
+        calculateShipmentZoneTotal(shipmentZoneTwoPrice, form.getValues().shipmentZoneTwo) +
+        calculateShipmentZoneTotal(shipmentZoneThreePrice, form.getValues().shipmentZoneThree) +
+        calculateShipmentZoneTotal(shipmentZoneFourPrice, form.getValues().shipmentZoneFour);
+
+    const completeInstallationPrice =
+        calculateShipmentZoneTotal(
+            completeInstallationLockersPrice,
+            form.getValues().completeInstallationLockers,
+        ) + calculateShipmentZoneTotal(completeAtypicalPrice, form.getValues().completeAtypical);
+
+    const basicInstallationPrice =
+        calculateShipmentZoneTotal(basicLockersPrice, form.getValues().basicLockers) +
+        calculateShipmentZoneTotal(basicMilledPrice, form.getValues().basicMilled) +
+        calculateShipmentZoneTotal(basicAtypicalPrice, form.getValues().basicAtypical);
+
+    const installationPrice =
+        calculateShipmentZoneTotal(
+            installationDigesterPrice,
+            form.getValues().installationDigester,
+        ) +
+        calculateShipmentZoneTotal(installationHobPrice, form.getValues().installationHob) +
+        calculateShipmentZoneTotal(installationGasHobPrice, form.getValues().installationGasHob) +
+        calculateShipmentZoneTotal(installationLightsPrice, form.getValues().installationLights) +
+        calculateShipmentZoneTotal(
+            installationMicrowavePrice,
+            form.getValues().installationMicrowave,
+        ) +
+        calculateShipmentZoneTotal(installationFreezerPrice, form.getValues().installationFreezer) +
+        calculateShipmentZoneTotal(
+            installationDishwasherPrice,
+            form.getValues().installationDishwasher,
+        ) +
+        calculateShipmentZoneTotal(installationOvenPrice, form.getValues().installationOven) +
+        calculateShipmentZoneTotal(installationFaucetPrice, form.getValues().installationFaucet) +
+        calculateShipmentZoneTotal(
+            installationMilledJointPrice,
+            form.getValues().installationMilledJoint,
+        ) +
+        calculateShipmentZoneTotal(installationWorktopPrice, form.getValues().installationWorktop) +
+        calculateShipmentZoneTotal(
+            installationWallPanelPrice,
+            form.getValues().installationWallPanel,
+        ) +
+        calculateShipmentZoneTotal(
+            applianceOutsideOfIkeaPrice,
+            form.getValues().applianceOutsideOfIkea,
+        ) +
+        calculateShipmentZoneTotal(
+            gasApplianceOutsideOfIkeaPrice,
+            form.getValues().gasApplianceOutsideOfIkea,
+        );
+
     return (
         <Form {...form}>
             <motion.form
@@ -440,24 +494,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                 <div className="flex items-baseline justify-between gap-x-8">
                     <Typography variant="h2">Doprava montérů</Typography>
                     <Unit
-                        value={String(
-                            calculateShipmentZoneTotal(
-                                shipmentZoneOnePrice,
-                                form.getValues().shipmentZoneOne,
-                            ) +
-                                calculateShipmentZoneTotal(
-                                    shipmentZoneTwoPrice,
-                                    form.getValues().shipmentZoneTwo,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    shipmentZoneThreePrice,
-                                    form.getValues().shipmentZoneThree,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    shipmentZoneFourPrice,
-                                    form.getValues().shipmentZoneFour,
-                                ),
-                        )}
+                        value={String(shipmentPrice)}
                         className="text-xl font-medium tracking-wider text-foreground"
                         unit=",-"
                     />
@@ -594,16 +631,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                 <div className="flex items-baseline justify-between gap-x-8">
                     <Typography variant="h2">Kompletní instalace Method</Typography>
                     <Unit
-                        value={String(
-                            calculateShipmentZoneTotal(
-                                completeInstallationLockersPrice,
-                                form.getValues().completeInstallationLockers,
-                            ) +
-                                calculateShipmentZoneTotal(
-                                    completeAtypicalPrice,
-                                    form.getValues().completeAtypical,
-                                ),
-                        )}
+                        value={String(completeInstallationPrice)}
                         className="text-xl font-medium tracking-wider text-foreground"
                         unit=",-"
                     />
@@ -680,20 +708,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                 <div className="flex items-baseline justify-between gap-x-8">
                     <Typography variant="h2">Základní instalace Method</Typography>
                     <Unit
-                        value={String(
-                            calculateShipmentZoneTotal(
-                                basicLockersPrice,
-                                form.getValues().basicLockers,
-                            ) +
-                                calculateShipmentZoneTotal(
-                                    basicMilledPrice,
-                                    form.getValues().basicMilled,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    basicAtypicalPrice,
-                                    form.getValues().basicAtypical,
-                                ),
-                        )}
+                        value={String(basicInstallationPrice)}
                         className="text-xl font-medium tracking-wider text-foreground"
                         unit=",-"
                     />
@@ -799,64 +814,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                 <div className="flex items-baseline justify-between gap-x-8">
                     <Typography variant="h2">Instalace</Typography>
                     <Unit
-                        value={String(
-                            calculateShipmentZoneTotal(
-                                installationDigesterPrice,
-                                form.getValues().installationDigester,
-                            ) +
-                                calculateShipmentZoneTotal(
-                                    installationHobPrice,
-                                    form.getValues().installationHob,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    installationGasHobPrice,
-                                    form.getValues().installationGasHob,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    installationLightsPrice,
-                                    form.getValues().installationLights,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    installationMicrowavePrice,
-                                    form.getValues().installationMicrowave,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    installationFreezerPrice,
-                                    form.getValues().installationFreezer,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    installationDishwasherPrice,
-                                    form.getValues().installationDishwasher,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    installationOvenPrice,
-                                    form.getValues().installationOven,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    installationFaucetPrice,
-                                    form.getValues().installationFaucet,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    installationMilledJointPrice,
-                                    form.getValues().installationMilledJoint,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    installationWorktopPrice,
-                                    form.getValues().installationWorktop,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    installationWallPanelPrice,
-                                    form.getValues().installationWallPanel,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    applianceOutsideOfIkeaPrice,
-                                    form.getValues().applianceOutsideOfIkea,
-                                ) +
-                                calculateShipmentZoneTotal(
-                                    gasApplianceOutsideOfIkeaPrice,
-                                    form.getValues().gasApplianceOutsideOfIkea,
-                                ),
-                        )}
+                        value={String(installationPrice)}
                         className="text-xl font-medium tracking-wider text-foreground"
                         unit=",-"
                     />
@@ -1415,6 +1373,17 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                         </FormItem>
                     )}
                 />
+
+                <Separator />
+
+                <Typography>
+                    {(shipmentPrice +
+                        completeInstallationPrice +
+                        basicInstallationPrice +
+                        installationPrice) *
+                        (Number(form.getValues().tax ? 12 : 21) / 100 + 1) -
+                        Number(form.getValues().bail)}
+                </Typography>
             </motion.form>
         </Form>
     );

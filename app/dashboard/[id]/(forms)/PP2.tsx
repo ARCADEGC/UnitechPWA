@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import SignatureCanvas from "react-signature-canvas";
 import { useCallback, useEffect, useRef } from "react";
 import { toast } from "sonner";
-import { OrderPP2 } from "@/db/schema";
 import { updateOrderPP2 } from "@/db/db";
 import {
     Form,
