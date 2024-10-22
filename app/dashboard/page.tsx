@@ -41,6 +41,7 @@ export default async function Home() {
             assignee: await getOrderAssigneeByOrderId(order.orderHeader).then((userUUID) =>
                 userUUID ? getUserNameById(userUUID) : "",
             ),
+            archived: order.archived ?? false,
         })),
     );
 

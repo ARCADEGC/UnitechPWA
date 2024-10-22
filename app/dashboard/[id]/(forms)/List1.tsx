@@ -36,9 +36,10 @@ type TList1Props = {
     userRole: boolean;
     referenceDate: Date | undefined;
     PP2Specifications: TOrderPP2Specifications;
+    archived: boolean;
 };
 
-function List1({ orderList1, userRole, referenceDate, PP2Specifications }: TList1Props) {
+function List1({ orderList1, userRole, referenceDate, PP2Specifications, archived }: TList1Props) {
     const [credit, setCredit] = useState<number | null>(0);
     const [aboveFifty, setAboveFifty] = useState<number | null>(0);
 
@@ -87,32 +88,35 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications }: TList
         },
     });
 
-    async function onSubmit(values: z.infer<typeof formList1Schema>) {
-        try {
-            const updatedOrder: TOrderListOne = {
-                aboveFifty: String(values.aboveFifty === "null" ? 0 : values.aboveFifty),
-                credit: String(values.credit === "null" ? 0 : values.credit),
+    const onSubmit = useCallback(
+        (values: z.infer<typeof formList1Schema>) => {
+            try {
+                const updatedOrder: TOrderListOne = {
+                    aboveFifty: String(values.aboveFifty === "null" ? 0 : values.aboveFifty),
+                    credit: String(values.credit === "null" ? 0 : values.credit),
 
-                material: String(values.material === "null" ? 0 : values.material),
-            };
+                    material: String(values.material === "null" ? 0 : values.material),
+                };
 
-            const promise = updateOrderList1(orderList1.id as string, updatedOrder, userRole);
+                const promise = updateOrderList1(orderList1.id as string, updatedOrder, userRole);
 
-            toast.promise(promise, {
-                loading: "Aktualizování objednávky...",
-                success: () => {
-                    return "Objednávka aktualizována úspěšně";
-                },
-                error: () => {
-                    return "Něco se pokazilo";
-                },
-            });
-        } catch {
-            return toast.error("Něco se pokazilo", {
-                description: "Prosím počkejte nebo to zkuste znovu",
-            });
-        }
-    }
+                toast.promise(promise, {
+                    loading: "Aktualizování objednávky...",
+                    success: () => {
+                        return "Objednávka aktualizována úspěšně";
+                    },
+                    error: () => {
+                        return "Něco se pokazilo";
+                    },
+                });
+            } catch {
+                return toast.error("Něco se pokazilo", {
+                    description: "Prosím počkejte nebo to zkuste znovu",
+                });
+            }
+        },
+        [userRole, orderList1.id],
+    );
 
     useEffect(() => {
         const fetchPrice = async () => {
@@ -251,7 +255,7 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications }: TList
             }
         };
         fetchPrice();
-    }, []);
+    }, [referenceDate]);
 
     useEffect(() => {
         const fetchPrice = async () => {
@@ -395,13 +399,14 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications }: TList
             }
         };
         fetchPrice();
-    }, []);
+    }, [referenceDate, userRole]);
 
     const debouncedSubmit = useCallback(
-        debounce(async () => {
-            onSubmit(form.getValues());
-        }, 500),
-        [orderList1, userRole],
+        () =>
+            debounce(async () => {
+                onSubmit(form.getValues());
+            }, 500),
+        [form, onSubmit],
     );
 
     useEffect(() => {
@@ -458,6 +463,7 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications }: TList
                                                             "text-muted-foreground"
                                                         :   "",
                                                     )}
+                                                    disabled={!userRole && archived}
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -502,6 +508,7 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications }: TList
                                                             "text-muted-foreground"
                                                         :   "",
                                                     )}
+                                                    disabled={!userRole && archived}
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -697,6 +704,7 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications }: TList
                                                             "text-muted-foreground"
                                                         :   "",
                                                     )}
+                                                    disabled={!userRole && archived}
                                                     {...field}
                                                 />
                                             </FormControl>
