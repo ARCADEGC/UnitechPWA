@@ -36,9 +36,10 @@ type TList1Props = {
     userRole: boolean;
     referenceDate: Date | undefined;
     PP2Specifications: TOrderPP2Specifications;
+    archived: boolean;
 };
 
-function List1({ orderList1, userRole, referenceDate, PP2Specifications }: TList1Props) {
+function List1({ orderList1, userRole, referenceDate, PP2Specifications, archived }: TList1Props) {
     const [credit, setCredit] = useState<number | null>(0);
     const [aboveFifty, setAboveFifty] = useState<number | null>(0);
 
@@ -458,6 +459,7 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications }: TList
                                                             "text-muted-foreground"
                                                         :   "",
                                                     )}
+                                                    disabled={!userRole && archived}
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -502,6 +504,7 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications }: TList
                                                             "text-muted-foreground"
                                                         :   "",
                                                     )}
+                                                    disabled={!userRole && archived}
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -697,6 +700,7 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications }: TList
                                                             "text-muted-foreground"
                                                         :   "",
                                                     )}
+                                                    disabled={!userRole && archived}
                                                     {...field}
                                                 />
                                             </FormControl>

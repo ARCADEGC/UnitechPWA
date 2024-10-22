@@ -531,6 +531,24 @@ export async function deleteOrder(currentOrder: TOrder) {
     await db.delete(OrderListOne).where(eq(OrderListOne.id, currentOrder.orderListOne)).returning();
 }
 
+export async function archiveOrder(currentOrder: TOrder) {
+    await db
+        .update(order)
+        .set({
+            archived: true,
+        })
+        .where(eq(order.id, currentOrder.id ?? ""));
+}
+
+export async function unarchiveOrder(currentOrder: TOrder) {
+    await db
+        .update(order)
+        .set({
+            archived: false,
+        })
+        .where(eq(order.id, currentOrder.id ?? ""));
+}
+
 // . ||--------------------------------------------------------------------------------||
 // . ||                                     Prices                                     ||
 // . ||--------------------------------------------------------------------------------||

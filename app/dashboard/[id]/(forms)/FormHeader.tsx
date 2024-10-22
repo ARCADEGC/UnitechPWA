@@ -37,13 +37,15 @@ import { Calendar } from "@/components/ui/calendar";
 import { TOrderHeader, TUser } from "@/types/dbSchemas";
 import { formHeaderSchema } from "@/types/orderForm";
 import { cubicBezier, motion } from "framer-motion";
+import { order } from "@/db/schema";
 
 type TFormHeaderProps = {
     orderHeader: TOrderHeader;
     userRole: boolean;
+    archived: boolean;
 };
 
-function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
+function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
     const [users, setUsers] = useState<TUser[]>([]);
 
     const form = useForm<z.infer<typeof formHeaderSchema>>({
@@ -146,6 +148,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                                 <Input
                                     placeholder="order name"
                                     autoComplete="on"
+                                    disabled={!userRole && archived}
                                     {...field}
                                 />
                             </FormControl>
@@ -164,6 +167,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                                 <Input
                                     placeholder="order address"
                                     autoComplete="on"
+                                    disabled={!userRole && archived}
                                     {...field}
                                 />
                             </FormControl>
@@ -189,6 +193,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                                                         "w-[240px] pl-3 text-left font-normal",
                                                         !field.value && "text-muted-foreground",
                                                     )}
+                                                    disabled={!userRole && archived}
                                                 >
                                                     {field.value ?
                                                         format(field.value, "PPP")
@@ -231,7 +236,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                                     disabled={!userRole}
                                 >
                                     <FormControl>
-                                        <SelectTrigger>
+                                        <SelectTrigger disabled={!userRole && archived}>
                                             <SelectValue placeholder="Select a assignee" />
                                         </SelectTrigger>
                                     </FormControl>
@@ -264,6 +269,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                                     <Input
                                         placeholder="order phone"
                                         autoComplete="on"
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -282,6 +288,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                                     <Input
                                         placeholder="order email"
                                         autoComplete="on"
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -303,6 +310,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                                         placeholder="order number"
                                         autoComplete="on"
                                         type="number"
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -321,6 +329,7 @@ function FormHeader({ orderHeader, userRole }: TFormHeaderProps) {
                                         placeholder="order number"
                                         autoComplete="on"
                                         type="number"
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>

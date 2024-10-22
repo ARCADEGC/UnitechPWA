@@ -21,6 +21,7 @@ type TOrderListProps = {
         name: string | undefined;
         orderNumber: string;
         assignee: string | null;
+        archived: boolean;
     }[];
     role: boolean;
     userId: string;
@@ -51,31 +52,76 @@ function OrderList({ orders, role, userId }: TOrderListProps) {
                     />
                 )}
                 {queriedOrders.length > 0 &&
-                    queriedOrders?.map((order) => (
-                        <Link
-                            href={`/dashboard/${order.id}`}
-                            key={order.id}
-                            className="group/cardLink"
-                        >
-                            <Card className="transition-colors group-hover/cardLink:bg-muted">
-                                <CardHeader>
-                                    <CardTitle className="transition-[letter-spacing] group-hover/cardLink:tracking-wider">
-                                        {order.name}
-                                    </CardTitle>
-                                    <CardDescription>{order.orderNumber}</CardDescription>
-                                </CardHeader>
-                                {/*
+                    queriedOrders?.map(
+                        (order) =>
+                            !order.archived && (
+                                <Link
+                                    href={`/dashboard/${order.id}`}
+                                    key={order.id}
+                                    className="group/cardLink"
+                                >
+                                    <Card className="transition-colors group-hover/cardLink:bg-muted">
+                                        <CardHeader>
+                                            <CardTitle className="transition-[letter-spacing] group-hover/cardLink:tracking-wider">
+                                                {order.name}
+                                            </CardTitle>
+                                            <CardDescription>{order.orderNumber}</CardDescription>
+                                        </CardHeader>
+                                        {/*
                         <CardContent>
                             <p className="line-clamp-3"></p>
                         </CardContent>
                         */}
-                                <CardFooter>
-                                    <p>{order.assignee}</p>
-                                </CardFooter>
-                            </Card>
-                        </Link>
-                    ))}
+                                        <CardFooter>
+                                            <p>{order.assignee}</p>
+                                        </CardFooter>
+                                    </Card>
+                                </Link>
+                            ),
+                    )}
             </div>
+
+            {queriedOrders.filter((order) => order.archived).length > 0 && (
+                <Typography
+                    variant="h2"
+                    as="p"
+                    className="mt-16 border-b border-border"
+                >
+                    Archivované objednávky
+                </Typography>
+            )}
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {queriedOrders.length > 0 &&
+                    queriedOrders?.map(
+                        (order) =>
+                            order.archived && (
+                                <Link
+                                    href={`/dashboard/${order.id}`}
+                                    key={order.id}
+                                    className="group/cardLink"
+                                >
+                                    <Card className="transition-colors group-hover/cardLink:bg-muted">
+                                        <CardHeader>
+                                            <CardTitle className="transition-[letter-spacing] group-hover/cardLink:tracking-wider">
+                                                {order.name}
+                                            </CardTitle>
+                                            <CardDescription>{order.orderNumber}</CardDescription>
+                                        </CardHeader>
+                                        {/*
+                        <CardContent>
+                            <p className="line-clamp-3"></p>
+                        </CardContent>
+                        */}
+                                        <CardFooter>
+                                            <p>{order.assignee}</p>
+                                        </CardFooter>
+                                    </Card>
+                                </Link>
+                            ),
+                    )}
+            </div>
+
             {searchQuery && queriedOrders.length === 0 && (
                 <Typography
                     variant="h1"

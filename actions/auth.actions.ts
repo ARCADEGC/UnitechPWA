@@ -58,7 +58,7 @@ export const loginFunction = async (values: TLoginProps) => {
         expiresIn: ONE_MONTH,
     });
     const sessionCookie = lucia.createSessionCookie(session.id);
-    cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+    (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 
     return { success: true };
 };
@@ -71,7 +71,7 @@ export const logOut = async () => {
     await lucia.invalidateSession(session.session.id);
 
     const sessionCookie = lucia.createBlankSessionCookie();
-    cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+    (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 
     return { success: true };
 };

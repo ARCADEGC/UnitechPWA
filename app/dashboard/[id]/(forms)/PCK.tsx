@@ -38,9 +38,10 @@ type TPCKProps = {
     orderNewPCK: TOrderNewPCK;
     userRole: boolean;
     referenceDate: Date | undefined;
+    archived: boolean;
 };
 
-function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
+function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
     let sigCanvasRef = useRef<SignatureCanvas>(null);
 
     const [shipmentZoneOnePrice, setShipmentZoneOnePrice] = useState<number | undefined>(0);
@@ -482,6 +483,22 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
             form.getValues().gasApplianceOutsideOfIkea,
         );
 
+    const calculateTotalPrice = () => {
+        const prices = [
+            shipmentPrice,
+            completeInstallationPrice,
+            basicInstallationPrice,
+            installationPrice,
+        ];
+
+        const total = prices.reduce((acc, price) => acc + (price ?? 0), 0);
+
+        const taxRate = form.getValues().tax ? 1.12 : 1.21;
+        const bail = Number(form.getValues().bail ?? 0);
+
+        return total * taxRate - bail;
+    };
+
     return (
         <Form {...form}>
             <motion.form
@@ -525,6 +542,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -556,6 +574,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -587,6 +606,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -618,6 +638,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -664,6 +685,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -695,6 +717,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -739,6 +762,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -770,6 +794,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -801,6 +826,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -845,6 +871,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -876,6 +903,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -907,6 +935,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -938,6 +967,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -969,6 +999,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1000,6 +1031,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1031,6 +1063,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1062,6 +1095,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1093,6 +1127,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1124,6 +1159,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1155,6 +1191,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1186,6 +1223,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1217,6 +1255,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1248,6 +1287,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         className={cn(
                                             field.value == "0.00" ? "text-muted-foreground" : "",
                                         )}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1288,6 +1328,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         min="0"
                                         step=".01"
                                         onFocus={(event) => event.currentTarget.select()}
+                                        disabled={!userRole && archived}
                                         {...field}
                                     />
                                 </FormControl>
@@ -1315,6 +1356,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                         <Switch
                                             checked={field.value}
                                             onCheckedChange={field.onChange}
+                                            disabled={!userRole && archived}
                                         />
                                         <Typography
                                             variant="muted"
@@ -1353,7 +1395,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                             className:
                                                 "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
                                         }}
-                                        penColor="#000"
+                                        penColor={!userRole && archived ? "#00000000" : "#000"}
                                         clearOnResize={false}
                                     />
                                 </FormControl>
@@ -1364,6 +1406,7 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                                     onClick={() => sigCanvasRef.current?.clear()}
                                     variant={"secondary"}
                                     className="absolute -bottom-2 -right-2 print:hidden"
+                                    disabled={!userRole && archived}
                                 >
                                     <Eraser className="size-4" />
                                 </Button>
@@ -1377,12 +1420,13 @@ function PCK({ orderNewPCK, userRole, referenceDate }: TPCKProps) {
                 <Separator />
 
                 <Typography>
-                    {(shipmentPrice +
-                        completeInstallationPrice +
-                        basicInstallationPrice +
-                        installationPrice) *
-                        (Number(form.getValues().tax ? 12 : 21) / 100 + 1) -
-                        Number(form.getValues().bail)}
+                    <Unit
+                        value={calculateTotalPrice().toFixed(2)}
+                        unit=",-"
+                        variant="h1"
+                        as="p"
+                        className="text-right text-primary"
+                    />
                 </Typography>
             </motion.form>
         </Form>

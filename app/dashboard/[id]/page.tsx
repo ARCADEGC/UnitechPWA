@@ -16,17 +16,20 @@ import { NotFound } from "@/app/dashboard/[id]/NotFound";
 import Loading from "@/app/loading";
 import { PrintButton } from "./(buttons)/PrintButton";
 import { DeleteOrderButton } from "@/app/dashboard/[id]/(buttons)/DeteteOrderButton";
+import { ArchiveButton } from "@/app/dashboard/[id]/(buttons)/ArchiveButton";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/formTabs";
 import { Separator } from "@/components/ui/separator";
 import { Typography } from "@/components/ui/Typography";
+import { ReverseArchiveButton } from "./(buttons)/ReverseArchiveButton";
 
 const FormHeader = lazy(() => import("@/app/dashboard/[id]/(forms)/FormHeader"));
 const PCK = lazy(() => import("@/app/dashboard/[id]/(forms)/PCK"));
 const PP2 = lazy(() => import("@/app/dashboard/[id]/(forms)/PP2"));
 const List1 = lazy(() => import("@/app/dashboard/[id]/(forms)/List1"));
 
-async function Home({ params }: { params: { id: string } }) {
+async function Home(props: { params: Promise<{ id: string }> }) {
+    const params = await props.params;
     const { user } = await validateSession();
 
     if (!user) return null;
@@ -56,6 +59,7 @@ async function Home({ params }: { params: { id: string } }) {
                     orderNewPCK={orderNewPCK}
                     userRole={userRole}
                     referenceDate={currentOrder?.referenceDate}
+                    archived={currentOrder.archived ?? true}
                 />
             :   <div>Nastala chyba při načítání objednávky PCK. Zkuste to prosím znovu.</div>;
     }
@@ -72,6 +76,7 @@ async function Home({ params }: { params: { id: string } }) {
                     orderPP2={orderPP2}
                     userRole={userRole}
                     referenceDate={currentOrder?.referenceDate}
+                    archived={currentOrder.archived ?? true}
                 />
             :   <div>Nastala chyba při načítání objednávky PP 2. Zkuste to prosím znovu.</div>;
     }
@@ -95,6 +100,7 @@ async function Home({ params }: { params: { id: string } }) {
                     userRole={userRole}
                     referenceDate={currentOrder?.referenceDate}
                     PP2Specifications={PP2Specifications}
+                    archived={currentOrder.archived ?? true}
                 />
             :   <div>Nastala chyba při načítání objednávky List 1. Zkuste to prosím znovu.</div>;
     }
@@ -112,6 +118,7 @@ async function Home({ params }: { params: { id: string } }) {
                 <FormHeader
                     orderHeader={orderHeader}
                     userRole={userRole}
+                    archived={currentOrder.archived ?? true}
                 />
             :   <div>Nastala chyba při načítání objednávky. Zkuste to prosím znovu.</div>}
 
@@ -142,8 +149,14 @@ async function Home({ params }: { params: { id: string } }) {
             <Separator className="my-16" />
 
             <div className="mx-auto flex max-w-prose gap-8 print:hidden">
-                <DeleteOrderButton currentOrder={currentOrder} />
+                {!currentOrder.archived ||
+                    (currentOrder.archived && userRole && (
+                        <DeleteOrderButton currentOrder={currentOrder} />
+                    ))}
                 <PrintButton>Tisk</PrintButton>
+                {currentOrder.archived ?
+                    userRole && <ReverseArchiveButton currentOrder={currentOrder} />
+                :   <ArchiveButton currentOrder={currentOrder} />}
             </div>
         </Suspense>
     );

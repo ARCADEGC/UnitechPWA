@@ -44,10 +44,10 @@ import { Unit } from "@/components/ui/unit";
 type TPP2Props = {
     orderPP2: TOrderPP2;
     userRole: boolean;
-    referenceDate: Date | undefined;
+    archived: boolean;
 };
 
-function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
+function PP2({ orderPP2, userRole, archived }: TPP2Props) {
     let workerSigCanvasRef = useRef<SignatureCanvas>(null);
     let custommerSigCanvasRef = useRef<SignatureCanvas>(null);
 
@@ -224,6 +224,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                         <Checkbox
                                             checked={field.value}
                                             onCheckedChange={field.onChange}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
                                     <FormLabel className="!mt-0 text-sm font-normal">
@@ -253,6 +254,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                                 min="0"
                                                 step=".01"
                                                 onFocus={(event) => event.currentTarget.select()}
+                                                disabled={!userRole && archived}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -277,6 +279,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                         <Checkbox
                                             checked={field.value}
                                             onCheckedChange={field.onChange}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
                                     <FormLabel className="!mt-0 text-sm font-normal">
@@ -306,6 +309,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                                 min="0"
                                                 step=".01"
                                                 onFocus={(event) => event.currentTarget.select()}
+                                                disabled={!userRole && archived}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -332,6 +336,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     <Select
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
+                                        disabled={!userRole && archived}
                                     >
                                         <FormControl>
                                             <SelectTrigger>
@@ -365,6 +370,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                         <FormControl>
                                             <Textarea
                                                 placeholder="důvod"
+                                                disabled={!userRole && archived}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -392,6 +398,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                         <FormControl>
                                             <Textarea
                                                 placeholder="důvod"
+                                                disabled={!userRole && archived}
                                                 {...field}
                                             />
                                         </FormControl>
@@ -415,6 +422,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     <Checkbox
                                         checked={field.value}
                                         onCheckedChange={field.onChange}
+                                        disabled={!userRole && archived}
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
@@ -433,6 +441,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     <Checkbox
                                         checked={field.value}
                                         onCheckedChange={field.onChange}
+                                        disabled={!userRole && archived}
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
@@ -452,6 +461,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     <Checkbox
                                         checked={field.value}
                                         onCheckedChange={field.onChange}
+                                        disabled={!userRole && archived}
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
@@ -470,6 +480,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     <Checkbox
                                         checked={field.value}
                                         onCheckedChange={field.onChange}
+                                        disabled={!userRole && archived}
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
@@ -488,6 +499,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     <Checkbox
                                         checked={field.value}
                                         onCheckedChange={field.onChange}
+                                        disabled={!userRole && archived}
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
@@ -506,6 +518,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     <Checkbox
                                         checked={field.value}
                                         onCheckedChange={field.onChange}
+                                        disabled={!userRole && archived}
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
@@ -524,6 +537,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     <Checkbox
                                         checked={field.value}
                                         onCheckedChange={field.onChange}
+                                        disabled={!userRole && archived}
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
@@ -542,6 +556,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     <Checkbox
                                         checked={field.value}
                                         onCheckedChange={field.onChange}
+                                        disabled={!userRole && archived}
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
@@ -560,6 +575,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     <Checkbox
                                         checked={field.value}
                                         onCheckedChange={field.onChange}
+                                        disabled={!userRole && archived}
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
@@ -578,6 +594,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     <Checkbox
                                         checked={field.value}
                                         onCheckedChange={field.onChange}
+                                        disabled={!userRole && archived}
                                     />
                                 </FormControl>
                                 <FormLabel className="!mt-0 text-sm font-normal">
@@ -603,6 +620,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                     }}
                                     placeholder="Napište sem komentář k objednávce"
                                     className="resize-none"
+                                    disabled={!userRole && archived}
                                     {...field}
                                 />
                             </FormControl>
@@ -643,6 +661,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                                 "pl-3 text-left font-normal",
                                                 !field.value && "text-muted-foreground",
                                             )}
+                                            disabled={!userRole && archived}
                                         >
                                             {field.value ?
                                                 format(field.value, "PPP")
@@ -696,6 +715,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -720,6 +740,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -744,6 +765,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -768,6 +790,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -792,6 +815,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -816,6 +840,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -840,6 +865,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -864,6 +890,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -888,6 +915,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -912,6 +940,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -940,6 +969,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -964,6 +994,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -988,6 +1019,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -1012,6 +1044,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -1036,6 +1069,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             {...field}
+                                            disabled={!userRole && archived}
                                         />
                                     </FormControl>
 
@@ -1065,7 +1099,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                                 className:
                                                     "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
                                             }}
-                                            penColor="#000"
+                                            penColor={!userRole && archived ? "#00000000" : "#000"}
                                             clearOnResize={false}
                                         />
                                     </FormControl>
@@ -1076,6 +1110,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                         onClick={() => custommerSigCanvasRef.current?.clear()}
                                         variant={"secondary"}
                                         className="absolute -bottom-2 -right-2 print:hidden"
+                                        disabled={!userRole && archived}
                                     >
                                         <Eraser className="size-4" />
                                     </Button>
@@ -1102,7 +1137,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                                 className:
                                                     "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
                                             }}
-                                            penColor="#000"
+                                            penColor={!userRole && archived ? "#00000000" : "#000"}
                                             clearOnResize={false}
                                         />
                                     </FormControl>
@@ -1113,6 +1148,7 @@ function PP2({ orderPP2, userRole, referenceDate }: TPP2Props) {
                                         onClick={() => workerSigCanvasRef.current?.clear()}
                                         variant={"secondary"}
                                         className="absolute -bottom-2 -right-2 print:hidden"
+                                        disabled={!userRole && archived}
                                     >
                                         <Eraser className="size-4" />
                                     </Button>
