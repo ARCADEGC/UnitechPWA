@@ -96,72 +96,75 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
         mode: "all",
     });
 
-    async function onSubmit(values: z.infer<typeof formPP2Schema>) {
-        try {
-            const updatedOrder: TOrderPP2 = {
-                anotherService: values.anotherService,
-                timeToFinish: String(values.timeToFinish ?? 0),
-                contactWithIkea: values.contactWithIkea,
-                numOfReturn: String(values.numOfReturn ?? 0),
-                finished: values.canceled,
-                reasonOfCancelation:
-                    values.reasonOfCancelation === "null" ? "" : values.reasonOfCancelation,
-                reasonOfImposibility:
-                    values.reasonOfImposibility === "null" ? "" : values.reasonOfImposibility,
-                waterConnection: values.waterConnection,
-                couplingsAndKitchenAdjustment: values.couplingsAndKitchenAdjustment,
-                testDishwasherFaucet: values.testDishwasherFaucet,
-                viewCutsOk: values.viewCutsOk,
-                electricalAppliancesPluggedIn: values.electricalAppliancesPluggedIn,
-                cleaningOfKitchenInstallationArea: values.cleaningOfKitchenInstallationArea,
-                electricalTestAppliances: values.electricalTestAppliances,
-                previousDamageToApartment: values.previousDamageToApartment,
-                sealingOfWorktops: values.sealingOfWorktops,
-                damageToFlatDuringInstallation: values.damageToFlatDuringInstallation,
-                comment: values.comment ?? "",
+    const onSubmit = useCallback(
+        (values: z.infer<typeof formPP2Schema>) => {
+            try {
+                const updatedOrder: TOrderPP2 = {
+                    anotherService: values.anotherService,
+                    timeToFinish: String(values.timeToFinish ?? 0),
+                    contactWithIkea: values.contactWithIkea,
+                    numOfReturn: String(values.numOfReturn ?? 0),
+                    finished: values.canceled,
+                    reasonOfCancelation:
+                        values.reasonOfCancelation === "null" ? "" : values.reasonOfCancelation,
+                    reasonOfImposibility:
+                        values.reasonOfImposibility === "null" ? "" : values.reasonOfImposibility,
+                    waterConnection: values.waterConnection,
+                    couplingsAndKitchenAdjustment: values.couplingsAndKitchenAdjustment,
+                    testDishwasherFaucet: values.testDishwasherFaucet,
+                    viewCutsOk: values.viewCutsOk,
+                    electricalAppliancesPluggedIn: values.electricalAppliancesPluggedIn,
+                    cleaningOfKitchenInstallationArea: values.cleaningOfKitchenInstallationArea,
+                    electricalTestAppliances: values.electricalTestAppliances,
+                    previousDamageToApartment: values.previousDamageToApartment,
+                    sealingOfWorktops: values.sealingOfWorktops,
+                    damageToFlatDuringInstallation: values.damageToFlatDuringInstallation,
+                    comment: values.comment ?? "",
 
-                upperLocker: String(values.upperLocker === "null" ? 0 : values.upperLocker),
-                lowerLocker: String(values.lowerLocker === "null" ? 0 : values.lowerLocker),
-                highLocker: String(values.highLocker === "null" ? 0 : values.highLocker),
-                milledJoint: String(values.milledJoint === "null" ? 0 : values.milledJoint),
-                worktop: String(values.worktop === "null" ? 0 : values.worktop),
-                tailoredWorktop: String(
-                    values.tailoredWorktop === "null" ? 0 : values.tailoredWorktop,
-                ),
-                wallPanel: String(values.wallPanel === "null" ? 0 : values.wallPanel),
-                atypical: String(values.atypical === "null" ? 0 : values.atypical),
-                unnecessary: String(values.unnecessary === "null" ? 0 : values.unnecessary),
-                kitchen: String(values.kitchen === "null" ? 0 : values.kitchen),
+                    upperLocker: String(values.upperLocker === "null" ? 0 : values.upperLocker),
+                    lowerLocker: String(values.lowerLocker === "null" ? 0 : values.lowerLocker),
+                    highLocker: String(values.highLocker === "null" ? 0 : values.highLocker),
+                    milledJoint: String(values.milledJoint === "null" ? 0 : values.milledJoint),
+                    worktop: String(values.worktop === "null" ? 0 : values.worktop),
+                    tailoredWorktop: String(
+                        values.tailoredWorktop === "null" ? 0 : values.tailoredWorktop,
+                    ),
+                    wallPanel: String(values.wallPanel === "null" ? 0 : values.wallPanel),
+                    atypical: String(values.atypical === "null" ? 0 : values.atypical),
+                    unnecessary: String(values.unnecessary === "null" ? 0 : values.unnecessary),
+                    kitchen: String(values.kitchen === "null" ? 0 : values.kitchen),
 
-                lights: String(values.lights === "null" ? 0 : values.lights),
-                ikea: String(values.ikea === "null" ? 0 : values.ikea),
-                nonIkea: String(values.nonIkea === "null" ? 0 : values.nonIkea),
-                ikeaGas: String(values.ikeaGas === "null" ? 0 : values.ikeaGas),
-                nonIkeaGas: String(values.nonIkeaGas === "null" ? 0 : values.nonIkeaGas),
+                    lights: String(values.lights === "null" ? 0 : values.lights),
+                    ikea: String(values.ikea === "null" ? 0 : values.ikea),
+                    nonIkea: String(values.nonIkea === "null" ? 0 : values.nonIkea),
+                    ikeaGas: String(values.ikeaGas === "null" ? 0 : values.ikeaGas),
+                    nonIkeaGas: String(values.nonIkeaGas === "null" ? 0 : values.nonIkeaGas),
 
-                workerSignature: workerSigCanvasRef.current?.toData() as SignaturePad.Point[][],
-                custommerSignature:
-                    custommerSigCanvasRef.current?.toData() as SignaturePad.Point[][],
-                date: values.date ?? new Date(),
-            };
+                    workerSignature: workerSigCanvasRef.current?.toData() as SignaturePad.Point[][],
+                    custommerSignature:
+                        custommerSigCanvasRef.current?.toData() as SignaturePad.Point[][],
+                    date: values.date ?? new Date(),
+                };
 
-            const promise = updateOrderPP2(orderPP2.id as string, updatedOrder, userRole);
+                const promise = updateOrderPP2(orderPP2.id as string, updatedOrder, userRole);
 
-            toast.promise(promise, {
-                loading: "Aktualizování objednávky...",
-                success: () => {
-                    return "Objednávka aktualizována úspěšně";
-                },
-                error: () => {
-                    return "Něco se pokazilo";
-                },
-            });
-        } catch {
-            return toast.error("Něco se pokazilo", {
-                description: "Prosím počkejte nebo to zkuste znovu",
-            });
-        }
-    }
+                toast.promise(promise, {
+                    loading: "Aktualizování objednávky...",
+                    success: () => {
+                        return "Objednávka aktualizována úspěšně";
+                    },
+                    error: () => {
+                        return "Něco se pokazilo";
+                    },
+                });
+            } catch {
+                return toast.error("Něco se pokazilo", {
+                    description: "Prosím počkejte nebo to zkuste znovu",
+                });
+            }
+        },
+        [userRole, orderPP2.id],
+    );
 
     useEffect(() => {
         form.getValues().workerSignature ?
@@ -180,10 +183,11 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
     }, [form]);
 
     const debouncedSubmit = useCallback(
-        debounce(async () => {
-            onSubmit(form.getValues());
-        }, 500),
-        [orderPP2, userRole],
+        () =>
+            debounce(async () => {
+                onSubmit(form.getValues());
+            }, 500),
+        [form, onSubmit],
     );
 
     useEffect(() => {
@@ -197,781 +201,932 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
     }, [form, debouncedSubmit]);
 
     return (
-        <Form {...form}>
-            <motion.form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                    duration: 0.5,
-                    ease: cubicBezier(0.4, 0, 0.2, 1),
-                    layout: {
-                        duration: 0.1,
-                    },
-                }}
-                layout
-            >
-                {/*Another service*/}
-                <>
-                    <FormField
-                        control={form.control}
-                        name="anotherService"
-                        render={({ field }) => {
-                            return (
-                                <FormItem className="flex items-center gap-x-3">
-                                    <FormControl>
-                                        <Checkbox
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
-                                    <FormLabel className="!mt-0 text-sm font-normal">
-                                        Je vyžadována další služba (domontáž)?
-                                    </FormLabel>
-                                </FormItem>
-                            );
-                        }}
-                    />
-
-                    {form.getValues().anotherService && (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) }}
-                        >
-                            <FormField
-                                control={form.control}
-                                name="timeToFinish"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Čas potřebný k dokončení</FormLabel>
-
+        <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+                duration: 0.5,
+                ease: cubicBezier(0.4, 0, 0.2, 1),
+                layout: {
+                    duration: 0.1,
+                },
+            }}
+            layout
+        >
+            <Form {...form}>
+                <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-8"
+                >
+                    {/*Another service*/}
+                    <>
+                        <FormField
+                            control={form.control}
+                            name="anotherService"
+                            render={({ field }) => {
+                                return (
+                                    <FormItem className="flex items-center gap-x-3">
                                         <FormControl>
-                                            <Input
-                                                type="number"
-                                                min="0"
-                                                step=".01"
-                                                onFocus={(event) => event.currentTarget.select()}
+                                            <Checkbox
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
                                                 disabled={!userRole && archived}
-                                                {...field}
                                             />
                                         </FormControl>
-
-                                        <FormMessage />
+                                        <FormLabel className="!mt-0 text-sm font-normal">
+                                            Je vyžadována další služba (domontáž)?
+                                        </FormLabel>
                                     </FormItem>
-                                )}
-                            />
-                        </motion.div>
-                    )}
-                </>
+                                );
+                            }}
+                        />
 
-                {/*Contact with Ikea*/}
-                <>
-                    <FormField
-                        control={form.control}
-                        name="contactWithIkea"
-                        render={({ field }) => {
-                            return (
-                                <FormItem className="flex items-center gap-x-3">
-                                    <FormControl>
-                                        <Checkbox
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
-                                    <FormLabel className="!mt-0 text-sm font-normal">
-                                        Kontakt s IKEA (kurýr popř. reklamace)
-                                    </FormLabel>
-                                </FormItem>
-                            );
-                        }}
-                    />
+                        {form.getValues().anotherService && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) }}
+                            >
+                                <FormField
+                                    control={form.control}
+                                    name="timeToFinish"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Čas potřebný k dokončení</FormLabel>
 
-                    {form.getValues().contactWithIkea && (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) }}
-                        >
-                            <FormField
-                                control={form.control}
-                                name="numOfReturn"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Číslo reklamace (SAMS)</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    min="0"
+                                                    step=".01"
+                                                    onFocus={(event) =>
+                                                        event.currentTarget.select()
+                                                    }
+                                                    disabled={!userRole && archived}
+                                                    {...field}
+                                                />
+                                            </FormControl>
 
-                                        <FormControl>
-                                            <Input
-                                                type="number"
-                                                min="0"
-                                                step=".01"
-                                                onFocus={(event) => event.currentTarget.select()}
-                                                disabled={!userRole && archived}
-                                                {...field}
-                                            />
-                                        </FormControl>
-
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </motion.div>
-                    )}
-                </>
-
-                {/*Finished*/}
-                <>
-                    <FormField
-                        control={form.control}
-                        name="canceled"
-                        render={({ field }) => {
-                            return (
-                                <FormItem>
-                                    <FormLabel className="!mt-0 text-sm font-normal">
-                                        Zakázka dokončena
-                                    </FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                        disabled={!userRole && archived}
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select a verified email to display" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="yes">Ano</SelectItem>
-                                            <SelectItem value="no">Nebylo možné</SelectItem>
-                                            <SelectItem value="canceled">Zrušeno</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </FormItem>
-                            );
-                        }}
-                    />
-
-                    {form.getValues().canceled === "no" && (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) }}
-                        >
-                            <FormField
-                                control={form.control}
-                                name="reasonOfImposibility"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Nebylo možné dokončení</FormLabel>
-
-                                        <FormControl>
-                                            <Textarea
-                                                placeholder="důvod"
-                                                disabled={!userRole && archived}
-                                                {...field}
-                                            />
-                                        </FormControl>
-
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </motion.div>
-                    )}
-
-                    {form.getValues().canceled === "canceled" && (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) }}
-                        >
-                            <FormField
-                                control={form.control}
-                                name="reasonOfCancelation"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Zakázka zrušena</FormLabel>
-
-                                        <FormControl>
-                                            <Textarea
-                                                placeholder="důvod"
-                                                disabled={!userRole && archived}
-                                                {...field}
-                                            />
-                                        </FormControl>
-
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </motion.div>
-                    )}
-                </>
-
-                {/*Checkbox Group*/}
-                <div className="grid gap-8 md:grid-cols-2">
-                    <FormField
-                        control={form.control}
-                        name="waterConnection"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-3">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        disabled={!userRole && archived}
-                                    />
-                                </FormControl>
-                                <FormLabel className="!mt-0 text-sm font-normal">
-                                    Provedeno připojení vody
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="testDishwasherFaucet"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-3">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        disabled={!userRole && archived}
-                                    />
-                                </FormControl>
-                                <FormLabel className="!mt-0 text-sm font-normal">
-                                    Zkouška myčky, baterie
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="electricalAppliancesPluggedIn"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-3">
-                                {" "}
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        disabled={!userRole && archived}
-                                    />
-                                </FormControl>
-                                <FormLabel className="!mt-0 text-sm font-normal">
-                                    El. spotřebiče zapojeny
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="electricalTestAppliances"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-3">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        disabled={!userRole && archived}
-                                    />
-                                </FormControl>
-                                <FormLabel className="!mt-0 text-sm font-normal">
-                                    Zkouška el. spotřebičů
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="sealingOfWorktops"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-3">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        disabled={!userRole && archived}
-                                    />
-                                </FormControl>
-                                <FormLabel className="!mt-0 text-sm font-normal">
-                                    Utěsnění pracovní desky
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="couplingsAndKitchenAdjustment"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-3">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        disabled={!userRole && archived}
-                                    />
-                                </FormControl>
-                                <FormLabel className="!mt-0 text-sm font-normal">
-                                    Spáry a seřízení kuchyně v pořádku
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="viewCutsOk"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-3">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        disabled={!userRole && archived}
-                                    />
-                                </FormControl>
-                                <FormLabel className="!mt-0 text-sm font-normal">
-                                    Pohledové řezy OK
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="cleaningOfKitchenInstallationArea"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-3">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        disabled={!userRole && archived}
-                                    />
-                                </FormControl>
-                                <FormLabel className="!mt-0 text-sm font-normal">
-                                    Úklid kuchyně a prostoru montáže
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="previousDamageToApartment"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-3">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        disabled={!userRole && archived}
-                                    />
-                                </FormControl>
-                                <FormLabel className="!mt-0 text-sm font-normal">
-                                    Předchozí poškození bytu
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="damageToFlatDuringInstallation"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center gap-x-3">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        disabled={!userRole && archived}
-                                    />
-                                </FormControl>
-                                <FormLabel className="!mt-0 text-sm font-normal">
-                                    Poškození bytu při montáži
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-                </div>
-
-                <FormField
-                    control={form.control}
-                    name="comment"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Komentář</FormLabel>
-                            <FormControl>
-                                <Textarea
-                                    onInput={(e) => {
-                                        const textarea = e.target as HTMLTextAreaElement;
-                                        textarea.style.height = "auto";
-                                        textarea.style.height = textarea.scrollHeight + "px";
-                                    }}
-                                    placeholder="Napište sem komentář k objednávce"
-                                    className="resize-none"
-                                    disabled={!userRole && archived}
-                                    {...field}
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
                                 />
-                            </FormControl>
+                            </motion.div>
+                        )}
+                    </>
 
-                            <FormDescription>
-                                <Typography
-                                    variant="muted"
-                                    className="print:hidden"
-                                >
-                                    Pro recenzi spokojenosti zákazníka klikněte{" "}
-                                    <Typography
-                                        variant="anchor"
-                                        asChild
-                                    >
-                                        <Link href={""}>zde</Link>
-                                    </Typography>
-                                    .
-                                </Typography>
-                            </FormDescription>
+                    {/*Contact with Ikea*/}
+                    <>
+                        <FormField
+                            control={form.control}
+                            name="contactWithIkea"
+                            render={({ field }) => {
+                                return (
+                                    <FormItem className="flex items-center gap-x-3">
+                                        <FormControl>
+                                            <Checkbox
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
+                                        <FormLabel className="!mt-0 text-sm font-normal">
+                                            Kontakt s IKEA (kurýr popř. reklamace)
+                                        </FormLabel>
+                                    </FormItem>
+                                );
+                            }}
+                        />
 
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                        {form.getValues().contactWithIkea && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) }}
+                            >
+                                <FormField
+                                    control={form.control}
+                                    name="numOfReturn"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Číslo reklamace (SAMS)</FormLabel>
 
-                <FormField
-                    control={form.control}
-                    name="date"
-                    render={({ field }) => (
-                        <FormItem className="grid">
-                            <FormLabel>Datum </FormLabel>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <FormControl>
-                                        <Button
-                                            variant={"outline"}
-                                            className={cn(
-                                                "pl-3 text-left font-normal",
-                                                !field.value && "text-muted-foreground",
-                                            )}
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    min="0"
+                                                    step=".01"
+                                                    onFocus={(event) =>
+                                                        event.currentTarget.select()
+                                                    }
+                                                    disabled={!userRole && archived}
+                                                    {...field}
+                                                />
+                                            </FormControl>
+
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </motion.div>
+                        )}
+                    </>
+
+                    {/*Finished*/}
+                    <>
+                        <FormField
+                            control={form.control}
+                            name="canceled"
+                            render={({ field }) => {
+                                return (
+                                    <FormItem>
+                                        <FormLabel className="!mt-0 text-sm font-normal">
+                                            Zakázka dokončena
+                                        </FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
                                             disabled={!userRole && archived}
                                         >
-                                            {field.value ?
-                                                format(field.value, "PPP")
-                                            :   <span>Pick a date</span>}
-                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                        </Button>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a verified email to display" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="yes">Ano</SelectItem>
+                                                <SelectItem value="no">Nebylo možné</SelectItem>
+                                                <SelectItem value="canceled">Zrušeno</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </FormItem>
+                                );
+                            }}
+                        />
+
+                        {form.getValues().canceled === "no" && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) }}
+                            >
+                                <FormField
+                                    control={form.control}
+                                    name="reasonOfImposibility"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Nebylo možné dokončení</FormLabel>
+
+                                            <FormControl>
+                                                <Textarea
+                                                    placeholder="důvod"
+                                                    disabled={!userRole && archived}
+                                                    {...field}
+                                                />
+                                            </FormControl>
+
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </motion.div>
+                        )}
+
+                        {form.getValues().canceled === "canceled" && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) }}
+                            >
+                                <FormField
+                                    control={form.control}
+                                    name="reasonOfCancelation"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Zakázka zrušena</FormLabel>
+
+                                            <FormControl>
+                                                <Textarea
+                                                    placeholder="důvod"
+                                                    disabled={!userRole && archived}
+                                                    {...field}
+                                                />
+                                            </FormControl>
+
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </motion.div>
+                        )}
+                    </>
+
+                    {/*Checkbox Group*/}
+                    <div className="grid gap-8 md:grid-cols-2">
+                        <FormField
+                            control={form.control}
+                            name="waterConnection"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center gap-x-3">
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={!userRole && archived}
+                                        />
                                     </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent
-                                    className="w-auto p-0"
-                                    align="start"
-                                >
-                                    <Calendar
-                                        mode="single"
-                                        selected={field.value}
-                                        onSelect={field.onChange}
-                                        disabled={(date) =>
-                                            date < new Date() || date < new Date("1900-01-01")
-                                        }
-                                        initialFocus
+                                    <FormLabel className="!mt-0 text-sm font-normal">
+                                        Provedeno připojení vody
+                                    </FormLabel>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="testDishwasherFaucet"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center gap-x-3">
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={!userRole && archived}
+                                        />
+                                    </FormControl>
+                                    <FormLabel className="!mt-0 text-sm font-normal">
+                                        Zkouška myčky, baterie
+                                    </FormLabel>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="electricalAppliancesPluggedIn"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center gap-x-3">
+                                    {" "}
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={!userRole && archived}
+                                        />
+                                    </FormControl>
+                                    <FormLabel className="!mt-0 text-sm font-normal">
+                                        El. spotřebiče zapojeny
+                                    </FormLabel>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="electricalTestAppliances"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center gap-x-3">
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={!userRole && archived}
+                                        />
+                                    </FormControl>
+                                    <FormLabel className="!mt-0 text-sm font-normal">
+                                        Zkouška el. spotřebičů
+                                    </FormLabel>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="sealingOfWorktops"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center gap-x-3">
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={!userRole && archived}
+                                        />
+                                    </FormControl>
+                                    <FormLabel className="!mt-0 text-sm font-normal">
+                                        Utěsnění pracovní desky
+                                    </FormLabel>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="couplingsAndKitchenAdjustment"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center gap-x-3">
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={!userRole && archived}
+                                        />
+                                    </FormControl>
+                                    <FormLabel className="!mt-0 text-sm font-normal">
+                                        Spáry a seřízení kuchyně v pořádku
+                                    </FormLabel>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="viewCutsOk"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center gap-x-3">
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={!userRole && archived}
+                                        />
+                                    </FormControl>
+                                    <FormLabel className="!mt-0 text-sm font-normal">
+                                        Pohledové řezy OK
+                                    </FormLabel>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="cleaningOfKitchenInstallationArea"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center gap-x-3">
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={!userRole && archived}
+                                        />
+                                    </FormControl>
+                                    <FormLabel className="!mt-0 text-sm font-normal">
+                                        Úklid kuchyně a prostoru montáže
+                                    </FormLabel>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="previousDamageToApartment"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center gap-x-3">
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={!userRole && archived}
+                                        />
+                                    </FormControl>
+                                    <FormLabel className="!mt-0 text-sm font-normal">
+                                        Předchozí poškození bytu
+                                    </FormLabel>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="damageToFlatDuringInstallation"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center gap-x-3">
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={!userRole && archived}
+                                        />
+                                    </FormControl>
+                                    <FormLabel className="!mt-0 text-sm font-normal">
+                                        Poškození bytu při montáži
+                                    </FormLabel>
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+                    <FormField
+                        control={form.control}
+                        name="comment"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Komentář</FormLabel>
+                                <FormControl>
+                                    <Textarea
+                                        onInput={(e) => {
+                                            const textarea = e.target as HTMLTextAreaElement;
+                                            textarea.style.height = "auto";
+                                            textarea.style.height = textarea.scrollHeight + "px";
+                                        }}
+                                        placeholder="Napište sem komentář k objednávce"
+                                        className="resize-none"
+                                        disabled={!userRole && archived}
+                                        {...field}
                                     />
-                                </PopoverContent>
-                            </Popover>
+                                </FormControl>
 
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                                <FormDescription>
+                                    <Typography
+                                        variant="muted"
+                                        className="print:hidden"
+                                    >
+                                        Pro recenzi spokojenosti zákazníka klikněte{" "}
+                                        <Typography
+                                            variant="anchor"
+                                            asChild
+                                        >
+                                            <Link href={""}>zde</Link>
+                                        </Typography>
+                                        .
+                                    </Typography>
+                                </FormDescription>
 
-                <div className="flex items-baseline justify-between gap-x-8">
-                    <Typography variant="h2">Specifikace služby </Typography>
-                </div>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                <Separator className="!mt-0 mb-8" />
-
-                <div>
-                    <div className="grid gap-x-4 gap-y-8 sm:grid-cols-2">
-                        <FormField
-                            control={form.control}
-                            name="upperLocker"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Montáž horních skříněk </FormLabel>
-                                        <Unit unit="bm" />
-                                    </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
-                                            disabled={!userRole && archived}
+                    <FormField
+                        control={form.control}
+                        name="date"
+                        render={({ field }) => (
+                            <FormItem className="grid">
+                                <FormLabel>Datum </FormLabel>
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <FormControl>
+                                            <Button
+                                                variant={"outline"}
+                                                className={cn(
+                                                    "pl-3 text-left font-normal",
+                                                    !field.value && "text-muted-foreground",
+                                                )}
+                                                disabled={!userRole && archived}
+                                            >
+                                                {field.value ?
+                                                    format(field.value, "PPP")
+                                                :   <span>Pick a date</span>}
+                                                <CalendarIcon className="ml-auto size-4 opacity-50" />
+                                            </Button>
+                                        </FormControl>
+                                    </PopoverTrigger>
+                                    <PopoverContent
+                                        className="w-auto p-0"
+                                        align="start"
+                                    >
+                                        <Calendar
+                                            mode="single"
+                                            selected={field.value}
+                                            onSelect={field.onChange}
+                                            disabled={(date) =>
+                                                date < new Date() || date < new Date("1900-01-01")
+                                            }
+                                            initialFocus
                                         />
-                                    </FormControl>
+                                    </PopoverContent>
+                                </Popover>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                        <FormField
-                            control={form.control}
-                            name="lowerLocker"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Montáž spodních skříněk </FormLabel>
-                                        <Unit unit="bm" />
-                                    </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
-                                            disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
+                    <div className="flex items-baseline justify-between gap-x-8">
+                        <Typography variant="h2">Specifikace služby </Typography>
+                    </div>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                    <Separator className="!mt-0 mb-8" />
 
-                        <FormField
-                            control={form.control}
-                            name="highLocker"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Montáž vysokých skříněk </FormLabel>
-                                        <Unit unit="bm" />
-                                    </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
-                                            disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
+                    <div>
+                        <div className="grid gap-x-4 gap-y-8 sm:grid-cols-2">
+                            <FormField
+                                control={form.control}
+                                name="upperLocker"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Montáž horních skříněk </FormLabel>
+                                            <Unit unit="bm" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="milledJoint"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Frézovaný spoj </FormLabel>
-                                        <Unit unit="ks" />
-                                    </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
-                                            disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
+                            <FormField
+                                control={form.control}
+                                name="lowerLocker"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Montáž spodních skříněk </FormLabel>
+                                            <Unit unit="bm" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="worktop"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Pracovní desky </FormLabel>
-                                        <Unit unit="bm" />
-                                    </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
-                                            disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
+                            <FormField
+                                control={form.control}
+                                name="highLocker"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Montáž vysokých skříněk </FormLabel>
+                                            <Unit unit="bm" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="tailoredWorktop"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Pracovní desky na míru </FormLabel>
-                                        <Unit unit="bm" />
-                                    </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
-                                            disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
+                            <FormField
+                                control={form.control}
+                                name="milledJoint"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Frézovaný spoj </FormLabel>
+                                            <Unit unit="ks" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="wallPanel"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Nástěnné panely </FormLabel>
-                                        <Unit unit="bm" />
-                                    </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
-                                            disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
+                            <FormField
+                                control={form.control}
+                                name="worktop"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Pracovní desky </FormLabel>
+                                            <Unit unit="bm" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="atypical"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Atypické práce </FormLabel>
-                                        <Unit unit="hod" />
-                                    </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
-                                            disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
+                            <FormField
+                                control={form.control}
+                                name="tailoredWorktop"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Pracovní desky na míru </FormLabel>
+                                            <Unit unit="bm" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="unnecessary"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Marný výjezd </FormLabel>
-                                        <Unit unit="obj" />
-                                    </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
-                                            disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
+                            <FormField
+                                control={form.control}
+                                name="wallPanel"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Nástěnné panely </FormLabel>
+                                            <Unit unit="bm" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="kitchen"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Zaměření PD/kuchyně </FormLabel>
-                                        <Unit unit="obj" />
-                                    </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
-                                            disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
+                            <FormField
+                                control={form.control}
+                                name="atypical"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Atypické práce </FormLabel>
+                                            <Unit unit="hod" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="unnecessary"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Marný výjezd </FormLabel>
+                                            <Unit unit="obj" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
+
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="kitchen"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Zaměření PD/kuchyně </FormLabel>
+                                            <Unit unit="obj" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
+
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        <Separator className="mb-8 mt-12" />
+
+                        <div className="grid gap-x-4 gap-y-8 sm:grid-cols-2">
+                            <FormField
+                                control={form.control}
+                                name="lights"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Osvětlění </FormLabel>
+                                            <Unit unit="ks" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
+
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="ikea"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Spotřebič IKEA </FormLabel>
+                                            <Unit unit="ks" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
+
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="nonIkea"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Spotřebič mimo IKEA </FormLabel>
+                                            <Unit unit="ks" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
+
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="ikeaGas"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Spotřebič IKEA plyn </FormLabel>
+                                            <Unit unit="ks" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
+
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="nonIkeaGas"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-baseline gap-x-2">
+                                            <FormLabel>Spotřebič mimo IKEA plyn </FormLabel>
+                                            <Unit unit="ks" />
+                                        </div>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                step=".01"
+                                                onFocus={(event) => event.currentTarget.select()}
+                                                {...field}
+                                                disabled={!userRole && archived}
+                                            />
+                                        </FormControl>
+
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                     </div>
 
                     <Separator className="mb-8 mt-12" />
 
-                    <div className="grid gap-x-4 gap-y-8 sm:grid-cols-2">
+                    <div className="flex justify-between gap-x-8">
                         <FormField
                             control={form.control}
-                            name="lights"
+                            name="custommerSignature"
                             render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Osvětlění </FormLabel>
-                                        <Unit unit="ks" />
-                                    </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
+                                <FormItem className="w-fit">
+                                    <FormLabel>Podpis zákazníka </FormLabel>
+
+                                    <div className="relative w-fit max-sm:w-full">
+                                        <FormControl>
+                                            {/* TODO: on change should submit*/}
+                                            <SignatureCanvas
+                                                ref={custommerSigCanvasRef}
+                                                canvasProps={{
+                                                    className:
+                                                        "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
+                                                }}
+                                                penColor={
+                                                    !userRole && archived ? "#00000000" : "#000"
+                                                }
+                                                clearOnResize={false}
+                                            />
+                                        </FormControl>
+
+                                        <Button
+                                            type="button"
+                                            size={"icon"}
+                                            onClick={() => custommerSigCanvasRef.current?.clear()}
+                                            variant={"secondary"}
+                                            className="absolute -bottom-2 -right-2 print:hidden"
                                             disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
+                                        >
+                                            <Eraser className="size-4" />
+                                        </Button>
+                                    </div>
 
                                     <FormMessage />
                                 </FormItem>
@@ -980,187 +1135,47 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
 
                         <FormField
                             control={form.control}
-                            name="ikea"
+                            name="workerSignature"
                             render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Spotřebič IKEA </FormLabel>
-                                        <Unit unit="ks" />
-                                    </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
+                                <FormItem className="w-fit">
+                                    <FormLabel>Podpis servisního partnera </FormLabel>
+
+                                    <div className="relative w-fit max-sm:w-full">
+                                        <FormControl>
+                                            {/* TODO: on change should submit*/}
+                                            <SignatureCanvas
+                                                ref={workerSigCanvasRef}
+                                                canvasProps={{
+                                                    className:
+                                                        "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
+                                                }}
+                                                penColor={
+                                                    !userRole && archived ? "#00000000" : "#000"
+                                                }
+                                                clearOnResize={false}
+                                            />
+                                        </FormControl>
+
+                                        <Button
+                                            type="button"
+                                            size={"icon"}
+                                            onClick={() => workerSigCanvasRef.current?.clear()}
+                                            variant={"secondary"}
+                                            className="absolute -bottom-2 -right-2 print:hidden"
                                             disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
-
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="nonIkea"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Spotřebič mimo IKEA </FormLabel>
-                                        <Unit unit="ks" />
+                                        >
+                                            <Eraser className="size-4" />
+                                        </Button>
                                     </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
-                                            disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
-
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="ikeaGas"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Spotřebič IKEA plyn </FormLabel>
-                                        <Unit unit="ks" />
-                                    </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
-                                            disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
-
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="nonIkeaGas"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-baseline gap-x-2">
-                                        <FormLabel>Spotřebič mimo IKEA plyn </FormLabel>
-                                        <Unit unit="ks" />
-                                    </div>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            step=".01"
-                                            onFocus={(event) => event.currentTarget.select()}
-                                            {...field}
-                                            disabled={!userRole && archived}
-                                        />
-                                    </FormControl>
 
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
                     </div>
-                </div>
-
-                <Separator className="mb-8 mt-12" />
-
-                <div className="flex justify-between gap-x-8">
-                    <FormField
-                        control={form.control}
-                        name="custommerSignature"
-                        render={({ field }) => (
-                            <FormItem className="w-fit">
-                                <FormLabel>Podpis zákazníka </FormLabel>
-
-                                <div className="relative w-fit max-sm:w-full">
-                                    <FormControl>
-                                        {/* TODO: on change should submit*/}
-                                        <SignatureCanvas
-                                            ref={custommerSigCanvasRef}
-                                            canvasProps={{
-                                                className:
-                                                    "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
-                                            }}
-                                            penColor={!userRole && archived ? "#00000000" : "#000"}
-                                            clearOnResize={false}
-                                        />
-                                    </FormControl>
-
-                                    <Button
-                                        type="button"
-                                        size={"icon"}
-                                        onClick={() => custommerSigCanvasRef.current?.clear()}
-                                        variant={"secondary"}
-                                        className="absolute -bottom-2 -right-2 print:hidden"
-                                        disabled={!userRole && archived}
-                                    >
-                                        <Eraser className="size-4" />
-                                    </Button>
-                                </div>
-
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="workerSignature"
-                        render={({ field }) => (
-                            <FormItem className="w-fit">
-                                <FormLabel>Podpis servisního partnera </FormLabel>
-
-                                <div className="relative w-fit max-sm:w-full">
-                                    <FormControl>
-                                        {/* TODO: on change should submit*/}
-                                        <SignatureCanvas
-                                            ref={workerSigCanvasRef}
-                                            canvasProps={{
-                                                className:
-                                                    "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
-                                            }}
-                                            penColor={!userRole && archived ? "#00000000" : "#000"}
-                                            clearOnResize={false}
-                                        />
-                                    </FormControl>
-
-                                    <Button
-                                        type="button"
-                                        size={"icon"}
-                                        onClick={() => workerSigCanvasRef.current?.clear()}
-                                        variant={"secondary"}
-                                        className="absolute -bottom-2 -right-2 print:hidden"
-                                        disabled={!userRole && archived}
-                                    >
-                                        <Eraser className="size-4" />
-                                    </Button>
-                                </div>
-
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-            </motion.form>
-        </Form>
+                </form>
+            </Form>
+        </motion.div>
     );
 }
 

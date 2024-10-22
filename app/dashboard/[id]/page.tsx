@@ -59,7 +59,7 @@ async function Home(props: { params: Promise<{ id: string }> }) {
                     orderNewPCK={orderNewPCK}
                     userRole={userRole}
                     referenceDate={currentOrder?.referenceDate}
-                    archived={currentOrder.archived ?? true}
+                    archived={currentOrder?.archived ?? true}
                 />
             :   <div>Nastala chyba při načítání objednávky PCK. Zkuste to prosím znovu.</div>;
     }
@@ -75,8 +75,7 @@ async function Home(props: { params: Promise<{ id: string }> }) {
                 <PP2
                     orderPP2={orderPP2}
                     userRole={userRole}
-                    referenceDate={currentOrder?.referenceDate}
-                    archived={currentOrder.archived ?? true}
+                    archived={currentOrder?.archived ?? true}
                 />
             :   <div>Nastala chyba při načítání objednávky PP 2. Zkuste to prosím znovu.</div>;
     }
@@ -100,7 +99,7 @@ async function Home(props: { params: Promise<{ id: string }> }) {
                     userRole={userRole}
                     referenceDate={currentOrder?.referenceDate}
                     PP2Specifications={PP2Specifications}
-                    archived={currentOrder.archived ?? true}
+                    archived={currentOrder?.archived ?? true}
                 />
             :   <div>Nastala chyba při načítání objednávky List 1. Zkuste to prosím znovu.</div>;
     }
