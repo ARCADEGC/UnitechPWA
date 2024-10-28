@@ -1,6 +1,6 @@
+import { validateSession } from "@/auth";
 import Link from "next/link";
 
-import { validateSession } from "@/auth";
 import {
     getUserById,
     getUserNameById,
@@ -20,8 +20,10 @@ import {
 } from "@/components/ui/card";
 
 import { NoOrderFound } from "@/app/dashboard/NoOrderFound";
-import { OrderList } from "./OrderList";
+
 import { TOrder } from "@/types/dbSchemas";
+
+import { OrderList } from "./OrderList";
 
 export default async function Home() {
     const { user } = await validateSession();

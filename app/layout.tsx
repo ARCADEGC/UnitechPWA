@@ -1,10 +1,10 @@
-import type { Metadata, Viewport } from "next";
-import "./globals.css";
-
 import { cn } from "@/lib/utils";
+import type { Metadata, Viewport } from "next";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+
+import "./globals.css";
 
 const APP_NAME = "Unitech";
 const APP_DEFAULT_TITLE = "Unitech";

@@ -1,16 +1,21 @@
 "use server";
 
-import { compare /* hash */ } from "bcryptjs";
 import { lucia, validateSession } from "@/auth";
+import {
+    compare,
+    /* hash */
+} from "bcryptjs";
+import { eq } from "drizzle-orm";
 // import { randomUUID } from "crypto";
 import { cookies } from "next/headers";
-import { eq } from "drizzle-orm";
 
 // import { createUser } from "@/db/db";
-
 import { db } from "@/db/migrate";
 
-import type { TLoginProps /* TRegisterProps */ } from "@/types/authSchemas";
+import type {
+    TLoginProps,
+    /* TRegisterProps */
+} from "@/types/authSchemas";
 
 const ONE_MONTH = 60 * 60 * 24 * 30;
 

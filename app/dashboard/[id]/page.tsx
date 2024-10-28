@@ -1,7 +1,9 @@
+import { Archive } from "lucide-react";
 import React, { Suspense, lazy } from "react";
-import { User } from "lucia";
 
 import { validateSession } from "@/auth";
+import { User } from "lucia";
+
 import {
     getUserById,
     getOrderByIdAndRole,
@@ -12,17 +14,17 @@ import {
     getOrderPP2SpecificationsByIdAndRoleOrUser,
 } from "@/db/db";
 
-import { NotFound } from "@/app/dashboard/[id]/NotFound";
-import Loading from "@/app/loading";
-import { PrintButton } from "./(buttons)/PrintButton";
-import { DeleteOrderButton } from "@/app/dashboard/[id]/(buttons)/DeteteOrderButton";
-import { ArchiveButton } from "@/app/dashboard/[id]/(buttons)/ArchiveButton";
-
+import { Typography } from "@/components/ui/Typography";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/formTabs";
 import { Separator } from "@/components/ui/separator";
-import { Typography } from "@/components/ui/Typography";
+
+import { ArchiveButton } from "@/app/dashboard/[id]/(buttons)/ArchiveButton";
+import { DeleteOrderButton } from "@/app/dashboard/[id]/(buttons)/DeteteOrderButton";
+import { NotFound } from "@/app/dashboard/[id]/NotFound";
+import Loading from "@/app/loading";
+
+import { PrintButton } from "./(buttons)/PrintButton";
 import { ReverseArchiveButton } from "./(buttons)/ReverseArchiveButton";
-import { Archive } from "lucide-react";
 
 const FormHeader = lazy(() => import("@/app/dashboard/[id]/(forms)/FormHeader"));
 const PCK = lazy(() => import("@/app/dashboard/[id]/(forms)/PCK"));

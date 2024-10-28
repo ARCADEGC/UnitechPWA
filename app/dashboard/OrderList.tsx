@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+
 import Link from "next/link";
 
+import { Typography } from "@/components/ui/Typography";
 import {
     Card,
     CardContent,
@@ -12,8 +14,8 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+
 import { CreateNewButton } from "@/app/dashboard/CreateNewButton";
-import { Typography } from "@/components/ui/Typography";
 
 type TOrderListProps = {
     orders: {

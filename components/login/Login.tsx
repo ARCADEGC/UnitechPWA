@@ -1,16 +1,18 @@
 "use client";
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import Link from "next/link";
-import { hash } from "bcryptjs";
+
 import { loginFunction } from "@/actions/auth.actions";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { hash } from "bcryptjs";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { z } from "zod";
 
 import { getUserSaltByEmail } from "@/db/db";
 
-import { loginFormSchema } from "@/types/loginSchema";
-
+import { Button } from "@/components/ui/button";
 import {
     Form,
     FormControl,
@@ -19,10 +21,9 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
+
+import { loginFormSchema } from "@/types/loginSchema";
 
 function LoginForm() {
     const router = useRouter();
