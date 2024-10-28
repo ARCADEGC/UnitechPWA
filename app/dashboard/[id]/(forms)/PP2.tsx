@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarIcon, Eraser } from "lucide-react";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useForm } from "react-hook-form";
 import SignatureCanvas from "react-signature-canvas";
 
@@ -188,21 +188,29 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
     }, [form]);
 
     const debouncedSubmit = useCallback(
-        debounce((values: z.infer<typeof formPP2Schema>) => {
+        (values: z.infer<typeof formPP2Schema>) => {
             onSubmit(values);
-        }, 500),
+        },
         [onSubmit]
+    );
+
+    const debouncedSubmitWithDelay = useMemo(
+        () => debounce(debouncedSubmit, 500),
+        [debouncedSubmit]
     );
 
     useEffect(() => {
         const subscription = form.watch(async () => {
             if (await form.trigger()) {
-                return debouncedSubmit(form.getValues());
+                return debouncedSubmitWithDelay(form.getValues());
             }
         });
 
-        return () => subscription.unsubscribe();
-    }, [form, debouncedSubmit]);
+        return () => {
+            subscription.unsubscribe();
+            debouncedSubmitWithDelay.cancel();
+        };
+    }, [form, debouncedSubmitWithDelay]);
 
     return (
         <motion.div

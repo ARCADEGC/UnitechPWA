@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { cn } from "@/lib/utils";
@@ -402,21 +402,29 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
     }, [referenceDate, userRole]);
 
     const debouncedSubmit = useCallback(
-        debounce((values: z.infer<typeof formList1Schema>) => {
+        (values: z.infer<typeof formList1Schema>) => {
             onSubmit(values);
-        }, 500),
+        },
         [onSubmit]
+    );
+
+    const debouncedSubmitWithDelay = useMemo(
+        () => debounce(debouncedSubmit, 500),
+        [debouncedSubmit]
     );
 
     useEffect(() => {
         const subscription = form.watch(async () => {
             if (await form.trigger()) {
-                return debouncedSubmit(form.getValues());
+                return debouncedSubmitWithDelay(form.getValues());
             }
         });
 
-        return () => subscription.unsubscribe();
-    }, [form, debouncedSubmit]);
+        return () => {
+            subscription.unsubscribe();
+            debouncedSubmitWithDelay.cancel();
+        };
+    }, [form, debouncedSubmitWithDelay]);
 
     return (
         <Form {...form}>

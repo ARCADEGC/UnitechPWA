@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarIcon } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { cn } from "@/lib/utils";
@@ -115,21 +115,29 @@ function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
     );
 
     const debouncedSubmit = useCallback(
-        debounce((values: z.infer<typeof formHeaderSchema>) => {
+        (values: z.infer<typeof formHeaderSchema>) => {
             onSubmit(values);
-        }, 500),
+        },
         [onSubmit]
+    );
+
+    const debouncedSubmitWithDelay = useMemo(
+        () => debounce(debouncedSubmit, 500),
+        [debouncedSubmit]
     );
 
     useEffect(() => {
         const subscription = form.watch(async () => {
             if (await form.trigger()) {
-                return debouncedSubmit(form.getValues());
+                return debouncedSubmitWithDelay(form.getValues());
             }
         });
 
-        return () => subscription.unsubscribe();
-    }, [form, debouncedSubmit]);
+        return () => {
+            subscription.unsubscribe();
+            debouncedSubmitWithDelay.cancel();
+        };
+    }, [form, debouncedSubmitWithDelay]);
 
     return (
         <motion.div

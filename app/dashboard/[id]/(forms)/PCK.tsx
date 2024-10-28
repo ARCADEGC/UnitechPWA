@@ -1,7 +1,7 @@
 "use client";
 
 import { Eraser } from "lucide-react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import SignatureCanvas from "react-signature-canvas";
 
@@ -237,23 +237,29 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
     }, [form]);
 
     const debouncedSubmit = useCallback(
-        debounce((values: z.infer<typeof formNewPCKSchema>) => {
+        (values: z.infer<typeof formNewPCKSchema>) => {
             onSubmit(values);
-        }, 500),
+        },
         [onSubmit]
+    );
+
+    const debouncedSubmitWithDelay = useMemo(
+        () => debounce(debouncedSubmit, 500),
+        [debouncedSubmit]
     );
 
     useEffect(() => {
         const subscription = form.watch(async () => {
             if (await form.trigger()) {
-                return debouncedSubmit(form.getValues());
+                return debouncedSubmitWithDelay(form.getValues());
             }
         });
 
         return () => {
             subscription.unsubscribe();
+            debouncedSubmitWithDelay.cancel();
         };
-    }, [form, debouncedSubmit, sigCanvasRef.current?.toData()]);
+    }, [form, debouncedSubmitWithDelay, sigCanvasRef.current?.toData()]);
 
     useEffect(() => {
         const fetchPrice = async () => {
