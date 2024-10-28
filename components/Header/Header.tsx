@@ -1,15 +1,13 @@
-import Link from "next/link";
-import { eq } from "drizzle-orm";
-
 import { validateSession } from "@/auth";
+import { getInitials } from "@/lib/utils";
+import { eq } from "drizzle-orm";
+import Link from "next/link";
+
 import { db } from "@/db/migrate";
 
-import { getInitials } from "@/lib/utils";
-
+import { UserAvatar } from "@/components/Header/UserAvatar";
 import { Typography } from "@/components/ui/Typography";
 import { Button } from "@/components/ui/button";
-
-import { UserAvatar } from "@/components/Header/UserAvatar";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 
 async function Header() {

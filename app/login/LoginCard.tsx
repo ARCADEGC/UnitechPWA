@@ -3,9 +3,8 @@
 import { motion, cubicBezier } from "framer-motion";
 
 import { LoginForm } from "@/components/login/Login";
-
-import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { Typography } from "@/components/ui/Typography";
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 
 function LoginCard() {
     return (

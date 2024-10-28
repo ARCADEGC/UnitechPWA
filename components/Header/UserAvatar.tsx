@@ -1,9 +1,11 @@
 "use client";
 
+import { LogOut } from "lucide-react";
 import React, { memo } from "react";
 
-import { LogOut } from "lucide-react";
+import { logOut } from "@/actions/auth.actions";
 
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,9 +14,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-
-import { logOut } from "@/actions/auth.actions";
 
 const MemoizedAvatar = memo(Avatar);
 

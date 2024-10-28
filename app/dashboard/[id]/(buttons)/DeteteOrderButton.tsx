@@ -1,12 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-
 import { Trash } from "lucide-react";
+
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { deleteOrder } from "@/db/db";
 
-import { Button } from "@/components/ui/button";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -18,7 +18,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 import { TOrder } from "@/types/dbSchemas";
 

@@ -1,6 +1,6 @@
+import { validateSession } from "@/auth";
 import { redirect } from "next/navigation";
 
-import { validateSession } from "@/auth";
 import { LoginCard } from "./LoginCard";
 
 async function Home() {

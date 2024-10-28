@@ -1,4 +1,5 @@
 import withSerwistInit from "@serwist/next";
+
 // import MillionLint from "@million/lint";
 
 const withSerwist = withSerwistInit({

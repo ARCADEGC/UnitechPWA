@@ -1,5 +1,5 @@
-import { defineConfig } from "drizzle-kit";
 import "@/lib/loadEnv";
+import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
     dialect: "postgresql",

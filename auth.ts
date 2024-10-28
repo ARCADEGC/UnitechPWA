@@ -1,10 +1,12 @@
-import { Lucia } from "lucia";
-import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
-import { db } from "@/db/migrate";
-import { User, Session } from "@/db/schema";
 import { cache } from "react";
+
+import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
+import { Lucia } from "lucia";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+import { db } from "@/db/migrate";
+import { User, Session } from "@/db/schema";
 
 const adapter = new DrizzlePostgreSQLAdapter(db, Session, User);
 

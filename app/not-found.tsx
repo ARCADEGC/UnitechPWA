@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { cubicBezier, motion } from "framer-motion";
+import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
 import { Typography } from "@/components/ui/Typography";
+import { Button } from "@/components/ui/button";
 
 function NotFound() {
     return (
