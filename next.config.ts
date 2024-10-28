@@ -1,7 +1,5 @@
 import withSerwistInit from "@serwist/next";
-import MillionLint from "@million/lint";
-
-/** @type {import('next').NextConfig} */
+// import MillionLint from "@million/lint";
 
 const withSerwist = withSerwistInit({
     swSrc: "app/sw.ts",
@@ -11,6 +9,7 @@ const withSerwist = withSerwistInit({
 const nextConfig = {
     experimental: {
         turbo: {},
+        reactCompiler: true,
     },
 };
 

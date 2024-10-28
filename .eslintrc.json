@@ -3,7 +3,11 @@
         "next/core-web-vitals",
         "plugin:drizzle/all",
         "plugin:import/typescript",
+        "eslint-plugin-react-compiler",
         "plugin:tailwindcss/recommended",
         "prettier"
-    ]
+    ],
+    "rules": {
+        "react-compiler/react-compiler": "error"
+    }
 }
