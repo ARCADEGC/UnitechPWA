@@ -22,6 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/formTa
 import { Separator } from "@/components/ui/separator";
 import { Typography } from "@/components/ui/Typography";
 import { ReverseArchiveButton } from "./(buttons)/ReverseArchiveButton";
+import { Archive } from "lucide-react";
 
 const FormHeader = lazy(() => import("@/app/dashboard/[id]/(forms)/FormHeader"));
 const PCK = lazy(() => import("@/app/dashboard/[id]/(forms)/PCK"));
@@ -106,13 +107,25 @@ async function Home(props: { params: Promise<{ id: string }> }) {
 
     return (
         <Suspense fallback={<Loading />}>
-            <Typography
-                variant="h1"
-                as="p"
-                className="mb-8 hidden text-black print:block"
-            >
-                Unitech
-            </Typography>
+            <div className="mx-auto flex max-w-prose justify-between">
+                <Typography
+                    variant="h1"
+                    as="p"
+                    className="mb-8 hidden text-black print:block"
+                >
+                    Unitech
+                </Typography>
+                {currentOrder.archived && (
+                    <Typography
+                        variant="h1"
+                        as="p"
+                        className="mb-12 ml-auto mr-auto flex w-fit items-center gap-2 text-muted-foreground print:mr-0"
+                    >
+                        <Archive className="size-10 stroke-2" />
+                        Archivováno
+                    </Typography>
+                )}
+            </div>
             {orderHeader ?
                 <FormHeader
                     orderHeader={orderHeader}
