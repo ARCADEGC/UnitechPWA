@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarIcon, Eraser } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import SignatureCanvas from "react-signature-canvas";
 
@@ -52,9 +52,18 @@ type TPP2Props = {
     archived: boolean;
 };
 
+type SignaturePoints = SignaturePad.Point[][];
+
 function PP2({ orderPP2, userRole, archived }: TPP2Props) {
     let workerSigCanvasRef = useRef<SignatureCanvas>(null);
     let custommerSigCanvasRef = useRef<SignatureCanvas>(null);
+
+    const [signatureDataWorker, setSignatureDataWorker] = useState<SignaturePoints>(
+        (orderPP2.workerSignature as SignaturePoints) || []
+    );
+    const [signatureDataCustommer, setSignatureDataCustommer] = useState<SignaturePoints>(
+        (orderPP2.custommerSignature as SignaturePoints) || []
+    );
 
     const form = useForm<z.infer<typeof formPP2Schema>>({
         resolver: zodResolver(formPP2Schema),
@@ -95,8 +104,8 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
             nonIkeaGas: String(orderPP2.nonIkeaGas),
 
             date: orderPP2.date,
-            workerSignature: orderPP2.workerSignature,
-            custommerSignature: orderPP2.custommerSignature
+            workerSignature: (orderPP2.workerSignature as SignaturePoints) || [],
+            custommerSignature: (orderPP2.custommerSignature as SignaturePoints) || []
         },
         mode: "all"
     });
@@ -104,6 +113,8 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
     const onSubmit = useCallback(
         (values: z.infer<typeof formPP2Schema>) => {
             try {
+                const signatureWorker = workerSigCanvasRef.current?.toData() || [];
+                const signatureCustommer = custommerSigCanvasRef.current?.toData() || [];
                 const updatedOrder: TOrderPP2 = {
                     anotherService: values.anotherService,
                     timeToFinish: String(values.timeToFinish ?? 0),
@@ -145,9 +156,8 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                     ikeaGas: String(values.ikeaGas === "null" ? 0 : values.ikeaGas),
                     nonIkeaGas: String(values.nonIkeaGas === "null" ? 0 : values.nonIkeaGas),
 
-                    workerSignature: workerSigCanvasRef.current?.toData() as SignaturePad.Point[][],
-                    custommerSignature:
-                        custommerSigCanvasRef.current?.toData() as SignaturePad.Point[][],
+                    workerSignature: signatureWorker,
+                    custommerSignature: signatureCustommer,
                     date: values.date ?? new Date()
                 };
 
@@ -170,22 +180,6 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
         },
         [userRole, orderPP2.id]
     );
-
-    useEffect(() => {
-        form.getValues().workerSignature ?
-            workerSigCanvasRef.current?.fromData(
-                form.getValues().workerSignature as SignaturePad.Point[][]
-            )
-        :   workerSigCanvasRef.current?.clear();
-    }, [form]);
-
-    useEffect(() => {
-        form.getValues().custommerSignature ?
-            custommerSigCanvasRef.current?.fromData(
-                form.getValues().custommerSignature as SignaturePad.Point[][]
-            )
-        :   custommerSigCanvasRef.current?.clear();
-    }, [form]);
 
     const debouncedSubmit = useCallback(
         (values: z.infer<typeof formPP2Schema>) => {
@@ -211,6 +205,70 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
             debouncedSubmitWithDelay.cancel();
         };
     }, [form, debouncedSubmitWithDelay]);
+
+    useEffect(() => {
+        signatureDataWorker.length > 0 ?
+            workerSigCanvasRef.current?.fromData(signatureDataWorker)
+        :   workerSigCanvasRef.current?.clear();
+
+        signatureDataCustommer.length > 0 ?
+            custommerSigCanvasRef.current?.fromData(signatureDataCustommer)
+        :   custommerSigCanvasRef.current?.clear();
+    }, [signatureDataWorker, signatureDataCustommer]);
+
+    useEffect(() => {
+        const subscription = form.watch(() => {
+            if (workerSigCanvasRef.current) {
+                const newSignatureData = workerSigCanvasRef.current.toData();
+                setSignatureDataWorker(newSignatureData);
+            }
+
+            if (custommerSigCanvasRef.current) {
+                const newSignatureData = custommerSigCanvasRef.current.toData();
+                setSignatureDataCustommer(newSignatureData);
+            }
+        });
+
+        return () => subscription.unsubscribe();
+    }, [form]);
+
+    const handleClearSignatureWorker = useCallback(() => {
+        if (workerSigCanvasRef.current) {
+            workerSigCanvasRef.current.clear();
+            setSignatureDataWorker([]);
+            form.setValue("workerSignature", [], { shouldValidate: true });
+        }
+    }, [form]);
+
+    const handleClearSignatureCustommer = useCallback(() => {
+        if (custommerSigCanvasRef.current) {
+            custommerSigCanvasRef.current.clear();
+            setSignatureDataCustommer([]);
+            form.setValue("custommerSignature", [], { shouldValidate: true });
+        }
+    }, [form]);
+
+    const handleSignatureEndWorker = useCallback(() => {
+        if (workerSigCanvasRef.current) {
+            const newData = workerSigCanvasRef.current.toData();
+            setSignatureDataWorker(newData);
+            form.setValue("workerSignature", newData, { shouldValidate: true });
+        }
+    }, [form]);
+
+    const handleSignatureEndCustommer = useCallback(() => {
+        if (custommerSigCanvasRef.current) {
+            const newData = custommerSigCanvasRef.current.toData();
+            setSignatureDataCustommer(newData);
+            form.setValue("custommerSignature", newData, { shouldValidate: true });
+        }
+    }, [form]);
+
+    useEffect(() => {
+        if (form.formState.isValid) {
+            debouncedSubmitWithDelay(form.getValues());
+        }
+    }, [signatureDataCustommer, signatureDataWorker, debouncedSubmitWithDelay, form]);
 
     return (
         <motion.div
@@ -1126,13 +1184,14 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                                                     !userRole && archived ? "#00000000" : "#000"
                                                 }
                                                 clearOnResize={false}
+                                                onEnd={handleSignatureEndCustommer}
                                             />
                                         </FormControl>
 
                                         <Button
                                             type="button"
                                             size={"icon"}
-                                            onClick={() => custommerSigCanvasRef.current?.clear()}
+                                            onClick={handleClearSignatureCustommer}
                                             variant={"secondary"}
                                             className="absolute -bottom-2 -right-2 print:hidden"
                                             disabled={!userRole && archived}
@@ -1166,13 +1225,14 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                                                     !userRole && archived ? "#00000000" : "#000"
                                                 }
                                                 clearOnResize={false}
+                                                onEnd={handleSignatureEndWorker}
                                             />
                                         </FormControl>
 
                                         <Button
                                             type="button"
                                             size={"icon"}
-                                            onClick={() => workerSigCanvasRef.current?.clear()}
+                                            onClick={handleClearSignatureWorker}
                                             variant={"secondary"}
                                             className="absolute -bottom-2 -right-2 print:hidden"
                                             disabled={!userRole && archived}

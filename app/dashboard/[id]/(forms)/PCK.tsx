@@ -40,8 +40,13 @@ type TPCKProps = {
     archived: boolean;
 };
 
+type SignaturePoints = SignaturePad.Point[][];
+
 function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
     let sigCanvasRef = useRef<SignatureCanvas>(null);
+    const [signatureData, setSignatureData] = useState<SignaturePoints>(
+        (orderNewPCK.signature as SignaturePoints) || []
+    );
 
     const [shipmentZoneOnePrice, setShipmentZoneOnePrice] = useState<number | undefined>(0);
     const [shipmentZoneTwoPrice, setShipmentZoneTwoPrice] = useState<number | undefined>(0);
@@ -120,7 +125,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
 
             tax: !!orderNewPCK.tax,
             bail: String(orderNewPCK.bail),
-            signature: orderNewPCK.signature
+            signature: (orderNewPCK.signature as SignaturePoints) || []
         },
         mode: "all"
     });
@@ -128,6 +133,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
     const onSubmit = useCallback(
         (values: z.infer<typeof formNewPCKSchema>) => {
             try {
+                const signature = sigCanvasRef.current?.toData() || [];
                 const updatedOrder: TOrderNewPCK = {
                     shipmentZoneOne: String(
                         values.shipmentZoneOne === "null" ? 0 : values.shipmentZoneOne
@@ -207,7 +213,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
 
                     tax: values.tax,
                     bail: String(values.bail === "null" ? 0 : values.bail),
-                    signature: sigCanvasRef.current?.toData() as SignaturePad.Point[][]
+                    signature: signature
                 };
 
                 const promise = updateOrderNewPCK(orderNewPCK.id as string, updatedOrder, userRole);
@@ -229,12 +235,6 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
         },
         [userRole, orderNewPCK.id]
     );
-
-    useEffect(() => {
-        form.getValues().signature ?
-            sigCanvasRef.current?.fromData(form.getValues().signature as SignaturePad.Point[][])
-        :   sigCanvasRef.current?.clear();
-    }, [form]);
 
     const debouncedSubmit = useCallback(
         (values: z.infer<typeof formNewPCKSchema>) => {
@@ -259,7 +259,46 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
             subscription.unsubscribe();
             debouncedSubmitWithDelay.cancel();
         };
-    }, [form, debouncedSubmitWithDelay, sigCanvasRef.current?.toData()]);
+    }, [form, debouncedSubmitWithDelay]);
+
+    useEffect(() => {
+        signatureData.length > 0 ?
+            sigCanvasRef.current?.fromData(signatureData)
+        :   sigCanvasRef.current?.clear();
+    }, [signatureData]);
+
+    useEffect(() => {
+        const subscription = form.watch(() => {
+            if (sigCanvasRef.current) {
+                const newSignatureData = sigCanvasRef.current.toData();
+                setSignatureData(newSignatureData);
+            }
+        });
+
+        return () => subscription.unsubscribe();
+    }, [form]);
+
+    const handleClearSignature = useCallback(() => {
+        if (sigCanvasRef.current) {
+            sigCanvasRef.current.clear();
+            setSignatureData([]);
+            form.setValue("signature", [], { shouldValidate: true });
+        }
+    }, [form]);
+
+    const handleSignatureEnd = useCallback(() => {
+        if (sigCanvasRef.current) {
+            const newData = sigCanvasRef.current.toData();
+            setSignatureData(newData);
+            form.setValue("signature", newData, { shouldValidate: true });
+        }
+    }, [form]);
+
+    useEffect(() => {
+        if (form.formState.isValid) {
+            debouncedSubmitWithDelay(form.getValues());
+        }
+    }, [signatureData, debouncedSubmitWithDelay, form]);
 
     useEffect(() => {
         const fetchPrice = async () => {
@@ -1422,13 +1461,14 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             }}
                                             penColor={!userRole && archived ? "#00000000" : "#000"}
                                             clearOnResize={false}
+                                            onEnd={handleSignatureEnd}
                                         />
                                     </FormControl>
 
                                     <Button
                                         type="button"
                                         size={"icon"}
-                                        onClick={() => sigCanvasRef.current?.clear()}
+                                        onClick={handleClearSignature}
                                         variant={"secondary"}
                                         className="absolute -bottom-2 -right-2 print:hidden"
                                         disabled={!userRole && archived}
