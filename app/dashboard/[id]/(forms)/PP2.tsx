@@ -113,8 +113,6 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
     const onSubmit = useCallback(
         (values: z.infer<typeof formPP2Schema>) => {
             try {
-                const signatureWorker = workerSigCanvasRef.current?.toData() || [];
-                const signatureCustommer = custommerSigCanvasRef.current?.toData() || [];
                 const updatedOrder: TOrderPP2 = {
                     anotherService: values.anotherService,
                     timeToFinish: String(values.timeToFinish ?? 0),
@@ -156,8 +154,8 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                     ikeaGas: String(values.ikeaGas === "null" ? 0 : values.ikeaGas),
                     nonIkeaGas: String(values.nonIkeaGas === "null" ? 0 : values.nonIkeaGas),
 
-                    workerSignature: signatureWorker,
-                    custommerSignature: signatureCustommer,
+                    workerSignature: signatureDataWorker,
+                    custommerSignature: signatureDataCustommer,
                     date: values.date ?? new Date()
                 };
 
@@ -178,7 +176,7 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                 });
             }
         },
-        [userRole, orderPP2.id]
+        [userRole, orderPP2.id, signatureDataWorker, signatureDataCustommer]
     );
 
     const debouncedSubmit = useCallback(
@@ -207,13 +205,11 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
     }, [form, debouncedSubmitWithDelay]);
 
     useEffect(() => {
-        signatureDataWorker.length > 0 ?
-            workerSigCanvasRef.current?.fromData(signatureDataWorker)
-        :   workerSigCanvasRef.current?.clear();
+        if (signatureDataWorker.length > 0 && custommerSigCanvasRef.current)
+            workerSigCanvasRef.current?.fromData(signatureDataWorker);
 
-        signatureDataCustommer.length > 0 ?
-            custommerSigCanvasRef.current?.fromData(signatureDataCustommer)
-        :   custommerSigCanvasRef.current?.clear();
+        if (signatureDataCustommer.length > 0 && workerSigCanvasRef.current)
+            custommerSigCanvasRef.current?.fromData(signatureDataCustommer);
     }, [signatureDataWorker, signatureDataCustommer]);
 
     useEffect(() => {

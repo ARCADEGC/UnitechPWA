@@ -133,7 +133,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
     const onSubmit = useCallback(
         (values: z.infer<typeof formNewPCKSchema>) => {
             try {
-                const signature = sigCanvasRef.current?.toData() || [];
+                const signature = signatureData;
                 const updatedOrder: TOrderNewPCK = {
                     shipmentZoneOne: String(
                         values.shipmentZoneOne === "null" ? 0 : values.shipmentZoneOne
@@ -233,7 +233,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                 });
             }
         },
-        [userRole, orderNewPCK.id]
+        [userRole, orderNewPCK.id, signatureData]
     );
 
     const debouncedSubmit = useCallback(
@@ -262,9 +262,8 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
     }, [form, debouncedSubmitWithDelay]);
 
     useEffect(() => {
-        signatureData.length > 0 ?
-            sigCanvasRef.current?.fromData(signatureData)
-        :   sigCanvasRef.current?.clear();
+        if (signatureData.length > 0 && sigCanvasRef.current)
+            sigCanvasRef.current.fromData(signatureData);
     }, [signatureData]);
 
     useEffect(() => {
@@ -536,7 +535,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
             form.getValues().gasApplianceOutsideOfIkea
         );
 
-    const calculateTotalPrice = () => {
+    const calculateTotalPrice = useMemo(() => {
         const prices = [
             shipmentPrice,
             completeInstallationPrice,
@@ -550,7 +549,20 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
         const bail = Number(form.getValues().bail ?? 0);
 
         return total * taxRate - bail;
-    };
+    }, [shipmentPrice, completeInstallationPrice, basicInstallationPrice, installationPrice, form]);
+
+    const formValues = useMemo(
+        () => ({
+            bail: Number(form.getValues().bail ?? 0),
+            tax: form.getValues().tax
+        }),
+        [form]
+    );
+
+    const calculatedBail = useMemo(() => {
+        const taxRate = formValues.tax ? 1.12 : 1.21;
+        return Math.floor(formValues.bail * taxRate * 100) / 100;
+    }, [formValues.bail, formValues.tax]);
 
     return (
         <motion.div
@@ -1365,13 +1377,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                     <div className="flex items-baseline justify-between gap-x-8">
                         <Typography variant="h2">Kauce</Typography>
                         <Unit
-                            value={
-                                Math.floor(
-                                    Number(form.getValues().bail ?? 0) *
-                                        Number(form.getValues().tax ? 1.12 : 1.21) *
-                                        100
-                                ) / 100
-                            }
+                            value={calculatedBail}
                             className="text-xl font-medium tracking-wider text-foreground"
                             unit=",-"
                         />
@@ -1489,7 +1495,10 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                         asChild
                     >
                         <Unit
-                            value={calculateTotalPrice().toFixed(2)}
+                            value={useMemo(
+                                () => calculateTotalPrice.toFixed(2),
+                                [calculateTotalPrice]
+                            )}
                             unit=",-"
                             variant="h1"
                             as="p"
