@@ -402,17 +402,16 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
     }, [referenceDate, userRole]);
 
     const debouncedSubmit = useCallback(
-        () =>
-            debounce(async () => {
-                onSubmit(form.getValues());
-            }, 500),
-        [form, onSubmit]
+        debounce((values: z.infer<typeof formList1Schema>) => {
+            onSubmit(values);
+        }, 500),
+        [onSubmit]
     );
 
     useEffect(() => {
         const subscription = form.watch(async () => {
             if (await form.trigger()) {
-                return debouncedSubmit();
+                return debouncedSubmit(form.getValues());
             }
         });
 
@@ -441,10 +440,14 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                     <TableBody>
                         <TableRow>
                             <TableCell>Paušál (do 50 km)</TableCell>
+
                             <TableCell className="font-medium">
-                                <span className="hidden print:block">
+                                <Typography
+                                    as="span"
+                                    className="hidden print:block"
+                                >
                                     {form.getValues().credit}
-                                </span>
+                                </Typography>
                                 <FormField
                                     control={form.control}
                                     name="credit"
@@ -486,10 +489,14 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
 
                         <TableRow>
                             <TableCell>Nad 50km + 18,-Kč/km</TableCell>
+
                             <TableCell className="font-medium">
-                                <span className="hidden print:block">
+                                <Typography
+                                    as="span"
+                                    className="hidden print:block"
+                                >
                                     {form.getValues().aboveFifty}
-                                </span>
+                                </Typography>
                                 <FormField
                                     control={form.control}
                                     name="aboveFifty"
@@ -684,8 +691,14 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
 
                         <TableRow>
                             <TableCell>Materiál</TableCell>
-                            <span className="hidden print:block">{form.getValues().material}</span>
+
                             <TableCell>
+                                <Typography
+                                    as="span"
+                                    className="hidden print:block"
+                                >
+                                    {form.getValues().material}
+                                </Typography>
                                 <FormField
                                     control={form.control}
                                     name="material"

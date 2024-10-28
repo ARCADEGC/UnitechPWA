@@ -54,9 +54,9 @@ export const formNewPCKSchema = z.object({
 
 export const formPP2Schema = z.object({
     anotherService: z.boolean().optional(),
-    timeToFinish: z.number().optional(),
+    timeToFinish: z.string().optional(),
     contactWithIkea: z.boolean().optional(),
-    numOfReturn: z.number().optional(),
+    numOfReturn: z.string().optional(),
     canceled: z.enum(["yes", "no", "canceled"]),
     reasonOfCancelation: z.string().optional(),
     reasonOfImposibility: z.string().optional(),

@@ -60,9 +60,9 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
         resolver: zodResolver(formPP2Schema),
         defaultValues: {
             anotherService: orderPP2.anotherService ?? false,
-            timeToFinish: Number(orderPP2.timeToFinish),
+            timeToFinish: String(orderPP2.timeToFinish),
             contactWithIkea: orderPP2.contactWithIkea ?? false,
-            numOfReturn: Number(orderPP2.numOfReturn),
+            numOfReturn: String(orderPP2.numOfReturn),
             canceled: orderPP2.finished ?? "no",
             reasonOfCancelation: String(orderPP2.reasonOfCancelation),
             reasonOfImposibility: String(orderPP2.reasonOfImposibility),
@@ -188,17 +188,16 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
     }, [form]);
 
     const debouncedSubmit = useCallback(
-        () =>
-            debounce(async () => {
-                onSubmit(form.getValues());
-            }, 500),
-        [form, onSubmit]
+        debounce((values: z.infer<typeof formPP2Schema>) => {
+            onSubmit(values);
+        }, 500),
+        [onSubmit]
     );
 
     useEffect(() => {
         const subscription = form.watch(async () => {
             if (await form.trigger()) {
-                return debouncedSubmit();
+                return debouncedSubmit(form.getValues());
             }
         });
 
@@ -640,11 +639,12 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                                     />
                                 </FormControl>
 
-                                <FormDescription>
-                                    <Typography
-                                        variant="muted"
-                                        className="print:hidden"
-                                    >
+                                <Typography
+                                    variant="muted"
+                                    className="print:hidden"
+                                    asChild
+                                >
+                                    <FormDescription>
                                         Pro recenzi spokojenosti zákazníka klikněte{" "}
                                         <Typography
                                             variant="anchor"
@@ -653,8 +653,8 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                                             <Link href={""}>zde</Link>
                                         </Typography>
                                         .
-                                    </Typography>
-                                </FormDescription>
+                                    </FormDescription>
+                                </Typography>
 
                                 <FormMessage />
                             </FormItem>

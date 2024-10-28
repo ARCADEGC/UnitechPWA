@@ -115,17 +115,16 @@ function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
     );
 
     const debouncedSubmit = useCallback(
-        () =>
-            debounce(async () => {
-                onSubmit(form.getValues());
-            }, 500),
-        [form, onSubmit]
+        debounce((values: z.infer<typeof formHeaderSchema>) => {
+            onSubmit(values);
+        }, 500),
+        [onSubmit]
     );
 
     useEffect(() => {
         const subscription = form.watch(async () => {
             if (await form.trigger()) {
-                return debouncedSubmit();
+                return debouncedSubmit(form.getValues());
             }
         });
 

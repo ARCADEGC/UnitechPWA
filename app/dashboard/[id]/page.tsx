@@ -121,7 +121,7 @@ async function Home(props: { params: Promise<{ id: string }> }) {
                     <Typography
                         variant="h1"
                         as="p"
-                        className="mb-12 ml-auto mr-auto flex w-fit items-center gap-2 text-muted-foreground print:mr-0"
+                        className="mx-auto mb-12 flex w-fit items-center gap-2 text-muted-foreground print:mr-0"
                     >
                         <Archive className="size-10 stroke-2" />
                         Archivováno
@@ -132,7 +132,7 @@ async function Home(props: { params: Promise<{ id: string }> }) {
                 <Typography
                     variant="h1"
                     as="p"
-                    className="mb-12 ml-auto mr-auto flex w-fit items-center gap-2 text-muted-foreground print:mr-0"
+                    className="mx-auto mb-12 flex w-fit items-center gap-2 text-muted-foreground print:mr-0"
                 >
                     {currentOrder.paid === "card" && <CreditCard className="size-10 stroke-2" />}
                     {currentOrder.paid === "cash" && <Coins className="size-10 stroke-2" />}

@@ -237,21 +237,22 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
     }, [form]);
 
     const debouncedSubmit = useCallback(
-        () =>
-            debounce(async () => {
-                onSubmit(form.getValues());
-            }, 500),
-        [form, onSubmit]
+        debounce((values: z.infer<typeof formNewPCKSchema>) => {
+            onSubmit(values);
+        }, 500),
+        [onSubmit]
     );
 
     useEffect(() => {
         const subscription = form.watch(async () => {
             if (await form.trigger()) {
-                return debouncedSubmit();
+                return debouncedSubmit(form.getValues());
             }
         });
 
-        return () => subscription.unsubscribe();
+        return () => {
+            subscription.unsubscribe();
+        };
     }, [form, debouncedSubmit, sigCanvasRef.current?.toData()]);
 
     useEffect(() => {

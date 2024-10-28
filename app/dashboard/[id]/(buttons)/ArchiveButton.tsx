@@ -56,7 +56,10 @@ function ArchiveButton({ currentOrder }: { currentOrder: TOrder }) {
                 <AlertDialogFooter>
                     <AlertDialogCancel>Zrušit</AlertDialogCancel>
 
-                    <AlertDialogAction className="bg-transparent px-0">
+                    <AlertDialogAction
+                        className="bg-transparent px-0"
+                        asChild
+                    >
                         <Button
                             variant={"default"}
                             className="flex items-center gap-x-2"
