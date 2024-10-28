@@ -15,7 +15,7 @@ import {
     OrderHeader,
     OrderNewPCK,
     OrderPP2,
-    OrderListOne,
+    OrderListOne
 } from "@/db/schema";
 
 import type {
@@ -26,7 +26,7 @@ import type {
     TOrderPP2,
     TOrderPP2Specifications,
     TPaid,
-    TUser,
+    TUser
 } from "@/types/dbSchemas";
 
 // . ||--------------------------------------------------------------------------------||
@@ -49,8 +49,8 @@ export async function getUserById(id: string) {
     return await db.query.User.findFirst({
         where: (table) => eq(table.id, id),
         columns: {
-            role: true,
-        },
+            role: true
+        }
     });
 }
 
@@ -62,13 +62,13 @@ export async function getOrdersByIdAndRole(id: string, role: boolean) {
     if (role) return await db.query.order.findMany();
 
     const OrderHeaders = await db.query.OrderHeader.findMany({
-        where: (table) => eq(table.assignee, id),
+        where: (table) => eq(table.assignee, id)
     });
 
     const orders = await db.query.order.findMany();
 
     const filteredOrders = [
-        ...orders.filter((order) => OrderHeaders.some((header) => header.id === order.orderHeader)),
+        ...orders.filter((order) => OrderHeaders.some((header) => header.id === order.orderHeader))
     ];
 
     return filteredOrders;
@@ -78,10 +78,10 @@ export async function getOrderByIdAndRole(id: string, role: boolean): Promise<TO
     const fetchedOrder =
         role ?
             await db.query.order.findFirst({
-                where: (table) => eq(table.id, id),
+                where: (table) => eq(table.id, id)
             })
         :   await db.query.order.findFirst({
-                where: (table) => eq(table.id, id),
+                where: (table) => eq(table.id, id)
             });
 
     if (!fetchedOrder) return undefined;
@@ -94,10 +94,10 @@ export async function getOrderByIdAndRole(id: string, role: boolean): Promise<TO
 export async function getOrderHeaderByIdAndRoleOrUser(
     id: string,
     role: boolean,
-    userId: string,
+    userId: string
 ): Promise<TOrderHeader | undefined> {
     const orderHeader = await db.query.OrderHeader.findFirst({
-        where: (table) => eq(table.id, id),
+        where: (table) => eq(table.id, id)
     });
 
     if (!orderHeader) return undefined;
@@ -112,7 +112,7 @@ export async function getOrderHeaderByIdAndRoleOrUser(
 export async function getOrderNewPCKByIdAndRoleOrUser(
     id: string,
     role: boolean,
-    userId: string,
+    userId: string
 ): Promise<TOrderNewPCK | undefined> {
     // TODO : Check if user has access to this order
     // const assignee = await db.query.OrderHeader.findFirst({
@@ -121,7 +121,7 @@ export async function getOrderNewPCKByIdAndRoleOrUser(
     // });
 
     const orderNewPCK = await db.query.OrderNewPCK.findFirst({
-        where: (table) => eq(table.id, id),
+        where: (table) => eq(table.id, id)
     });
 
     // if (!orderNewPCK) return undefined;
@@ -138,7 +138,7 @@ export async function getOrderNewPCKByIdAndRoleOrUser(
 export async function getOrderPP2ByIdAndRoleOrUser(
     id: string,
     role: boolean,
-    userId: string,
+    userId: string
 ): Promise<TOrderPP2 | undefined> {
     // TODO : Check if user has access to this order
     // const assignee = await db.query.OrderHeader.findFirst({
@@ -147,7 +147,7 @@ export async function getOrderPP2ByIdAndRoleOrUser(
     // });
 
     const OrderPP2 = await db.query.OrderPP2.findFirst({
-        where: (table) => eq(table.id, id),
+        where: (table) => eq(table.id, id)
     });
 
     // if ((assignee?.assignee !== userId && !role) || !OrderPP2) return undefined;
@@ -158,7 +158,7 @@ export async function getOrderPP2ByIdAndRoleOrUser(
 export async function getOrderList1ByIdAndRoleOrUser(
     id: string,
     role: boolean,
-    userId: string,
+    userId: string
 ): Promise<TOrderNewPCK | undefined> {
     // TODO : Check if user has access to this order
     // const assignee = await db.query.OrderHeader.findFirst({
@@ -167,7 +167,7 @@ export async function getOrderList1ByIdAndRoleOrUser(
     // });
 
     const OrderList1 = await db.query.OrderListOne.findFirst({
-        where: (table) => eq(table.id, id),
+        where: (table) => eq(table.id, id)
     });
 
     // if ((assignee?.assignee !== userId && !role) || !OrderList1)
@@ -179,7 +179,7 @@ export async function getOrderList1ByIdAndRoleOrUser(
 export async function getOrderPP2SpecificationsByIdAndRoleOrUser(
     id: string,
     role: boolean,
-    userId: string,
+    userId: string
 ): Promise<TOrderPP2Specifications | undefined> {
     // TODO : Check if user has access to this order
     // const assignee = await db.query.OrderHeader.findFirst({
@@ -204,9 +204,9 @@ export async function getOrderPP2SpecificationsByIdAndRoleOrUser(
             ikea: true,
             ikeaGas: true,
             nonIkea: true,
-            nonIkeaGas: true,
+            nonIkeaGas: true
         },
-        where: (table) => eq(table.id, id),
+        where: (table) => eq(table.id, id)
     });
 
     // if ((assignee?.assignee !== userId && !role) || !OrderPP2) return undefined;
@@ -220,7 +220,7 @@ export async function getOrderPP2SpecificationsByIdAndRoleOrUser(
 
 export async function getUserNameById(userId: string) {
     const user = await db.query.User.findFirst({
-        where: (table) => eq(table.id, userId),
+        where: (table) => eq(table.id, userId)
     });
 
     return user?.name ?? null;
@@ -228,7 +228,7 @@ export async function getUserNameById(userId: string) {
 
 export async function getIdByUserName(userName: string) {
     const user = await db.query.User.findFirst({
-        where: (table) => eq(table.name, userName),
+        where: (table) => eq(table.name, userName)
     });
 
     return user?.id ?? null;
@@ -237,7 +237,7 @@ export async function getIdByUserName(userName: string) {
 export async function getNameFromHeaderByOrderId(orderId: string) {
     const orderHeader = await db.query.OrderHeader.findFirst({
         columns: { customer: true },
-        where: (table) => eq(table.id, orderId),
+        where: (table) => eq(table.id, orderId)
     });
 
     return orderHeader?.customer;
@@ -246,7 +246,7 @@ export async function getNameFromHeaderByOrderId(orderId: string) {
 export async function getOrderNumberFromHeaderByOrderId(orderId: string) {
     const orderHeader = await db.query.OrderHeader.findFirst({
         columns: { orderNumber: true, ikeaNumber: true },
-        where: (table) => eq(table.id, orderId),
+        where: (table) => eq(table.id, orderId)
     });
 
     return `${orderHeader?.orderNumber} / ${orderHeader?.ikeaNumber}`;
@@ -255,7 +255,7 @@ export async function getOrderNumberFromHeaderByOrderId(orderId: string) {
 export async function getOrderAssigneeByOrderId(orderId: string) {
     const orderHeader = await db.query.OrderHeader.findFirst({
         columns: { assignee: true },
-        where: (table) => eq(table.id, orderId),
+        where: (table) => eq(table.id, orderId)
     });
 
     return orderHeader?.assignee;
@@ -268,7 +268,7 @@ export async function getOrderAssigneeByOrderId(orderId: string) {
 export async function updateOrderHeader(
     orderHeaderId: string,
     content: TOrderHeader,
-    role: boolean,
+    role: boolean
 ): Promise<void> {
     // TODO user validation
     await db
@@ -282,9 +282,9 @@ export async function updateOrderHeader(
                     email: content.email,
                     dueDate: content.dueDate,
                     orderNumber: content.orderNumber,
-                    ikeaNumber: content.ikeaNumber,
+                    ikeaNumber: content.ikeaNumber
                 }
-            ),
+            )
         )
         .where(eq(OrderHeader.id, orderHeaderId))
         .execute();
@@ -297,7 +297,7 @@ export async function updateOrderPaidStatus(orderId: string, paid: TPaid) {
 export async function updateOrderNewPCK(
     orderNewPCKId: string,
     content: TOrderNewPCK,
-    role: boolean,
+    role: boolean
 ): Promise<void> {
     // TODO user validation
     await db
@@ -310,7 +310,7 @@ export async function updateOrderNewPCK(
 export async function updateOrderPP2(
     orderPP2Id: string,
     content: TOrderNewPCK,
-    role: boolean,
+    role: boolean
 ): Promise<void> {
     // TODO user validation
     await db
@@ -323,7 +323,7 @@ export async function updateOrderPP2(
 export async function updateOrderList1(
     orderList1Id: string,
     content: TOrderListOne,
-    role: boolean,
+    role: boolean
 ): Promise<void> {
     // TODO user validation
     await db
@@ -354,7 +354,7 @@ export async function CreateOrder(userId: string): Promise<string | boolean> {
                 orderNewPCK: newOrderNewPCKId.toString(),
                 orderPP2: newOrderNewPP2Id.toString(),
                 orderListOne: newOrderNewList1Id.toString(),
-                referenceDate: new Date(),
+                referenceDate: new Date()
             })
             .returning({ id: order.id });
 
@@ -392,7 +392,7 @@ async function CreateOrderHeader(userId: string) {
                 assignee: userId,
                 dueDate: new Date(),
                 orderNumber: 1,
-                ikeaNumber: 1,
+                ikeaNumber: 1
             })
             .returning({ id: OrderHeader.id });
 
@@ -428,7 +428,7 @@ async function CreateOrderNewPP2() {
         const newOrderHeader = await db
             .insert(OrderPP2)
             .values({
-                date: new Date(),
+                date: new Date()
             })
             .returning({ id: OrderHeader.id });
 
@@ -475,7 +475,7 @@ export async function archiveOrder(currentOrder: TOrder) {
     await db
         .update(order)
         .set({
-            archived: true,
+            archived: true
         })
         .where(eq(order.id, currentOrder.id ?? ""));
 }
@@ -484,7 +484,7 @@ export async function unarchiveOrder(currentOrder: TOrder) {
     await db
         .update(order)
         .set({
-            archived: false,
+            archived: false
         })
         .where(eq(order.id, currentOrder.id ?? ""));
 }
@@ -500,8 +500,8 @@ export async function seedPrices(prices: { name: string; price: number }[]) {
             prices.map((item) => ({
                 name: item.name,
                 price: String(item.price),
-                validFrom: new Date(),
-            })),
+                validFrom: new Date()
+            }))
         )
         .execute();
 }
@@ -511,8 +511,8 @@ export async function getPriceAtDate(productName: string, date: Date) {
         orderBy: (table) => desc(table.validFrom),
         where: (table) => and(eq(table.name, productName), lte(table.validFrom, date)),
         columns: {
-            price: true,
-        },
+            price: true
+        }
     });
 
     return price;
@@ -533,8 +533,8 @@ export async function seedAdminPrices(prices: { name: string; price: number }[])
             prices.map((item) => ({
                 name: item.name,
                 price: String(item.price),
-                validFrom: new Date(),
-            })),
+                validFrom: new Date()
+            }))
         )
         .execute();
 }
@@ -553,8 +553,8 @@ export async function getAdminPriceAtDate(productName: string, date: Date) {
         orderBy: (table) => desc(table.validFrom),
         where: (table) => and(eq(table.name, productName), lte(table.validFrom, date)),
         columns: {
-            price: true,
-        },
+            price: true
+        }
     });
 
     return price;

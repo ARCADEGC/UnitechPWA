@@ -3,6 +3,7 @@
 import { Trash } from "lucide-react";
 
 import { useRouter } from "next/navigation";
+
 import { toast } from "sonner";
 
 import { deleteOrder } from "@/db/db";
@@ -16,7 +17,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
+    AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
@@ -37,7 +38,7 @@ function DeleteOrderButton({ currentOrder }: { currentOrder: TOrder }) {
             },
             error: () => {
                 return "Nastala chyba při mazání objednávky";
-            },
+            }
         });
     }
 

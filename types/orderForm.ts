@@ -4,13 +4,13 @@ import { z } from "zod";
 
 export const formHeaderSchema = z.object({
     customer: z.string().min(2, {
-        message: "Zákazník musí mít minimálně 2 znaky.",
+        message: "Zákazník musí mít minimálně 2 znaky."
     }),
     address: z.string().min(3, {
-        message: "Adresa musí mít minimálně 3 znaky.",
+        message: "Adresa musí mít minimálně 3 znaky."
     }),
     phone: z.string().min(9, {
-        message: "Telefon musí mít minimálně 9 čísel.",
+        message: "Telefon musí mít minimálně 9 čísel."
     }),
     // email: z.string().email({
     //     message: "Invalid email address.",
@@ -19,7 +19,7 @@ export const formHeaderSchema = z.object({
     assignee: z.string(),
     dueDate: z.date(),
     orderNumber: z.string(),
-    ikeaNumber: z.string(),
+    ikeaNumber: z.string()
 });
 
 export const formNewPCKSchema = z.object({
@@ -49,7 +49,7 @@ export const formNewPCKSchema = z.object({
     gasApplianceOutsideOfIkea: z.string().optional(),
     tax: z.boolean().optional(),
     bail: z.string().optional(),
-    signature: z.any().optional(),
+    signature: z.any().optional()
 });
 
 export const formPP2Schema = z.object({
@@ -90,12 +90,12 @@ export const formPP2Schema = z.object({
 
     date: z.date(),
     workerSignature: z.any().optional(),
-    custommerSignature: z.any().optional(),
+    custommerSignature: z.any().optional()
 });
 
 export const formList1Schema = z.object({
     credit: z.string().optional(),
     aboveFifty: z.string().optional(),
 
-    material: z.string().optional(),
+    material: z.string().optional()
 });

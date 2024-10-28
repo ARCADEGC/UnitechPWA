@@ -13,7 +13,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
+    AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
@@ -32,7 +32,7 @@ function PaidButton({ orderId, paid }: { orderId: string; paid: TPaid }) {
             >
                 <Button
                     variant={"outline"}
-                    className="flex gap-2 items-center h-10"
+                    className="flex gap-2 h-10 items-center "
                 >
                     {paid === "card" && <CreditCard className="size-4" />}
                     {paid === "cash" && <Coins className="size-4" />}

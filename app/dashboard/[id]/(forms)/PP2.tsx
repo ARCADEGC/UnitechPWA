@@ -28,7 +28,7 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
+    FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -37,7 +37,7 @@ import {
     SelectContent,
     SelectItem,
     SelectTrigger,
-    SelectValue,
+    SelectValue
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
@@ -96,9 +96,9 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
 
             date: orderPP2.date,
             workerSignature: orderPP2.workerSignature,
-            custommerSignature: orderPP2.custommerSignature,
+            custommerSignature: orderPP2.custommerSignature
         },
-        mode: "all",
+        mode: "all"
     });
 
     const onSubmit = useCallback(
@@ -132,7 +132,7 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                     milledJoint: String(values.milledJoint === "null" ? 0 : values.milledJoint),
                     worktop: String(values.worktop === "null" ? 0 : values.worktop),
                     tailoredWorktop: String(
-                        values.tailoredWorktop === "null" ? 0 : values.tailoredWorktop,
+                        values.tailoredWorktop === "null" ? 0 : values.tailoredWorktop
                     ),
                     wallPanel: String(values.wallPanel === "null" ? 0 : values.wallPanel),
                     atypical: String(values.atypical === "null" ? 0 : values.atypical),
@@ -148,7 +148,7 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                     workerSignature: workerSigCanvasRef.current?.toData() as SignaturePad.Point[][],
                     custommerSignature:
                         custommerSigCanvasRef.current?.toData() as SignaturePad.Point[][],
-                    date: values.date ?? new Date(),
+                    date: values.date ?? new Date()
                 };
 
                 const promise = updateOrderPP2(orderPP2.id as string, updatedOrder, userRole);
@@ -160,21 +160,21 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                     },
                     error: () => {
                         return "Něco se pokazilo";
-                    },
+                    }
                 });
             } catch {
                 return toast.error("Něco se pokazilo", {
-                    description: "Prosím počkejte nebo to zkuste znovu",
+                    description: "Prosím počkejte nebo to zkuste znovu"
                 });
             }
         },
-        [userRole, orderPP2.id],
+        [userRole, orderPP2.id]
     );
 
     useEffect(() => {
         form.getValues().workerSignature ?
             workerSigCanvasRef.current?.fromData(
-                form.getValues().workerSignature as SignaturePad.Point[][],
+                form.getValues().workerSignature as SignaturePad.Point[][]
             )
         :   workerSigCanvasRef.current?.clear();
     }, [form]);
@@ -182,7 +182,7 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
     useEffect(() => {
         form.getValues().custommerSignature ?
             custommerSigCanvasRef.current?.fromData(
-                form.getValues().custommerSignature as SignaturePad.Point[][],
+                form.getValues().custommerSignature as SignaturePad.Point[][]
             )
         :   custommerSigCanvasRef.current?.clear();
     }, [form]);
@@ -192,7 +192,7 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
             debounce(async () => {
                 onSubmit(form.getValues());
             }, 500),
-        [form, onSubmit],
+        [form, onSubmit]
     );
 
     useEffect(() => {
@@ -213,8 +213,8 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                 duration: 0.5,
                 ease: cubicBezier(0.4, 0, 0.2, 1),
                 layout: {
-                    duration: 0.1,
-                },
+                    duration: 0.1
+                }
             }}
             layout
         >
@@ -674,7 +674,7 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                                                 variant={"outline"}
                                                 className={cn(
                                                     "pl-3 text-left font-normal",
-                                                    !field.value && "text-muted-foreground",
+                                                    !field.value && "text-muted-foreground"
                                                 )}
                                                 disabled={!userRole && archived}
                                             >
@@ -1112,7 +1112,7 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                                                 ref={custommerSigCanvasRef}
                                                 canvasProps={{
                                                     className:
-                                                        "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
+                                                        "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2"
                                                 }}
                                                 penColor={
                                                     !userRole && archived ? "#00000000" : "#000"
@@ -1152,7 +1152,7 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                                                 ref={workerSigCanvasRef}
                                                 canvasProps={{
                                                     className:
-                                                        "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
+                                                        "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2"
                                                 }}
                                                 penColor={
                                                     !userRole && archived ? "#00000000" : "#000"

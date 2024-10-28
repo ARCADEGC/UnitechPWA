@@ -2,11 +2,12 @@
 
 import { useForm } from "react-hook-form";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 import { loginFunction } from "@/actions/auth.actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { hash } from "bcryptjs";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -19,7 +20,7 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
+    FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
@@ -31,8 +32,8 @@ function LoginForm() {
         resolver: zodResolver(loginFormSchema),
         defaultValues: {
             email: "",
-            password: "",
-        },
+            password: ""
+        }
     });
 
     async function onSubmit(values: z.infer<typeof loginFormSchema>) {
@@ -45,7 +46,7 @@ function LoginForm() {
 
             const response = await loginFunction({
                 email: values.email,
-                password: passwordHash,
+                password: passwordHash
             });
 
             if (response.success) {

@@ -1,9 +1,10 @@
 import { cache } from "react";
 
-import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
-import { Lucia } from "lucia";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
+import { Lucia } from "lucia";
 
 import { db } from "@/db/migrate";
 import { User, Session } from "@/db/schema";
@@ -14,9 +15,9 @@ export const lucia = new Lucia(adapter, {
     sessionCookie: {
         expires: false,
         attributes: {
-            secure: process.env.NODE_ENV === "production",
-        },
-    },
+            secure: process.env.NODE_ENV === "production"
+        }
+    }
 });
 
 export const validateSession = cache(async () => {
@@ -25,7 +26,7 @@ export const validateSession = cache(async () => {
     if (!sessionId)
         return {
             user: null,
-            session: null,
+            session: null
         };
 
     const { user, session } = await lucia.validateSession(sessionId);
@@ -37,7 +38,7 @@ export const validateSession = cache(async () => {
             (await cookies()).set(
                 sessionCookie.name,
                 sessionCookie.value,
-                sessionCookie.attributes,
+                sessionCookie.attributes
             );
         }
         if (!session) {
@@ -46,7 +47,7 @@ export const validateSession = cache(async () => {
             (await cookies()).set(
                 sessionCookie.name,
                 sessionCookie.value,
-                sessionCookie.attributes,
+                sessionCookie.attributes
             );
         }
     } catch {

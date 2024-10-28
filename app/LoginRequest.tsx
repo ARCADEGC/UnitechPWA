@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, cubicBezier } from "framer-motion";
 import Link from "next/link";
+
+import { motion, cubicBezier } from "framer-motion";
 
 import { Typography } from "@/components/ui/Typography";
 import { Button } from "@/components/ui/button";

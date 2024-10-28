@@ -8,6 +8,6 @@ export default defineConfig({
     strict: true,
     verbose: true,
     dbCredentials: {
-        url: process.env.POSTGRES_URL!,
-    },
+        url: process.env.POSTGRES_URL!
+    }
 });
