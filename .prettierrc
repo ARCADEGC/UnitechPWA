@@ -21,6 +21,7 @@
     "importOrderSeparation": true,
     "importOrder": [
         "react",
+        "next/(.*)$",
         "<THIRD_PARTY_MODULES>",
         "lucide-react",
 

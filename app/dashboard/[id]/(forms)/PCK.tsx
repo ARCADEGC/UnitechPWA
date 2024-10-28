@@ -1487,13 +1487,16 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
 
                     <Separator />
 
-                    <Typography>
+                    <Typography
+                        as="h3"
+                        asChild
+                    >
                         <Unit
                             value={calculateTotalPrice().toFixed(2)}
                             unit=",-"
                             variant="h1"
                             as="p"
-                            className="text-right text-primary"
+                            className="text-right text-primary pt-12"
                         />
                     </Typography>
                 </form>

@@ -25,6 +25,7 @@ import type {
     TOrderNewPCK,
     TOrderPP2,
     TOrderPP2Specifications,
+    TPaid,
     TUser,
 } from "@/types/dbSchemas";
 
@@ -289,6 +290,10 @@ export async function updateOrderHeader(
         .execute();
 }
 
+export async function updateOrderPaidStatus(orderId: string, paid: TPaid) {
+    await db.update(order).set({ paid }).where(eq(order.id, orderId));
+}
+
 export async function updateOrderNewPCK(
     orderNewPCKId: string,
     content: TOrderNewPCK,
@@ -327,72 +332,6 @@ export async function updateOrderList1(
         .where(eq(OrderListOne.id, orderList1Id))
         .execute();
 }
-
-// export async function updateOrder(content: TOrder, role: boolean) {
-//     return await db
-//         .update(order)
-//         .set(
-//             role ? content : (
-//                 {
-//                     name: content.name,
-//                     signature: content.signature,
-//                     address: content.address,
-//                     phone: content.phone,
-//                     email: content.email,
-//                     dueDate: content.dueDate,
-//                     orderNumber: content.orderNumber,
-//                     ikeaNumber: content.ikeaNumber,
-//                     tax: content.tax,
-//                     bail: content.bail,
-
-//                     anotherService: content.anotherService,
-//                     timeToFinish: content.timeToFinish,
-//                     contactWithIkea: content.contactWithIkea,
-//                     numOfReturn: content.numOfReturn,
-//                     canceled: content.canceled,
-//                     reasonOfCancelation: content.reasonOfCancelation,
-//                     reasonOfImposibility: content.reasonOfImposibility,
-//                     waterConnection: content.waterConnection,
-//                     couplingsAndKitchenAdjustment: content.couplingsAndKitchenAdjustment,
-//                     testDishwasherFaucet: content.testDishwasherFaucet,
-//                     viewCutsOk: content.viewCutsOk,
-//                     electricalAppliancesPluggedIn: content.electricalAppliancesPluggedIn,
-//                     cleaningOfKitchenInstallationArea: content.cleaningOfKitchenInstallationArea,
-//                     electricalTestAppliances: content.electricalTestAppliances,
-//                     previousDamageToApartment: content.previousDamageToApartment,
-//                     sealingOfWorktops: content.sealingOfWorktops,
-//                     damageToFlatDuringInstallation: content.damageToFlatDuringInstallation,
-//                     comment: content.comment,
-
-//                     applianceOutsideOfIkea: content.applianceOutsideOfIkea,
-//                     gasApplianceOutsideOfIkea: content.gasApplianceOutsideOfIkea,
-//                     shipmentZoneOne: content.shipmentZoneOne,
-//                     shipmentZoneTwo: content.shipmentZoneTwo,
-//                     shipmentZoneThree: content.shipmentZoneThree,
-//                     shipmentZoneFour: content.shipmentZoneFour,
-//                     completeInstallationLockers: content.completeInstallationLockers,
-//                     completeAtypical: content.completeAtypical,
-//                     basicLockers: content.basicLockers,
-//                     basicMilled: content.basicMilled,
-//                     basicAtypical: content.basicAtypical,
-//                     installationDigester: content.installationDigester,
-//                     installationHob: content.installationHob,
-//                     installationGasHob: content.installationGasHob,
-//                     installationLights: content.installationLights,
-//                     installationMicrowave: content.installationMicrowave,
-//                     installationFreezer: content.installationFreezer,
-//                     installationDishwasher: content.installationDishwasher,
-//                     installationOven: content.installationOven,
-//                     installationSink: content.installationSink,
-//                     installationMilledJoint: content.installationMilledJoint,
-//                     installationWorktop: content.installationWorktop,
-//                     installationWallPanel: content.installationWallPanel,
-//                 }
-//             ),
-//         )
-//         .where(eq(order.id, content.id ?? ""))
-//         .returning();
-// }
 
 // . ||--------------------------------------------------------------------------------||
 // . ||                                  Create Order                                  ||
