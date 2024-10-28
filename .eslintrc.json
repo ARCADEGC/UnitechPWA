@@ -1,9 +1,9 @@
 {
+    "plugins": ["eslint-plugin-react-compiler"],
     "extends": [
         "next/core-web-vitals",
         "plugin:drizzle/all",
         "plugin:import/typescript",
-        "eslint-plugin-react-compiler",
         "plugin:tailwindcss/recommended",
         "prettier"
     ],
