@@ -12,10 +12,13 @@ import {
     uuid,
 } from "drizzle-orm/pg-core";
 
+export const PaidStatus = pgEnum("paid_status", ["card", "cash", "unpaid"]);
+
 export const order = pgTable("order", {
     id: uuid("id").unique().notNull().defaultRandom().primaryKey(),
     referenceDate: timestamp("reference_date").notNull().default(new Date()),
     archived: boolean("archived").default(false),
+    paid: PaidStatus("paid").default("unpaid"),
 
     orderHeader: uuid("order_header")
         .notNull()

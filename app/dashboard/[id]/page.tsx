@@ -1,4 +1,4 @@
-import { Archive } from "lucide-react";
+import { Archive, Coins, CreditCard } from "lucide-react";
 import React, { Suspense, lazy } from "react";
 
 import { validateSession } from "@/auth";
@@ -21,8 +21,8 @@ import { Separator } from "@/components/ui/separator";
 import { ArchiveButton } from "@/app/dashboard/[id]/(buttons)/ArchiveButton";
 import { DeleteOrderButton } from "@/app/dashboard/[id]/(buttons)/DeteteOrderButton";
 import { NotFound } from "@/app/dashboard/[id]/NotFound";
-import Loading from "@/app/loading";
 
+import { PaidButton } from "./(buttons)/PaidButton";
 import { PrintButton } from "./(buttons)/PrintButton";
 import { ReverseArchiveButton } from "./(buttons)/ReverseArchiveButton";
 
@@ -108,7 +108,7 @@ async function Home(props: { params: Promise<{ id: string }> }) {
     }
 
     return (
-        <Suspense fallback={<Loading />}>
+        <>
             <div className="mx-auto flex max-w-prose justify-between">
                 <Typography
                     variant="h1"
@@ -128,6 +128,18 @@ async function Home(props: { params: Promise<{ id: string }> }) {
                     </Typography>
                 )}
             </div>
+            {currentOrder.paid !== "unpaid" && (
+                <Typography
+                    variant="h1"
+                    as="p"
+                    className="mb-12 ml-auto mr-auto flex w-fit items-center gap-2 text-muted-foreground print:mr-0"
+                >
+                    {currentOrder.paid === "card" && <CreditCard className="size-10 stroke-2" />}
+                    {currentOrder.paid === "cash" && <Coins className="size-10 stroke-2" />}
+                    Zaplaceno {currentOrder.paid === "card" && "kartou"}
+                    {currentOrder.paid === "cash" && "hotově"}
+                </Typography>
+            )}
             {orderHeader ?
                 <FormHeader
                     orderHeader={orderHeader}
@@ -135,11 +147,6 @@ async function Home(props: { params: Promise<{ id: string }> }) {
                     archived={currentOrder.archived ?? true}
                 />
             :   <div>Nastala chyba při načítání objednávky. Zkuste to prosím znovu.</div>}
-
-            {/* <OrderFormWithNoSSR
-                order={currentOrder}
-                userRole={userRole}
-            /> */}
 
             <Separator className="my-16" />
 
@@ -171,8 +178,12 @@ async function Home(props: { params: Promise<{ id: string }> }) {
                 {currentOrder.archived ?
                     userRole && <ReverseArchiveButton currentOrder={currentOrder} />
                 :   <ArchiveButton currentOrder={currentOrder} />}
+                <PaidButton
+                    orderId={currentOrder.id ?? ""}
+                    paid={currentOrder.paid ?? "unpaid"}
+                />
             </div>
-        </Suspense>
+        </>
     );
 }
 

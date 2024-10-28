@@ -2,6 +2,8 @@ import { order, User, OrderHeader, OrderNewPCK, OrderPP2, OrderListOne } from "@
 
 export type TUser = typeof User.$inferInsert;
 
+export type TPaid = "cash" | "card" | "unpaid";
+
 export type TOrder = typeof order.$inferInsert;
 
 export type TOrderHeader = typeof OrderHeader.$inferInsert;
