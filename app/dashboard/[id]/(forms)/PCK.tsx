@@ -1446,7 +1446,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                             unit=",-"
                             variant="h1"
                             as="p"
-                            className="text-right text-primary pt-12"
+                            className="pt-12 text-right text-primary"
                         />
                     </Typography>
                 </form>
