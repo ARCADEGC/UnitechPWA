@@ -36,9 +36,9 @@ const typographyVariants = cva("", {
             large: "text-lg font-semibold",
             small: "text-sm font-medium leading-none",
             muted: "text-sm text-muted-foreground",
-            anchor: "font-medium text-primary underline underline-offset-4",
-        },
-    },
+            anchor: "font-medium text-primary underline underline-offset-4"
+        }
+    }
 });
 
 const variantToTag: Record<VariantKey, string> = {
@@ -55,7 +55,7 @@ const variantToTag: Record<VariantKey, string> = {
     large: "div",
     small: "p",
     muted: "p",
-    anchor: "a",
+    anchor: "a"
 };
 
 interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
@@ -78,7 +78,7 @@ const Typography = React.forwardRef<HTMLElement, TypographyProps>(
             disableSelect = false,
             ...props
         },
-        ref,
+        ref
     ) => {
         const Comp = asChild ? Slot : (as ?? variantToTag[variant]);
 
@@ -86,7 +86,7 @@ const Typography = React.forwardRef<HTMLElement, TypographyProps>(
             <Comp
                 className={cn(
                     typographyVariants({ variant, className }),
-                    disableSelect ? "select-none" : "",
+                    disableSelect ? "select-none" : ""
                 )}
                 ref={ref}
                 {...props}
@@ -94,7 +94,7 @@ const Typography = React.forwardRef<HTMLElement, TypographyProps>(
                 {children}
             </Comp>
         );
-    },
+    }
 );
 
 Typography.displayName = "Typography";

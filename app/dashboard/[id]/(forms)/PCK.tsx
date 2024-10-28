@@ -1,7 +1,7 @@
 "use client";
 
 import { Eraser } from "lucide-react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import SignatureCanvas from "react-signature-canvas";
 
@@ -23,7 +23,7 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
+    FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -40,8 +40,13 @@ type TPCKProps = {
     archived: boolean;
 };
 
+type SignaturePoints = SignaturePad.Point[][];
+
 function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
     let sigCanvasRef = useRef<SignatureCanvas>(null);
+    const [signatureData, setSignatureData] = useState<SignaturePoints>(
+        (orderNewPCK.signature as SignaturePoints) || []
+    );
 
     const [shipmentZoneOnePrice, setShipmentZoneOnePrice] = useState<number | undefined>(0);
     const [shipmentZoneTwoPrice, setShipmentZoneTwoPrice] = useState<number | undefined>(0);
@@ -58,7 +63,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
     const [basicAtypicalPrice, setBasicAtypicalPrice] = useState<number | undefined>(0);
 
     const [installationDigesterPrice, setInstallationDigesterPrice] = useState<number | undefined>(
-        0,
+        0
     );
     const [installationHobPrice, setInstallationHobPrice] = useState<number | undefined>(0);
     const [installationGasHobPrice, setInstallationGasHobPrice] = useState<number | undefined>(0);
@@ -120,98 +125,95 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
 
             tax: !!orderNewPCK.tax,
             bail: String(orderNewPCK.bail),
-            signature: orderNewPCK.signature,
+            signature: (orderNewPCK.signature as SignaturePoints) || []
         },
-        mode: "all",
+        mode: "all"
     });
 
     const onSubmit = useCallback(
         (values: z.infer<typeof formNewPCKSchema>) => {
             try {
+                const signature = signatureData;
                 const updatedOrder: TOrderNewPCK = {
                     shipmentZoneOne: String(
-                        values.shipmentZoneOne === "null" ? 0 : values.shipmentZoneOne,
+                        values.shipmentZoneOne === "null" ? 0 : values.shipmentZoneOne
                     ),
                     shipmentZoneTwo: String(
-                        values.shipmentZoneTwo === "null" ? 0 : values.shipmentZoneTwo,
+                        values.shipmentZoneTwo === "null" ? 0 : values.shipmentZoneTwo
                     ),
                     shipmentZoneThree: String(
-                        values.shipmentZoneThree === "null" ? 0 : values.shipmentZoneThree,
+                        values.shipmentZoneThree === "null" ? 0 : values.shipmentZoneThree
                     ),
                     shipmentZoneFour: String(
-                        values.shipmentZoneFour === "null" ? 0 : values.shipmentZoneFour,
+                        values.shipmentZoneFour === "null" ? 0 : values.shipmentZoneFour
                     ),
 
                     completeInstallationLockers: String(
                         values.completeInstallationLockers === "null" ?
                             0
-                        :   values.completeInstallationLockers,
+                        :   values.completeInstallationLockers
                     ),
                     completeAtypical: String(
-                        values.completeAtypical === "null" ? 0 : values.completeAtypical,
+                        values.completeAtypical === "null" ? 0 : values.completeAtypical
                     ),
 
                     basicLockers: String(values.basicLockers === "null" ? 0 : values.basicLockers),
                     basicMilled: String(values.basicMilled === "null" ? 0 : values.basicMilled),
                     basicAtypical: String(
-                        values.basicAtypical === "null" ? 0 : values.basicAtypical,
+                        values.basicAtypical === "null" ? 0 : values.basicAtypical
                     ),
 
                     installationDigester: String(
-                        values.installationDigester === "null" ? 0 : values.installationDigester,
+                        values.installationDigester === "null" ? 0 : values.installationDigester
                     ),
                     installationHob: String(
-                        values.installationHob === "null" ? 0 : values.installationHob,
+                        values.installationHob === "null" ? 0 : values.installationHob
                     ),
                     installationGasHob: String(
-                        values.installationGasHob === "null" ? 0 : values.installationGasHob,
+                        values.installationGasHob === "null" ? 0 : values.installationGasHob
                     ),
                     installationLights: String(
-                        values.installationLights === "null" ? 0 : values.installationLights,
+                        values.installationLights === "null" ? 0 : values.installationLights
                     ),
                     installationMicrowave: String(
-                        values.installationMicrowave === "null" ? 0 : values.installationMicrowave,
+                        values.installationMicrowave === "null" ? 0 : values.installationMicrowave
                     ),
                     installationFreezer: String(
-                        values.installationFreezer === "null" ? 0 : values.installationFreezer,
+                        values.installationFreezer === "null" ? 0 : values.installationFreezer
                     ),
                     installationDishwasher: String(
-                        values.installationDishwasher === "null" ?
-                            0
-                        :   values.installationDishwasher,
+                        values.installationDishwasher === "null" ? 0 : values.installationDishwasher
                     ),
                     installationOven: String(
-                        values.installationOven === "null" ? 0 : values.installationOven,
+                        values.installationOven === "null" ? 0 : values.installationOven
                     ),
                     installationFaucet: String(
-                        values.installationFaucet === "null" ? 0 : values.installationFaucet,
+                        values.installationFaucet === "null" ? 0 : values.installationFaucet
                     ),
                     installationMilledJoint: String(
                         values.installationMilledJoint === "null" ?
                             0
-                        :   values.installationMilledJoint,
+                        :   values.installationMilledJoint
                     ),
                     installationWorktop: String(
-                        values.installationWorktop === "null" ? 0 : values.installationWorktop,
+                        values.installationWorktop === "null" ? 0 : values.installationWorktop
                     ),
                     installationWallPanel: String(
-                        values.installationWallPanel === "null" ? 0 : values.installationWallPanel,
+                        values.installationWallPanel === "null" ? 0 : values.installationWallPanel
                     ),
 
                     applianceOutsideOfIkea: String(
-                        values.applianceOutsideOfIkea === "null" ?
-                            0
-                        :   values.applianceOutsideOfIkea,
+                        values.applianceOutsideOfIkea === "null" ? 0 : values.applianceOutsideOfIkea
                     ),
                     gasApplianceOutsideOfIkea: String(
                         values.gasApplianceOutsideOfIkea === "null" ?
                             0
-                        :   values.gasApplianceOutsideOfIkea,
+                        :   values.gasApplianceOutsideOfIkea
                     ),
 
                     tax: values.tax,
                     bail: String(values.bail === "null" ? 0 : values.bail),
-                    signature: sigCanvasRef.current?.toData() as SignaturePad.Point[][],
+                    signature: signature
                 };
 
                 const promise = updateOrderNewPCK(orderNewPCK.id as string, updatedOrder, userRole);
@@ -223,40 +225,79 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                     },
                     error: () => {
                         return "Něco se pokazilo";
-                    },
+                    }
                 });
             } catch {
                 return toast.error("Něco se pokazilo", {
-                    description: "Prosím počkejte nebo to zkuste znovu",
+                    description: "Prosím počkejte nebo to zkuste znovu"
                 });
             }
         },
-        [userRole, orderNewPCK.id],
+        [userRole, orderNewPCK.id, signatureData]
     );
 
-    useEffect(() => {
-        form.getValues().signature ?
-            sigCanvasRef.current?.fromData(form.getValues().signature as SignaturePad.Point[][])
-        :   sigCanvasRef.current?.clear();
-    }, [form]);
-
     const debouncedSubmit = useCallback(
-        () =>
-            debounce(async () => {
-                onSubmit(form.getValues());
-            }, 500),
-        [form, onSubmit],
+        (values: z.infer<typeof formNewPCKSchema>) => {
+            onSubmit(values);
+        },
+        [onSubmit]
+    );
+
+    const debouncedSubmitWithDelay = useMemo(
+        () => debounce(debouncedSubmit, 500),
+        [debouncedSubmit]
     );
 
     useEffect(() => {
         const subscription = form.watch(async () => {
             if (await form.trigger()) {
-                return debouncedSubmit();
+                return debouncedSubmitWithDelay(form.getValues());
+            }
+        });
+
+        return () => {
+            subscription.unsubscribe();
+            debouncedSubmitWithDelay.cancel();
+        };
+    }, [form, debouncedSubmitWithDelay]);
+
+    useEffect(() => {
+        if (signatureData.length > 0 && sigCanvasRef.current)
+            sigCanvasRef.current.fromData(signatureData);
+    }, [signatureData]);
+
+    useEffect(() => {
+        const subscription = form.watch(() => {
+            if (sigCanvasRef.current) {
+                const newSignatureData = sigCanvasRef.current.toData();
+                setSignatureData(newSignatureData);
             }
         });
 
         return () => subscription.unsubscribe();
-    }, [form, debouncedSubmit, sigCanvasRef.current?.toData()]);
+    }, [form]);
+
+    const handleClearSignature = useCallback(() => {
+        if (sigCanvasRef.current) {
+            sigCanvasRef.current.clear();
+            setSignatureData([]);
+            form.setValue("signature", [], { shouldValidate: true });
+        }
+    }, [form]);
+
+    const handleSignatureEnd = useCallback(() => {
+        if (sigCanvasRef.current) {
+            const newData = sigCanvasRef.current.toData();
+            setSignatureData(newData);
+            form.setValue("signature", newData, { shouldValidate: true });
+        }
+    }, [form]);
+
+    useEffect(() => {
+        if (form.formState.isValid) {
+            debouncedSubmitWithDelay(form.getValues());
+        }
+    }, [signatureData, debouncedSubmitWithDelay, form]);
 
     useEffect(() => {
         const fetchPrice = async () => {
@@ -264,167 +305,167 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                 setShipmentZoneOnePrice(
                     Number(
                         await getPriceAtDate("shipment_zone_one", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setShipmentZoneTwoPrice(
                     Number(
                         await getPriceAtDate("shipment_zone_two", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setShipmentZoneThreePrice(
                     Number(
                         await getPriceAtDate("shipment_zone_three", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setShipmentZoneFourPrice(
                     Number(
                         await getPriceAtDate("shipment_zone_four", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setCompleteInstallationLockersPrice(
                     Number(
                         await getPriceAtDate("complete_installation_lockers", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setCompleteAtypicalPrice(
                     Number(
                         await getPriceAtDate("complete_atypical", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setBasicLockersPrice(
                     Number(
                         await getPriceAtDate("basic_lockers", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setBasicMilledPrice(
                     Number(
                         await getPriceAtDate("basic_milled", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setBasicAtypicalPrice(
                     Number(
                         await getPriceAtDate("basic_atypical", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setInstallationDigesterPrice(
                     Number(
                         await getPriceAtDate("installation_digester", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setInstallationHobPrice(
                     Number(
                         await getPriceAtDate("installation_hob", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setInstallationGasHobPrice(
                     Number(
                         await getPriceAtDate("installation_gas_hob", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setInstallationLightsPrice(
                     Number(
                         await getPriceAtDate("installation_lights", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setInstallationMicrowavePrice(
                     Number(
                         await getPriceAtDate("installation_microwave", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setInstallationFreezerPrice(
                     Number(
                         await getPriceAtDate("installation_freezer", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setInstallationDishwasherPrice(
                     Number(
                         await getPriceAtDate("installation_dishwasher", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setInstallationOvenPrice(
                     Number(
                         await getPriceAtDate("installation_oven", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setInstallationFaucetPrice(
                     Number(
                         await getPriceAtDate("installation_sink", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setInstallationMilledJointPrice(
                     Number(
                         await getPriceAtDate("installation_milled_joint", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setInstallationWorktopPrice(
                     Number(
                         await getPriceAtDate("installation_worktop", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setInstallationWallPanelPrice(
                     Number(
                         await getPriceAtDate("installation_wall_panel", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setApplianceOutsideOfIkeaPrice(
                     Number(
                         await getPriceAtDate("appliance_outside_of_ikea", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setGasApplianceOutsideOfIkeaPrice(
                     Number(
                         await getPriceAtDate("gas_appliance_outside_of_ikea", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
             } else {
                 toast.error("Žádné referenční datum");
@@ -435,7 +476,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
 
     const calculateShipmentZoneTotal = (
         price: number | undefined,
-        quantity: string | undefined,
+        quantity: string | undefined
     ): number => {
         return (Number(price) || 0) * (Number(quantity) || 0);
     };
@@ -449,7 +490,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
     const completeInstallationPrice =
         calculateShipmentZoneTotal(
             completeInstallationLockersPrice,
-            form.getValues().completeInstallationLockers,
+            form.getValues().completeInstallationLockers
         ) + calculateShipmentZoneTotal(completeAtypicalPrice, form.getValues().completeAtypical);
 
     const basicInstallationPrice =
@@ -460,46 +501,46 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
     const installationPrice =
         calculateShipmentZoneTotal(
             installationDigesterPrice,
-            form.getValues().installationDigester,
+            form.getValues().installationDigester
         ) +
         calculateShipmentZoneTotal(installationHobPrice, form.getValues().installationHob) +
         calculateShipmentZoneTotal(installationGasHobPrice, form.getValues().installationGasHob) +
         calculateShipmentZoneTotal(installationLightsPrice, form.getValues().installationLights) +
         calculateShipmentZoneTotal(
             installationMicrowavePrice,
-            form.getValues().installationMicrowave,
+            form.getValues().installationMicrowave
         ) +
         calculateShipmentZoneTotal(installationFreezerPrice, form.getValues().installationFreezer) +
         calculateShipmentZoneTotal(
             installationDishwasherPrice,
-            form.getValues().installationDishwasher,
+            form.getValues().installationDishwasher
         ) +
         calculateShipmentZoneTotal(installationOvenPrice, form.getValues().installationOven) +
         calculateShipmentZoneTotal(installationFaucetPrice, form.getValues().installationFaucet) +
         calculateShipmentZoneTotal(
             installationMilledJointPrice,
-            form.getValues().installationMilledJoint,
+            form.getValues().installationMilledJoint
         ) +
         calculateShipmentZoneTotal(installationWorktopPrice, form.getValues().installationWorktop) +
         calculateShipmentZoneTotal(
             installationWallPanelPrice,
-            form.getValues().installationWallPanel,
+            form.getValues().installationWallPanel
         ) +
         calculateShipmentZoneTotal(
             applianceOutsideOfIkeaPrice,
-            form.getValues().applianceOutsideOfIkea,
+            form.getValues().applianceOutsideOfIkea
         ) +
         calculateShipmentZoneTotal(
             gasApplianceOutsideOfIkeaPrice,
-            form.getValues().gasApplianceOutsideOfIkea,
+            form.getValues().gasApplianceOutsideOfIkea
         );
 
-    const calculateTotalPrice = () => {
+    const calculateTotalPrice = useMemo(() => {
         const prices = [
             shipmentPrice,
             completeInstallationPrice,
             basicInstallationPrice,
-            installationPrice,
+            installationPrice
         ];
 
         const total = prices.reduce((acc, price) => acc + (price ?? 0), 0);
@@ -508,7 +549,20 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
         const bail = Number(form.getValues().bail ?? 0);
 
         return total * taxRate - bail;
-    };
+    }, [shipmentPrice, completeInstallationPrice, basicInstallationPrice, installationPrice, form]);
+
+    const formValues = useMemo(
+        () => ({
+            bail: Number(form.getValues().bail ?? 0),
+            tax: form.getValues().tax
+        }),
+        [form]
+    );
+
+    const calculatedBail = useMemo(() => {
+        const taxRate = formValues.tax ? 1.12 : 1.21;
+        return Math.floor(formValues.bail * taxRate * 100) / 100;
+    }, [formValues.bail, formValues.tax]);
 
     return (
         <motion.div
@@ -553,9 +607,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -587,9 +639,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -621,9 +671,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -655,9 +703,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -705,9 +751,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -739,9 +783,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -786,9 +828,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -820,9 +860,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -854,9 +892,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -901,9 +937,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -935,9 +969,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -969,9 +1001,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -1003,9 +1033,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -1037,9 +1065,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -1071,9 +1097,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -1107,9 +1131,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -1141,9 +1163,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -1175,9 +1195,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -1211,9 +1229,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -1245,9 +1261,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -1279,9 +1293,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -1315,9 +1327,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -1351,9 +1361,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             step=".01"
                                             onFocus={(event) => event.currentTarget.select()}
                                             className={cn(
-                                                field.value == "0.00" ?
-                                                    "text-muted-foreground"
-                                                :   "",
+                                                field.value == "0.00" ? "text-muted-foreground" : ""
                                             )}
                                             disabled={!userRole && archived}
                                             {...field}
@@ -1369,13 +1377,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                     <div className="flex items-baseline justify-between gap-x-8">
                         <Typography variant="h2">Kauce</Typography>
                         <Unit
-                            value={
-                                Math.floor(
-                                    Number(form.getValues().bail ?? 0) *
-                                        Number(form.getValues().tax ? 1.12 : 1.21) *
-                                        100,
-                                ) / 100
-                            }
+                            value={calculatedBail}
                             className="text-xl font-medium tracking-wider text-foreground"
                             unit=",-"
                         />
@@ -1461,17 +1463,18 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                             ref={sigCanvasRef}
                                             canvasProps={{
                                                 className:
-                                                    "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
+                                                    "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2"
                                             }}
                                             penColor={!userRole && archived ? "#00000000" : "#000"}
                                             clearOnResize={false}
+                                            onEnd={handleSignatureEnd}
                                         />
                                     </FormControl>
 
                                     <Button
                                         type="button"
                                         size={"icon"}
-                                        onClick={() => sigCanvasRef.current?.clear()}
+                                        onClick={handleClearSignature}
                                         variant={"secondary"}
                                         className="absolute -bottom-2 -right-2 print:hidden"
                                         disabled={!userRole && archived}
@@ -1492,11 +1495,14 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                         asChild
                     >
                         <Unit
-                            value={calculateTotalPrice().toFixed(2)}
+                            value={useMemo(
+                                () => calculateTotalPrice.toFixed(2),
+                                [calculateTotalPrice]
+                            )}
                             unit=",-"
                             variant="h1"
                             as="p"
-                            className="text-right text-primary pt-12"
+                            className="pt-12 text-right text-primary"
                         />
                     </Typography>
                 </form>

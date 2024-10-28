@@ -1,19 +1,20 @@
 "use server";
 
+// import { randomUUID } from "crypto";
+import { cookies } from "next/headers";
+
 import { lucia, validateSession } from "@/auth";
 import {
-    compare,
+    compare
     /* hash */
 } from "bcryptjs";
 import { eq } from "drizzle-orm";
-// import { randomUUID } from "crypto";
-import { cookies } from "next/headers";
 
 // import { createUser } from "@/db/db";
 import { db } from "@/db/migrate";
 
 import type {
-    TLoginProps,
+    TLoginProps
     /* TRegisterProps */
 } from "@/types/authSchemas";
 
@@ -48,7 +49,7 @@ const ONE_MONTH = 60 * 60 * 24 * 30;
 
 export const loginFunction = async (values: TLoginProps) => {
     const user = await db.query.User.findFirst({
-        where: (table) => eq(table.email, values.email),
+        where: (table) => eq(table.email, values.email)
     });
 
     if (!user) return { error: "User not found" };
@@ -60,7 +61,7 @@ export const loginFunction = async (values: TLoginProps) => {
     if (!passwordValidation) return { error: "Incorrect username or password" };
 
     const session = await lucia.createSession(user.id, {
-        expiresIn: ONE_MONTH,
+        expiresIn: ONE_MONTH
     });
     const sessionCookie = lucia.createSessionCookie(session.id);
     (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);

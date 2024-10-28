@@ -3,6 +3,7 @@
 import { Plus } from "lucide-react";
 
 import { useRouter } from "next/navigation";
+
 import { toast } from "sonner";
 
 import { CreateOrder } from "@/db/db";
@@ -21,7 +22,7 @@ function CreateNewButton({ userId, asCard = false }: { userId: string; asCard?: 
             setTimeout(() => toast.success("Objednávka vytvořena úspěšně."), 500);
         } catch {
             toast.error("Něco se pokazilo", {
-                description: "Prosím počkejte nebo zkuste obnovit stránku",
+                description: "Prosím počkejte nebo zkuste obnovit stránku"
             });
         }
     }

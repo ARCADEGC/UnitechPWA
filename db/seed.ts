@@ -57,7 +57,7 @@ const prices = [
     { name: "non_ikea_gas", price: 146 },
 
     { name: "credit", price: 473 },
-    { name: "aboveFifty", price: 18 },
+    { name: "aboveFifty", price: 18 }
 ];
 
 // const baseUser = {
@@ -76,7 +76,7 @@ const prices = [
 const newUser: TUserSeed = {
     name: "user",
     email: "user@email.com",
-    password: "password",
+    password: "password"
 };
 
 async function seedUser() {
@@ -92,7 +92,7 @@ async function seedUser() {
         email: newUser.email,
         password: hashedPassword,
         salt: salt,
-        role: newUser?.role ?? false,
+        role: newUser?.role ?? false
     });
 }
 

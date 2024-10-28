@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarIcon } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { cn } from "@/lib/utils";
@@ -23,7 +23,7 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
+    FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -32,7 +32,7 @@ import {
     SelectContent,
     SelectItem,
     SelectTrigger,
-    SelectValue,
+    SelectValue
 } from "@/components/ui/select";
 
 import { TOrderHeader, TUser } from "@/types/dbSchemas";
@@ -57,9 +57,9 @@ function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
             assignee: orderHeader.assignee,
             dueDate: orderHeader.dueDate,
             orderNumber: String(orderHeader.orderNumber),
-            ikeaNumber: String(orderHeader.ikeaNumber),
+            ikeaNumber: String(orderHeader.ikeaNumber)
         },
-        mode: "all",
+        mode: "all"
     });
 
     useEffect(() => {
@@ -91,7 +91,7 @@ function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
                     orderNumber: Number(values.orderNumber),
                     ikeaNumber: Number(values.ikeaNumber),
                     customer: values.customer,
-                    assignee: (await getIdByUserName(values.assignee as string)) ?? "", // TODO duplicate names
+                    assignee: (await getIdByUserName(values.assignee as string)) ?? "" // TODO duplicate names
                 };
 
                 const promise = updateOrderHeader(orderHeader.id as string, updatedOrder, userRole);
@@ -103,34 +103,41 @@ function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
                     },
                     error: () => {
                         return "Něco se pokazilo";
-                    },
+                    }
                 });
             } catch {
                 return toast.error("Něco se pokazilo", {
-                    description: "Prosím počkejte nebo zkuste znovu",
+                    description: "Prosím počkejte nebo zkuste znovu"
                 });
             }
         },
-        [orderHeader.id, userRole],
+        [orderHeader.id, userRole]
     );
 
     const debouncedSubmit = useCallback(
-        () =>
-            debounce(async () => {
-                onSubmit(form.getValues());
-            }, 500),
-        [form, onSubmit],
+        (values: z.infer<typeof formHeaderSchema>) => {
+            onSubmit(values);
+        },
+        [onSubmit]
+    );
+
+    const debouncedSubmitWithDelay = useMemo(
+        () => debounce(debouncedSubmit, 500),
+        [debouncedSubmit]
     );
 
     useEffect(() => {
         const subscription = form.watch(async () => {
             if (await form.trigger()) {
-                return debouncedSubmit();
+                return debouncedSubmitWithDelay(form.getValues());
             }
         });
 
-        return () => subscription.unsubscribe();
-    }, [form, debouncedSubmit]);
+        return () => {
+            subscription.unsubscribe();
+            debouncedSubmitWithDelay.cancel();
+        };
+    }, [form, debouncedSubmitWithDelay]);
 
     return (
         <motion.div
@@ -196,7 +203,7 @@ function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
                                                         variant={"outline"}
                                                         className={cn(
                                                             "w-[240px] pl-3 text-left font-normal",
-                                                            !field.value && "text-muted-foreground",
+                                                            !field.value && "text-muted-foreground"
                                                         )}
                                                         disabled={!userRole && archived}
                                                     >

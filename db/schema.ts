@@ -9,7 +9,7 @@ import {
     serial,
     text,
     timestamp,
-    uuid,
+    uuid
 } from "drizzle-orm/pg-core";
 
 export const PaidStatus = pgEnum("paid_status", ["card", "cash", "unpaid"]);
@@ -31,7 +31,7 @@ export const order = pgTable("order", {
         .references(() => OrderPP2.id),
     orderListOne: uuid("order_list_one")
         .notNull()
-        .references(() => OrderListOne.id),
+        .references(() => OrderListOne.id)
 });
 
 export const OrderHeader = pgTable("order_header", {
@@ -46,12 +46,12 @@ export const OrderHeader = pgTable("order_header", {
         .notNull()
         .references(() => User.id, {
             onDelete: "cascade",
-            onUpdate: "restrict",
+            onUpdate: "restrict"
         }),
 
     dueDate: timestamp("due_date").notNull(),
     orderNumber: integer("order_number_part_one").notNull(),
-    ikeaNumber: integer("order_number_part_two").notNull(),
+    ikeaNumber: integer("order_number_part_two").notNull()
 });
 
 export const OrderNewPCK = pgTable("order_new_pck", {
@@ -64,7 +64,7 @@ export const OrderNewPCK = pgTable("order_new_pck", {
 
     completeInstallationLockers: numeric("complete_installation_lockers", {
         precision: 10,
-        scale: 2,
+        scale: 2
     }),
     completeAtypical: numeric("complete_atypical", { precision: 10, scale: 2 }),
 
@@ -88,13 +88,13 @@ export const OrderNewPCK = pgTable("order_new_pck", {
     applianceOutsideOfIkea: numeric("appliance_outside_of_ikea", { precision: 10, scale: 2 }),
     gasApplianceOutsideOfIkea: numeric("gas_appliance_outside_of_ikea", {
         precision: 10,
-        scale: 2,
+        scale: 2
     }),
 
     tax: boolean("tax").default(false),
 
     bail: numeric("bail"),
-    signature: json("signature"),
+    signature: json("signature")
 });
 
 export const finishedEnum = pgEnum("finished", ["no", "yes", "canceled"]);
@@ -144,7 +144,7 @@ export const OrderPP2 = pgTable("order_pp2", {
 
     date: timestamp("date").notNull(),
     workerSignature: json("worker_signature"),
-    custommerSignature: json("custommer_signature"),
+    custommerSignature: json("custommer_signature")
 });
 
 export const OrderListOne = pgTable("order_list_one", {
@@ -153,7 +153,7 @@ export const OrderListOne = pgTable("order_list_one", {
     credit: numeric("credit", { precision: 10, scale: 2 }),
     aboveFifty: numeric("above_fifty", { precision: 10, scale: 2 }),
 
-    material: numeric("material", { precision: 10, scale: 2 }),
+    material: numeric("material", { precision: 10, scale: 2 })
 });
 
 export const User = pgTable("user", {
@@ -162,7 +162,7 @@ export const User = pgTable("user", {
     email: text("email").unique().notNull(),
     password: text("password").notNull(),
     salt: text("salt").unique().notNull(),
-    role: boolean("role").default(false),
+    role: boolean("role").default(false)
 });
 
 export const Session = pgTable("session", {
@@ -171,59 +171,59 @@ export const Session = pgTable("session", {
         .notNull()
         .references(() => User.id, {
             onDelete: "cascade",
-            onUpdate: "restrict",
+            onUpdate: "restrict"
         }),
     expiresAt: timestamp("expiresAt", {
         mode: "date",
-        withTimezone: true,
-    }).notNull(),
+        withTimezone: true
+    }).notNull()
 });
 
 export const Prices = pgTable("prices", {
     id: serial("id").unique().notNull().primaryKey(),
     name: text("name").notNull(),
     price: numeric("price", { precision: 10, scale: 2 }).notNull(),
-    validFrom: timestamp("valid_from").notNull(),
+    validFrom: timestamp("valid_from").notNull()
 });
 
 export const AdminPrices = pgTable("admin_prices", {
     id: serial("id").unique().notNull().primaryKey(),
     name: text("name").notNull(),
     price: numeric("price", { precision: 10, scale: 2 }).notNull(),
-    validFrom: timestamp("valid_from").notNull(),
+    validFrom: timestamp("valid_from").notNull()
 });
 
 export const orderRelations = relations(order, ({ one }) => ({
     orderHeader: one(OrderHeader, {
         fields: [order.orderHeader],
-        references: [OrderHeader.id],
+        references: [OrderHeader.id]
     }),
     orderNewPCK: one(OrderNewPCK, {
         fields: [order.orderNewPCK],
-        references: [OrderNewPCK.id],
+        references: [OrderNewPCK.id]
     }),
     orderPP2: one(OrderPP2, {
         fields: [order.orderPP2],
-        references: [OrderPP2.id],
+        references: [OrderPP2.id]
     }),
     orderListOne: one(OrderListOne, {
         fields: [order.orderListOne],
-        references: [OrderListOne.id],
-    }),
+        references: [OrderListOne.id]
+    })
 }));
 
 export const orderHeaderRelations = relations(OrderHeader, ({ one }) => ({
-    orders: one(order),
+    orders: one(order)
 }));
 
 export const orderNewPCKRelations = relations(OrderNewPCK, ({ one }) => ({
-    orders: one(order),
+    orders: one(order)
 }));
 
 export const orderPP2Relations = relations(OrderPP2, ({ one }) => ({
-    orders: one(order),
+    orders: one(order)
 }));
 
 export const orderListOneRelations = relations(OrderListOne, ({ one }) => ({
-    orders: one(order),
+    orders: one(order)
 }));

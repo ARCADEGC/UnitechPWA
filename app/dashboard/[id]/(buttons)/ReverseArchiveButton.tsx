@@ -3,6 +3,7 @@
 import { Archive } from "lucide-react";
 
 import { useRouter } from "next/navigation";
+
 import { toast } from "sonner";
 
 import { unarchiveOrder } from "@/db/db";
@@ -16,7 +17,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
+    AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
@@ -33,7 +34,7 @@ function ReverseArchiveButton({ currentOrder }: { currentOrder: TOrder }) {
             },
             error: () => {
                 return "Nastala chyba při změně archivace objednávky";
-            },
+            }
         });
     }
 

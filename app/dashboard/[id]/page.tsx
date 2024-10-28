@@ -11,7 +11,7 @@ import {
     getOrderNewPCKByIdAndRoleOrUser,
     getOrderPP2ByIdAndRoleOrUser,
     getOrderList1ByIdAndRoleOrUser,
-    getOrderPP2SpecificationsByIdAndRoleOrUser,
+    getOrderPP2SpecificationsByIdAndRoleOrUser
 } from "@/db/db";
 
 import { Typography } from "@/components/ui/Typography";
@@ -47,14 +47,14 @@ async function Home(props: { params: Promise<{ id: string }> }) {
     const orderHeader = await getOrderHeaderByIdAndRoleOrUser(
         currentOrder?.orderHeader ?? "",
         userRole,
-        user.id,
+        user.id
     );
 
     async function tabChangeToPCK(user: User) {
         const orderNewPCK = await getOrderNewPCKByIdAndRoleOrUser(
             currentOrder?.orderNewPCK ?? "",
             userRole,
-            user.id,
+            user.id
         );
 
         return orderNewPCK ?
@@ -71,7 +71,7 @@ async function Home(props: { params: Promise<{ id: string }> }) {
         const orderPP2 = await getOrderPP2ByIdAndRoleOrUser(
             currentOrder?.orderPP2 ?? "",
             userRole,
-            user.id,
+            user.id
         );
 
         return orderPP2 ?
@@ -87,13 +87,13 @@ async function Home(props: { params: Promise<{ id: string }> }) {
         const orderList1 = await getOrderList1ByIdAndRoleOrUser(
             currentOrder?.orderListOne ?? "",
             userRole,
-            user.id,
+            user.id
         );
 
         const PP2Specifications = await getOrderPP2SpecificationsByIdAndRoleOrUser(
             currentOrder?.orderPP2 ?? "",
             userRole,
-            user.id,
+            user.id
         );
 
         return orderList1 && PP2Specifications ?
@@ -121,7 +121,7 @@ async function Home(props: { params: Promise<{ id: string }> }) {
                     <Typography
                         variant="h1"
                         as="p"
-                        className="mb-12 ml-auto mr-auto flex w-fit items-center gap-2 text-muted-foreground print:mr-0"
+                        className="mx-auto mb-12 flex w-fit items-center gap-2 text-muted-foreground print:mr-0"
                     >
                         <Archive className="size-10 stroke-2" />
                         Archivováno
@@ -132,7 +132,7 @@ async function Home(props: { params: Promise<{ id: string }> }) {
                 <Typography
                     variant="h1"
                     as="p"
-                    className="mb-12 ml-auto mr-auto flex w-fit items-center gap-2 text-muted-foreground print:mr-0"
+                    className="mx-auto mb-12 flex w-fit items-center gap-2 text-muted-foreground print:mr-0"
                 >
                     {currentOrder.paid === "card" && <CreditCard className="size-10 stroke-2" />}
                     {currentOrder.paid === "cash" && <Coins className="size-10 stroke-2" />}

@@ -1,16 +1,17 @@
 "use client";
 
 import { CalendarIcon, Eraser } from "lucide-react";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import SignatureCanvas from "react-signature-canvas";
+
+import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { cubicBezier, motion } from "framer-motion";
 import { debounce } from "lodash";
-import Link from "next/link";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -27,7 +28,7 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
+    FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -36,7 +37,7 @@ import {
     SelectContent,
     SelectItem,
     SelectTrigger,
-    SelectValue,
+    SelectValue
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
@@ -51,17 +52,26 @@ type TPP2Props = {
     archived: boolean;
 };
 
+type SignaturePoints = SignaturePad.Point[][];
+
 function PP2({ orderPP2, userRole, archived }: TPP2Props) {
     let workerSigCanvasRef = useRef<SignatureCanvas>(null);
     let custommerSigCanvasRef = useRef<SignatureCanvas>(null);
+
+    const [signatureDataWorker, setSignatureDataWorker] = useState<SignaturePoints>(
+        (orderPP2.workerSignature as SignaturePoints) || []
+    );
+    const [signatureDataCustommer, setSignatureDataCustommer] = useState<SignaturePoints>(
+        (orderPP2.custommerSignature as SignaturePoints) || []
+    );
 
     const form = useForm<z.infer<typeof formPP2Schema>>({
         resolver: zodResolver(formPP2Schema),
         defaultValues: {
             anotherService: orderPP2.anotherService ?? false,
-            timeToFinish: Number(orderPP2.timeToFinish),
+            timeToFinish: String(orderPP2.timeToFinish),
             contactWithIkea: orderPP2.contactWithIkea ?? false,
-            numOfReturn: Number(orderPP2.numOfReturn),
+            numOfReturn: String(orderPP2.numOfReturn),
             canceled: orderPP2.finished ?? "no",
             reasonOfCancelation: String(orderPP2.reasonOfCancelation),
             reasonOfImposibility: String(orderPP2.reasonOfImposibility),
@@ -94,10 +104,10 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
             nonIkeaGas: String(orderPP2.nonIkeaGas),
 
             date: orderPP2.date,
-            workerSignature: orderPP2.workerSignature,
-            custommerSignature: orderPP2.custommerSignature,
+            workerSignature: (orderPP2.workerSignature as SignaturePoints) || [],
+            custommerSignature: (orderPP2.custommerSignature as SignaturePoints) || []
         },
-        mode: "all",
+        mode: "all"
     });
 
     const onSubmit = useCallback(
@@ -131,7 +141,7 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                     milledJoint: String(values.milledJoint === "null" ? 0 : values.milledJoint),
                     worktop: String(values.worktop === "null" ? 0 : values.worktop),
                     tailoredWorktop: String(
-                        values.tailoredWorktop === "null" ? 0 : values.tailoredWorktop,
+                        values.tailoredWorktop === "null" ? 0 : values.tailoredWorktop
                     ),
                     wallPanel: String(values.wallPanel === "null" ? 0 : values.wallPanel),
                     atypical: String(values.atypical === "null" ? 0 : values.atypical),
@@ -144,10 +154,9 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                     ikeaGas: String(values.ikeaGas === "null" ? 0 : values.ikeaGas),
                     nonIkeaGas: String(values.nonIkeaGas === "null" ? 0 : values.nonIkeaGas),
 
-                    workerSignature: workerSigCanvasRef.current?.toData() as SignaturePad.Point[][],
-                    custommerSignature:
-                        custommerSigCanvasRef.current?.toData() as SignaturePad.Point[][],
-                    date: values.date ?? new Date(),
+                    workerSignature: signatureDataWorker,
+                    custommerSignature: signatureDataCustommer,
+                    date: values.date ?? new Date()
                 };
 
                 const promise = updateOrderPP2(orderPP2.id as string, updatedOrder, userRole);
@@ -159,50 +168,103 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                     },
                     error: () => {
                         return "Něco se pokazilo";
-                    },
+                    }
                 });
             } catch {
                 return toast.error("Něco se pokazilo", {
-                    description: "Prosím počkejte nebo to zkuste znovu",
+                    description: "Prosím počkejte nebo to zkuste znovu"
                 });
             }
         },
-        [userRole, orderPP2.id],
+        [userRole, orderPP2.id, signatureDataWorker, signatureDataCustommer]
     );
 
-    useEffect(() => {
-        form.getValues().workerSignature ?
-            workerSigCanvasRef.current?.fromData(
-                form.getValues().workerSignature as SignaturePad.Point[][],
-            )
-        :   workerSigCanvasRef.current?.clear();
-    }, [form]);
-
-    useEffect(() => {
-        form.getValues().custommerSignature ?
-            custommerSigCanvasRef.current?.fromData(
-                form.getValues().custommerSignature as SignaturePad.Point[][],
-            )
-        :   custommerSigCanvasRef.current?.clear();
-    }, [form]);
-
     const debouncedSubmit = useCallback(
-        () =>
-            debounce(async () => {
-                onSubmit(form.getValues());
-            }, 500),
-        [form, onSubmit],
+        (values: z.infer<typeof formPP2Schema>) => {
+            onSubmit(values);
+        },
+        [onSubmit]
+    );
+
+    const debouncedSubmitWithDelay = useMemo(
+        () => debounce(debouncedSubmit, 500),
+        [debouncedSubmit]
     );
 
     useEffect(() => {
         const subscription = form.watch(async () => {
             if (await form.trigger()) {
-                return debouncedSubmit();
+                return debouncedSubmitWithDelay(form.getValues());
+            }
+        });
+
+        return () => {
+            subscription.unsubscribe();
+            debouncedSubmitWithDelay.cancel();
+        };
+    }, [form, debouncedSubmitWithDelay]);
+
+    useEffect(() => {
+        if (signatureDataWorker.length > 0 && custommerSigCanvasRef.current)
+            workerSigCanvasRef.current?.fromData(signatureDataWorker);
+
+        if (signatureDataCustommer.length > 0 && workerSigCanvasRef.current)
+            custommerSigCanvasRef.current?.fromData(signatureDataCustommer);
+    }, [signatureDataWorker, signatureDataCustommer]);
+
+    useEffect(() => {
+        const subscription = form.watch(() => {
+            if (workerSigCanvasRef.current) {
+                const newSignatureData = workerSigCanvasRef.current.toData();
+                setSignatureDataWorker(newSignatureData);
+            }
+
+            if (custommerSigCanvasRef.current) {
+                const newSignatureData = custommerSigCanvasRef.current.toData();
+                setSignatureDataCustommer(newSignatureData);
             }
         });
 
         return () => subscription.unsubscribe();
-    }, [form, debouncedSubmit]);
+    }, [form]);
+
+    const handleClearSignatureWorker = useCallback(() => {
+        if (workerSigCanvasRef.current) {
+            workerSigCanvasRef.current.clear();
+            setSignatureDataWorker([]);
+            form.setValue("workerSignature", [], { shouldValidate: true });
+        }
+    }, [form]);
+
+    const handleClearSignatureCustommer = useCallback(() => {
+        if (custommerSigCanvasRef.current) {
+            custommerSigCanvasRef.current.clear();
+            setSignatureDataCustommer([]);
+            form.setValue("custommerSignature", [], { shouldValidate: true });
+        }
+    }, [form]);
+
+    const handleSignatureEndWorker = useCallback(() => {
+        if (workerSigCanvasRef.current) {
+            const newData = workerSigCanvasRef.current.toData();
+            setSignatureDataWorker(newData);
+            form.setValue("workerSignature", newData, { shouldValidate: true });
+        }
+    }, [form]);
+
+    const handleSignatureEndCustommer = useCallback(() => {
+        if (custommerSigCanvasRef.current) {
+            const newData = custommerSigCanvasRef.current.toData();
+            setSignatureDataCustommer(newData);
+            form.setValue("custommerSignature", newData, { shouldValidate: true });
+        }
+    }, [form]);
+
+    useEffect(() => {
+        if (form.formState.isValid) {
+            debouncedSubmitWithDelay(form.getValues());
+        }
+    }, [signatureDataCustommer, signatureDataWorker, debouncedSubmitWithDelay, form]);
 
     return (
         <motion.div
@@ -212,8 +274,8 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                 duration: 0.5,
                 ease: cubicBezier(0.4, 0, 0.2, 1),
                 layout: {
-                    duration: 0.1,
-                },
+                    duration: 0.1
+                }
             }}
             layout
         >
@@ -639,11 +701,12 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                                     />
                                 </FormControl>
 
-                                <FormDescription>
-                                    <Typography
-                                        variant="muted"
-                                        className="print:hidden"
-                                    >
+                                <Typography
+                                    variant="muted"
+                                    className="print:hidden"
+                                    asChild
+                                >
+                                    <FormDescription>
                                         Pro recenzi spokojenosti zákazníka klikněte{" "}
                                         <Typography
                                             variant="anchor"
@@ -652,8 +715,8 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                                             <Link href={""}>zde</Link>
                                         </Typography>
                                         .
-                                    </Typography>
-                                </FormDescription>
+                                    </FormDescription>
+                                </Typography>
 
                                 <FormMessage />
                             </FormItem>
@@ -673,7 +736,7 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                                                 variant={"outline"}
                                                 className={cn(
                                                     "pl-3 text-left font-normal",
-                                                    !field.value && "text-muted-foreground",
+                                                    !field.value && "text-muted-foreground"
                                                 )}
                                                 disabled={!userRole && archived}
                                             >
@@ -1111,19 +1174,20 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                                                 ref={custommerSigCanvasRef}
                                                 canvasProps={{
                                                     className:
-                                                        "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
+                                                        "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2"
                                                 }}
                                                 penColor={
                                                     !userRole && archived ? "#00000000" : "#000"
                                                 }
                                                 clearOnResize={false}
+                                                onEnd={handleSignatureEndCustommer}
                                             />
                                         </FormControl>
 
                                         <Button
                                             type="button"
                                             size={"icon"}
-                                            onClick={() => custommerSigCanvasRef.current?.clear()}
+                                            onClick={handleClearSignatureCustommer}
                                             variant={"secondary"}
                                             className="absolute -bottom-2 -right-2 print:hidden"
                                             disabled={!userRole && archived}
@@ -1151,19 +1215,20 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                                                 ref={workerSigCanvasRef}
                                                 canvasProps={{
                                                     className:
-                                                        "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2",
+                                                        "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2"
                                                 }}
                                                 penColor={
                                                     !userRole && archived ? "#00000000" : "#000"
                                                 }
                                                 clearOnResize={false}
+                                                onEnd={handleSignatureEndWorker}
                                             />
                                         </FormControl>
 
                                         <Button
                                             type="button"
                                             size={"icon"}
-                                            onClick={() => workerSigCanvasRef.current?.clear()}
+                                            onClick={handleClearSignatureWorker}
                                             variant={"secondary"}
                                             className="absolute -bottom-2 -right-2 print:hidden"
                                             disabled={!userRole && archived}

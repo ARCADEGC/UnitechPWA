@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { cn } from "@/lib/utils";
@@ -19,7 +19,7 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
+    FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -29,7 +29,7 @@ import {
     TableCell,
     TableHead,
     TableHeader,
-    TableRow,
+    TableRow
 } from "@/components/ui/table";
 
 import { TOrderListOne, TOrderPP2Specifications } from "@/types/dbSchemas";
@@ -88,8 +88,8 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
             aboveFifty: String(orderList1.aboveFifty),
             credit: String(orderList1.credit),
 
-            material: String(orderList1.material),
-        },
+            material: String(orderList1.material)
+        }
     });
 
     const onSubmit = useCallback(
@@ -99,7 +99,7 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                     aboveFifty: String(values.aboveFifty === "null" ? 0 : values.aboveFifty),
                     credit: String(values.credit === "null" ? 0 : values.credit),
 
-                    material: String(values.material === "null" ? 0 : values.material),
+                    material: String(values.material === "null" ? 0 : values.material)
                 };
 
                 const promise = updateOrderList1(orderList1.id as string, updatedOrder, userRole);
@@ -111,15 +111,15 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                     },
                     error: () => {
                         return "Něco se pokazilo";
-                    },
+                    }
                 });
             } catch {
                 return toast.error("Něco se pokazilo", {
-                    description: "Prosím počkejte nebo to zkuste znovu",
+                    description: "Prosím počkejte nebo to zkuste znovu"
                 });
             }
         },
-        [userRole, orderList1.id],
+        [userRole, orderList1.id]
     );
 
     useEffect(() => {
@@ -127,132 +127,128 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
             if (referenceDate) {
                 setCredit(
                     Number(
-                        await getPriceAtDate("credit", referenceDate).then((price) => price?.price),
-                    ),
+                        await getPriceAtDate("credit", referenceDate).then((price) => price?.price)
+                    )
                 );
 
                 setAboveFifty(
                     Number(
                         await getPriceAtDate("aboveFifty", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setHighLocker(
                     Number(
                         await getPriceAtDate("high_locker", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setLowerLocker(
                     Number(
                         await getPriceAtDate("lower_locker", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setUpperLocker(
                     Number(
                         await getPriceAtDate("upper_locker", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setMilledJoint(
                     Number(
                         await getPriceAtDate("milled_joint", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setTailoredWorktop(
                     Number(
                         await getPriceAtDate("tailored_worktop", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setWorktop(
                     Number(
-                        await getPriceAtDate("worktop", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                        await getPriceAtDate("worktop", referenceDate).then((price) => price?.price)
+                    )
                 );
 
                 setWallPanel(
                     Number(
                         await getPriceAtDate("wall_panel", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAtypical(
                     Number(
                         await getPriceAtDate("atypical", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setUnnecessary(
                     Number(
                         await getPriceAtDate("unnecessary", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setKitchen(
                     Number(
-                        await getPriceAtDate("kitchen", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                        await getPriceAtDate("kitchen", referenceDate).then((price) => price?.price)
+                    )
                 );
 
                 setLights(
                     Number(
-                        await getPriceAtDate("lights", referenceDate).then((price) => price?.price),
-                    ),
+                        await getPriceAtDate("lights", referenceDate).then((price) => price?.price)
+                    )
                 );
 
                 setIkea(
                     Number(
-                        await getPriceAtDate("ikea", referenceDate).then((price) => price?.price),
-                    ),
+                        await getPriceAtDate("ikea", referenceDate).then((price) => price?.price)
+                    )
                 );
 
                 setIkeaGas(
                     Number(
                         await getPriceAtDate("ikea_gas", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setNonIkea(
                     Number(
                         await getPriceAtDate("non_ikea", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setNonIkeaGas(
                     Number(
                         await getPriceAtDate("non_ikea_gas", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
             } else {
                 toast.error("Žádné referenční datum");
@@ -267,136 +263,136 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                 setAdminCredit(
                     Number(
                         await getAdminPriceAtDate("credit", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminAboveFifty(
                     Number(
                         await getAdminPriceAtDate("aboveFifty", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
                 setAdminHighLocker(
                     Number(
                         await getAdminPriceAtDate("high_locker", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminLowerLocker(
                     Number(
                         await getAdminPriceAtDate("lower_locker", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminUpperLocker(
                     Number(
                         await getAdminPriceAtDate("upper_locker", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminMilledJoint(
                     Number(
                         await getAdminPriceAtDate("milled_joint", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminTailoredWorktop(
                     Number(
                         await getAdminPriceAtDate("tailored_worktop", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminWorktop(
                     Number(
                         await getAdminPriceAtDate("worktop", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminWallPanel(
                     Number(
                         await getAdminPriceAtDate("wall_panel", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminAtypical(
                     Number(
                         await getAdminPriceAtDate("atypical", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminUnnecessary(
                     Number(
                         await getAdminPriceAtDate("unnecessary", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminKitchen(
                     Number(
                         await getAdminPriceAtDate("kitchen", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminLights(
                     Number(
                         await getAdminPriceAtDate("lights", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminIkea(
                     Number(
                         await getAdminPriceAtDate("ikea", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminIkeaGas(
                     Number(
                         await getAdminPriceAtDate("ikea_gas", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminNonIkea(
                     Number(
                         await getAdminPriceAtDate("non_ikea", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
 
                 setAdminNonIkeaGas(
                     Number(
                         await getAdminPriceAtDate("non_ikea_gas", referenceDate).then(
-                            (price) => price?.price,
-                        ),
-                    ),
+                            (price) => price?.price
+                        )
+                    )
                 );
             } else {
                 toast.error("Žádné referenční datum");
@@ -406,22 +402,29 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
     }, [referenceDate, userRole]);
 
     const debouncedSubmit = useCallback(
-        () =>
-            debounce(async () => {
-                onSubmit(form.getValues());
-            }, 500),
-        [form, onSubmit],
+        (values: z.infer<typeof formList1Schema>) => {
+            onSubmit(values);
+        },
+        [onSubmit]
+    );
+
+    const debouncedSubmitWithDelay = useMemo(
+        () => debounce(debouncedSubmit, 500),
+        [debouncedSubmit]
     );
 
     useEffect(() => {
         const subscription = form.watch(async () => {
             if (await form.trigger()) {
-                return debouncedSubmit();
+                return debouncedSubmitWithDelay(form.getValues());
             }
         });
 
-        return () => subscription.unsubscribe();
-    }, [form, debouncedSubmit]);
+        return () => {
+            subscription.unsubscribe();
+            debouncedSubmitWithDelay.cancel();
+        };
+    }, [form, debouncedSubmitWithDelay]);
 
     return (
         <Form {...form}>
@@ -445,10 +448,14 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                     <TableBody>
                         <TableRow>
                             <TableCell>Paušál (do 50 km)</TableCell>
+
                             <TableCell className="font-medium">
-                                <span className="hidden print:block">
+                                <Typography
+                                    as="span"
+                                    className="hidden print:block"
+                                >
                                     {form.getValues().credit}
-                                </span>
+                                </Typography>
                                 <FormField
                                     control={form.control}
                                     name="credit"
@@ -465,7 +472,7 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                                                     className={cn(
                                                         field.value == "0.00" ?
                                                             "text-muted-foreground"
-                                                        :   "",
+                                                        :   ""
                                                     )}
                                                     disabled={!userRole && archived}
                                                     {...field}
@@ -490,10 +497,14 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
 
                         <TableRow>
                             <TableCell>Nad 50km + 18,-Kč/km</TableCell>
+
                             <TableCell className="font-medium">
-                                <span className="hidden print:block">
+                                <Typography
+                                    as="span"
+                                    className="hidden print:block"
+                                >
                                     {form.getValues().aboveFifty}
-                                </span>
+                                </Typography>
                                 <FormField
                                     control={form.control}
                                     name="aboveFifty"
@@ -510,7 +521,7 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                                                     className={cn(
                                                         field.value == "0.00" ?
                                                             "text-muted-foreground"
-                                                        :   "",
+                                                        :   ""
                                                     )}
                                                     disabled={!userRole && archived}
                                                     {...field}
@@ -688,8 +699,14 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
 
                         <TableRow>
                             <TableCell>Materiál</TableCell>
-                            <span className="hidden print:block">{form.getValues().material}</span>
+
                             <TableCell>
+                                <Typography
+                                    as="span"
+                                    className="hidden print:block"
+                                >
+                                    {form.getValues().material}
+                                </Typography>
                                 <FormField
                                     control={form.control}
                                     name="material"
@@ -706,7 +723,7 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                                                     className={cn(
                                                         field.value == "0.00" ?
                                                             "text-muted-foreground"
-                                                        :   "",
+                                                        :   ""
                                                     )}
                                                     disabled={!userRole && archived}
                                                     {...field}

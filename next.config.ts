@@ -4,13 +4,13 @@ import withSerwistInit from "@serwist/next";
 
 const withSerwist = withSerwistInit({
     swSrc: "app/sw.ts",
-    swDest: "public/sw.js",
+    swDest: "public/sw.js"
 });
 
 const nextConfig = {
     experimental: {
-        reactCompiler: true,
-    },
+        reactCompiler: true
+    }
 };
 
 // export default MillionLint.next({

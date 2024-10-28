@@ -13,7 +13,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
+    AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
@@ -32,7 +32,7 @@ function PaidButton({ orderId, paid }: { orderId: string; paid: TPaid }) {
             >
                 <Button
                     variant={"outline"}
-                    className="flex gap-2 items-center h-10"
+                    className="flex h-10 items-center gap-2"
                 >
                     {paid === "card" && <CreditCard className="size-4" />}
                     {paid === "cash" && <Coins className="size-4" />}
@@ -56,7 +56,7 @@ function PaidButton({ orderId, paid }: { orderId: string; paid: TPaid }) {
                     {paid !== "cash" && (
                         <Button
                             onClick={() => changeStatusAndReload("cash")}
-                            className="flex gap-2 items-center"
+                            className="flex items-center gap-2"
                         >
                             <Coins className="size-4" />
                             Hotově
@@ -65,7 +65,7 @@ function PaidButton({ orderId, paid }: { orderId: string; paid: TPaid }) {
                     {paid !== "card" && (
                         <Button
                             onClick={() => changeStatusAndReload("card")}
-                            className="flex gap-2 items-center"
+                            className="flex items-center gap-2"
                         >
                             <CreditCard className="size-4" />
                             Kartou

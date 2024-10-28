@@ -1,5 +1,6 @@
-import { validateSession } from "@/auth";
 import { redirect } from "next/navigation";
+
+import { validateSession } from "@/auth";
 
 import { Header } from "@/components/Header/Header";
 

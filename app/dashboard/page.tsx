@@ -1,5 +1,6 @@
-import { validateSession } from "@/auth";
 import Link from "next/link";
+
+import { validateSession } from "@/auth";
 
 import {
     getUserById,
@@ -7,7 +8,7 @@ import {
     getOrdersByIdAndRole,
     getNameFromHeaderByOrderId,
     getOrderNumberFromHeaderByOrderId,
-    getOrderAssigneeByOrderId,
+    getOrderAssigneeByOrderId
 } from "@/db/db";
 
 import {
@@ -16,7 +17,7 @@ import {
     CardDescription,
     CardFooter,
     CardHeader,
-    CardTitle,
+    CardTitle
 } from "@/components/ui/card";
 
 import { NoOrderFound } from "@/app/dashboard/NoOrderFound";
@@ -41,10 +42,10 @@ export default async function Home() {
             name: await getNameFromHeaderByOrderId(order.orderHeader),
             orderNumber: await getOrderNumberFromHeaderByOrderId(order.orderHeader),
             assignee: await getOrderAssigneeByOrderId(order.orderHeader).then((userUUID) =>
-                userUUID ? getUserNameById(userUUID) : "",
+                userUUID ? getUserNameById(userUUID) : ""
             ),
-            archived: order.archived ?? false,
-        })),
+            archived: order.archived ?? false
+        }))
     );
 
     return (

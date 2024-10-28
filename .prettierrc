@@ -7,7 +7,7 @@
     "singleQuote": false,
     "jsxSingleQuote": false,
     "quoteProps": "as-needed",
-    "trailingComma": "all",
+    "trailingComma": "none",
     "singleAttributePerLine": true,
     "htmlWhitespaceSensitivity": "css",
     "vueIndentScriptAndStyle": false,
@@ -40,5 +40,5 @@
 
         "^[./]"
     ],
-    "plugins": ["prettier-plugin-tailwindcss", "@trivago/prettier-plugin-sort-imports"]
+    "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"]
 }

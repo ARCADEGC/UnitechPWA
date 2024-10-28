@@ -11,7 +11,7 @@ import {
     CardDescription,
     CardFooter,
     CardHeader,
-    CardTitle,
+    CardTitle
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
@@ -33,7 +33,7 @@ function OrderList({ orders, role, userId }: TOrderListProps) {
     const [searchQuery, setSearchQuery] = useState("");
 
     const filteredOrders = orders.filter((order) =>
-        order.name?.toLowerCase().includes(searchQuery.toLowerCase()),
+        order.name?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const queriedOrders = searchQuery ? filteredOrders : orders;
@@ -79,7 +79,7 @@ function OrderList({ orders, role, userId }: TOrderListProps) {
                                         </CardFooter>
                                     </Card>
                                 </Link>
-                            ),
+                            )
                     )}
             </div>
 
@@ -120,7 +120,7 @@ function OrderList({ orders, role, userId }: TOrderListProps) {
                                         </CardFooter>
                                     </Card>
                                 </Link>
-                            ),
+                            )
                     )}
             </div>
 

@@ -1,7 +1,8 @@
+import Link from "next/link";
+
 import { validateSession } from "@/auth";
 import { getInitials } from "@/lib/utils";
 import { eq } from "drizzle-orm";
-import Link from "next/link";
 
 import { db } from "@/db/migrate";
 
@@ -16,7 +17,7 @@ async function Header() {
     const currentUser =
         user ?
             await db.query.User.findFirst({
-                where: (table) => eq(table.id, user.id),
+                where: (table) => eq(table.id, user.id)
             })
         :   null;
 

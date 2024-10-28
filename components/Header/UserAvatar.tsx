@@ -12,7 +12,7 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 
 const MemoizedAvatar = memo(Avatar);
@@ -24,7 +24,7 @@ const MemoizedDropdownMenu = memo(DropdownMenu);
 function UserAvatar({
     avatarInitials,
     username,
-    userRole = false,
+    userRole = false
 }: {
     avatarInitials: string;
     username: string;

@@ -3,6 +3,7 @@
 import { Archive } from "lucide-react";
 
 import { useRouter } from "next/navigation";
+
 import { toast } from "sonner";
 
 import { archiveOrder } from "@/db/db";
@@ -16,7 +17,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
+    AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
@@ -37,7 +38,7 @@ function ArchiveButton({ currentOrder }: { currentOrder: TOrder }) {
             },
             error: () => {
                 return "Nastala chyba při archivaci objednávky";
-            },
+            }
         });
     }
 
@@ -55,7 +56,10 @@ function ArchiveButton({ currentOrder }: { currentOrder: TOrder }) {
                 <AlertDialogFooter>
                     <AlertDialogCancel>Zrušit</AlertDialogCancel>
 
-                    <AlertDialogAction className="bg-transparent px-0">
+                    <AlertDialogAction
+                        className="bg-transparent px-0"
+                        asChild
+                    >
                         <Button
                             variant={"default"}
                             className="flex items-center gap-x-2"
