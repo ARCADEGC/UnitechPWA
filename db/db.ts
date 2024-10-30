@@ -294,6 +294,10 @@ export async function updateOrderPaidStatus(orderId: string, paid: TPaid) {
     await db.update(order).set({ paid }).where(eq(order.id, orderId));
 }
 
+export async function updateOrderReferenceDate(orderId: string, referenceDate: Date) {
+    await db.update(order).set({ referenceDate }).where(eq(order.id, orderId));
+}
+
 export async function updateOrderNewPCK(
     orderNewPCKId: string,
     content: TOrderNewPCK,

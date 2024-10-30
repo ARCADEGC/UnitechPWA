@@ -25,6 +25,7 @@ import { NotFound } from "@/app/dashboard/[id]/NotFound";
 import { PaidButton } from "./(buttons)/PaidButton";
 import { PrintButton } from "./(buttons)/PrintButton";
 import { ReverseArchiveButton } from "./(buttons)/ReverseArchiveButton";
+import { UpdateReferenceTimeButton } from "./(buttons)/UpdateReferenceTimeButton";
 
 const FormHeader = lazy(() => import("@/app/dashboard/[id]/(forms)/FormHeader"));
 const PCK = lazy(() => import("@/app/dashboard/[id]/(forms)/PCK"));
@@ -169,7 +170,7 @@ async function Home(props: { params: Promise<{ id: string }> }) {
 
             <Separator className="my-16" />
 
-            <div className="mx-auto flex max-w-prose gap-8 print:hidden">
+            <div className="mx-auto flex max-w-prose flex-wrap gap-8 print:hidden">
                 {!currentOrder.archived ||
                     (currentOrder.archived && userRole && (
                         <DeleteOrderButton currentOrder={currentOrder} />
@@ -178,6 +179,12 @@ async function Home(props: { params: Promise<{ id: string }> }) {
                 {currentOrder.archived ?
                     userRole && <ReverseArchiveButton currentOrder={currentOrder} />
                 :   <ArchiveButton currentOrder={currentOrder} />}
+                {userRole && (
+                    <UpdateReferenceTimeButton
+                        id={currentOrder.id ?? ""}
+                        referenceDate={currentOrder.referenceDate ?? "(nastala chyba)"}
+                    />
+                )}
                 <PaidButton
                     orderId={currentOrder.id ?? ""}
                     paid={currentOrder.paid ?? "unpaid"}
