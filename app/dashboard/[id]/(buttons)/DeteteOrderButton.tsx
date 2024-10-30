@@ -44,7 +44,7 @@ function DeleteOrderButton({ currentOrder }: { currentOrder: TOrder }) {
 
     return (
         <AlertDialog>
-            <AlertDialogTrigger className="mb-[35svh] flex h-9 items-center justify-center gap-x-2 whitespace-nowrap rounded-md bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground shadow-sm transition-colors hover:bg-destructive/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
+            <AlertDialogTrigger className="!mb-0 flex h-9 items-center justify-center gap-x-2 whitespace-nowrap rounded-md bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground shadow-sm transition-colors hover:bg-destructive/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
                 <Trash className="size-4" />
                 Smazat objednávku
             </AlertDialogTrigger>
