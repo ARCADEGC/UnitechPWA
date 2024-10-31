@@ -1,6 +1,6 @@
 "use client";
 
-import { lazy, useState, useEffect } from "react";
+import { lazy, useState, useEffect, useCallback } from "react";
 import { Suspense } from "react";
 
 import {
@@ -50,53 +50,56 @@ export default function ClientTabs({
     const [currentTab, setCurrentTab] = useState("pck");
     const [isLoading, setIsLoading] = useState(false);
 
-    const fetchDataForTab = async (tab: string) => {
-        setIsLoading(true);
-        try {
-            switch (tab) {
-                case "pck":
-                    const pckData = await getOrderNewPCKByIdAndRoleOrUser(
-                        orderNewPCKId,
-                        userRole,
-                        userId
-                    );
-                    if (pckData) setData((prev) => ({ ...prev, pck: pckData }));
-                    break;
+    const fetchDataForTab = useCallback(
+        async (tab: string) => {
+            setIsLoading(true);
+            try {
+                switch (tab) {
+                    case "pck":
+                        const pckData = await getOrderNewPCKByIdAndRoleOrUser(
+                            orderNewPCKId,
+                            userRole,
+                            userId
+                        );
+                        if (pckData) setData((prev) => ({ ...prev, pck: pckData }));
+                        break;
 
-                case "pp2":
-                    const pp2Data = await getOrderPP2ByIdAndRoleOrUser(
-                        orderPP2Id,
-                        userRole,
-                        userId
-                    );
-                    if (pp2Data) setData((prev) => ({ ...prev, pp2: pp2Data }));
-                    break;
+                    case "pp2":
+                        const pp2Data = await getOrderPP2ByIdAndRoleOrUser(
+                            orderPP2Id,
+                            userRole,
+                            userId
+                        );
+                        if (pp2Data) setData((prev) => ({ ...prev, pp2: pp2Data }));
+                        break;
 
-                case "list1":
-                    const [list1Data, pp2Specs] = await Promise.all([
-                        getOrderList1ByIdAndRoleOrUser(orderListOneId, userRole, userId),
-                        getOrderPP2SpecificationsByIdAndRoleOrUser(orderPP2Id, userRole, userId)
-                    ]);
-                    if (list1Data && pp2Specs) {
-                        setData((prev) => ({
-                            ...prev,
-                            list1: list1Data,
-                            pp2Specs
-                        }));
-                    }
-                    break;
+                    case "list1":
+                        const [list1Data, pp2Specs] = await Promise.all([
+                            getOrderList1ByIdAndRoleOrUser(orderListOneId, userRole, userId),
+                            getOrderPP2SpecificationsByIdAndRoleOrUser(orderPP2Id, userRole, userId)
+                        ]);
+                        if (list1Data && pp2Specs) {
+                            setData((prev) => ({
+                                ...prev,
+                                list1: list1Data,
+                                pp2Specs
+                            }));
+                        }
+                        break;
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                setIsLoading(false);
             }
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        },
+        [orderNewPCKId, orderPP2Id, orderListOneId, userRole, userId]
+    );
 
     // Fetch data whenever tab changes
     useEffect(() => {
         fetchDataForTab(currentTab);
-    }, [currentTab]);
+    }, [currentTab, fetchDataForTab]);
 
     return (
         <Tabs
