@@ -1168,17 +1168,21 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                                     <FormLabel>Podpis zákazníka </FormLabel>
 
                                     <div className="relative w-fit max-sm:w-full">
+                                        <div
+                                            className={
+                                                !userRole && archived ?
+                                                    "absolute inset-0 z-50 size-full"
+                                                :   ""
+                                            }
+                                        />
                                         <FormControl>
-                                            {/* TODO: on change should submit*/}
                                             <SignatureCanvas
                                                 ref={custommerSigCanvasRef}
                                                 canvasProps={{
                                                     className:
                                                         "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2"
                                                 }}
-                                                penColor={
-                                                    !userRole && archived ? "#00000000" : "#000"
-                                                }
+                                                penColor={"#000"}
                                                 clearOnResize={false}
                                                 onEnd={handleSignatureEndCustommer}
                                             />
@@ -1209,17 +1213,21 @@ function PP2({ orderPP2, userRole, archived }: TPP2Props) {
                                     <FormLabel>Podpis servisního partnera </FormLabel>
 
                                     <div className="relative w-fit max-sm:w-full">
+                                        <div
+                                            className={
+                                                !userRole && archived ?
+                                                    "absolute inset-0 z-50 size-full"
+                                                :   ""
+                                            }
+                                        />
                                         <FormControl>
-                                            {/* TODO: on change should submit*/}
                                             <SignatureCanvas
                                                 ref={workerSigCanvasRef}
                                                 canvasProps={{
                                                     className:
                                                         "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2"
                                                 }}
-                                                penColor={
-                                                    !userRole && archived ? "#00000000" : "#000"
-                                                }
+                                                penColor={"#000"}
                                                 clearOnResize={false}
                                                 onEnd={handleSignatureEndWorker}
                                             />

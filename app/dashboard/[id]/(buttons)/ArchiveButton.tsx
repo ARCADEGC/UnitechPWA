@@ -52,14 +52,12 @@ function ArchiveButton({ currentOrder }: { currentOrder: TOrder }) {
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Jste si opravdu jisti?</AlertDialogTitle>
+                    <AlertDialogDescription>Tato akce je návratná.</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Zrušit</AlertDialogCancel>
 
-                    <AlertDialogAction
-                        className="bg-transparent px-0"
-                        asChild
-                    >
+                    <AlertDialogAction asChild>
                         <Button
                             variant={"default"}
                             className="flex items-center gap-x-2"

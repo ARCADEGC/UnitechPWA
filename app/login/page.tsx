@@ -4,6 +4,8 @@ import { validateSession } from "@/auth";
 
 import { LoginCard } from "./LoginCard";
 
+export const dynamic = "force-dynamic";
+
 async function Home() {
     const { user } = await validateSession();
 

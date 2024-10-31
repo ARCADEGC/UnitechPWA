@@ -46,6 +46,7 @@ type TFormHeaderProps = {
 
 function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
     const [users, setUsers] = useState<TUser[]>([]);
+    const [isInitializing, setIsInitializing] = useState(true);
 
     const form = useForm<z.infer<typeof formHeaderSchema>>({
         resolver: zodResolver(formHeaderSchema),
@@ -54,7 +55,7 @@ function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
             address: orderHeader.address,
             phone: orderHeader.phone,
             email: orderHeader.email,
-            assignee: orderHeader.assignee,
+            assignee: "",
             dueDate: orderHeader.dueDate,
             orderNumber: String(orderHeader.orderNumber),
             ikeaNumber: String(orderHeader.ikeaNumber)
@@ -83,6 +84,14 @@ function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
     const onSubmit = useCallback(
         async (values: z.infer<typeof formHeaderSchema>) => {
             try {
+                const assigneeId = await getIdByUserName(values.assignee as string);
+
+                if (!assigneeId) {
+                    return toast.error("Invalid assignee selected", {
+                        description: "Please select a valid team member"
+                    });
+                }
+
                 const updatedOrder: TOrderHeader = {
                     address: values.address,
                     phone: values.phone,
@@ -91,7 +100,7 @@ function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
                     orderNumber: Number(values.orderNumber),
                     ikeaNumber: Number(values.ikeaNumber),
                     customer: values.customer,
-                    assignee: (await getIdByUserName(values.assignee as string)) ?? "" // TODO duplicate names
+                    assignee: assigneeId // TODO duplicate names
                 };
 
                 const promise = updateOrderHeader(orderHeader.id as string, updatedOrder, userRole);
@@ -114,6 +123,30 @@ function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
         [orderHeader.id, userRole]
     );
 
+    useEffect(() => {
+        const initializeForm = async () => {
+            try {
+                const userList = await getUsers();
+                setUsers(userList);
+
+                // Then get assignee name
+                const assignedUser = await getUserNameById(orderHeader.assignee);
+                if (assignedUser) {
+                    form.setValue("assignee", assignedUser, {
+                        shouldDirty: false,
+                        shouldTouch: false
+                    });
+                }
+            } catch (error) {
+                console.error("Error initializing form:", error);
+            } finally {
+                setIsInitializing(false);
+            }
+        };
+
+        initializeForm();
+    }, [form, orderHeader.assignee]);
+
     const debouncedSubmit = useCallback(
         (values: z.infer<typeof formHeaderSchema>) => {
             onSubmit(values);
@@ -127,6 +160,8 @@ function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
     );
 
     useEffect(() => {
+        if (isInitializing) return;
+
         const subscription = form.watch(async () => {
             if (await form.trigger()) {
                 return debouncedSubmitWithDelay(form.getValues());
@@ -137,7 +172,7 @@ function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
             subscription.unsubscribe();
             debouncedSubmitWithDelay.cancel();
         };
-    }, [form, debouncedSubmitWithDelay]);
+    }, [form, debouncedSubmitWithDelay, isInitializing]);
 
     return (
         <motion.div
@@ -245,7 +280,7 @@ function FormHeader({ orderHeader, userRole, archived }: TFormHeaderProps) {
                                     <Select
                                         onValueChange={field.onChange}
                                         value={form.watch("assignee")}
-                                        disabled={!userRole}
+                                        disabled={!userRole || isInitializing}
                                     >
                                         <FormControl>
                                             <SelectTrigger disabled={!userRole && archived}>

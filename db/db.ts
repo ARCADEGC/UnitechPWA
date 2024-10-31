@@ -75,14 +75,9 @@ export async function getOrdersByIdAndRole(id: string, role: boolean) {
 }
 
 export async function getOrderByIdAndRole(id: string, role: boolean): Promise<TOrder | undefined> {
-    const fetchedOrder =
-        role ?
-            await db.query.order.findFirst({
-                where: (table) => eq(table.id, id)
-            })
-        :   await db.query.order.findFirst({
-                where: (table) => eq(table.id, id)
-            });
+    const fetchedOrder = await db.query.order.findFirst({
+        where: (table) => eq(table.id, id)
+    });
 
     if (!fetchedOrder) return undefined;
 
@@ -227,6 +222,8 @@ export async function getUserNameById(userId: string) {
 }
 
 export async function getIdByUserName(userName: string) {
+    if (!userName) return null;
+
     const user = await db.query.User.findFirst({
         where: (table) => eq(table.name, userName)
     });
@@ -271,6 +268,14 @@ export async function updateOrderHeader(
     role: boolean
 ): Promise<void> {
     // TODO user validation
+    if (
+        !content.assignee ||
+        typeof content.assignee !== "string" ||
+        content.assignee.length !== 36
+    ) {
+        throw new Error("Invalid assignee ID");
+    }
+
     await db
         .update(OrderHeader)
         .set(
