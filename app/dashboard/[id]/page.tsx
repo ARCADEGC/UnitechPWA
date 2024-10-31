@@ -2,7 +2,6 @@ import { Archive, Coins, CreditCard } from "lucide-react";
 import React, { Suspense, lazy } from "react";
 
 import { validateSession } from "@/auth";
-import { User } from "lucia";
 
 import {
     getUserById,
@@ -15,7 +14,6 @@ import {
 } from "@/db/db";
 
 import { Typography } from "@/components/ui/Typography";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/formTabs";
 import { Separator } from "@/components/ui/separator";
 
 import { ArchiveButton } from "@/app/dashboard/[id]/(buttons)/ArchiveButton";
@@ -28,9 +26,9 @@ import { ReverseArchiveButton } from "./(buttons)/ReverseArchiveButton";
 import { UpdateReferenceTimeButton } from "./(buttons)/UpdateReferenceTimeButton";
 
 const FormHeader = lazy(() => import("@/app/dashboard/[id]/(forms)/FormHeader"));
-const PCK = lazy(() => import("@/app/dashboard/[id]/(forms)/PCK"));
-const PP2 = lazy(() => import("@/app/dashboard/[id]/(forms)/PP2"));
-const List1 = lazy(() => import("@/app/dashboard/[id]/(forms)/List1"));
+
+// Create client-side wrappers in separate files
+const ClientTabs = lazy(() => import("./clientTabs"));
 
 async function Home(props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
@@ -51,62 +49,13 @@ async function Home(props: { params: Promise<{ id: string }> }) {
         user.id
     );
 
-    async function tabChangeToPCK(user: User) {
-        const orderNewPCK = await getOrderNewPCKByIdAndRoleOrUser(
-            currentOrder?.orderNewPCK ?? "",
-            userRole,
-            user.id
-        );
-
-        return orderNewPCK ?
-                <PCK
-                    orderNewPCK={orderNewPCK}
-                    userRole={userRole}
-                    referenceDate={currentOrder?.referenceDate}
-                    archived={currentOrder?.archived ?? true}
-                />
-            :   <div>Nastala chyba při načítání objednávky PCK. Zkuste to prosím znovu.</div>;
-    }
-
-    async function tabChangeToPP2(user: User) {
-        const orderPP2 = await getOrderPP2ByIdAndRoleOrUser(
-            currentOrder?.orderPP2 ?? "",
-            userRole,
-            user.id
-        );
-
-        return orderPP2 ?
-                <PP2
-                    orderPP2={orderPP2}
-                    userRole={userRole}
-                    archived={currentOrder?.archived ?? true}
-                />
-            :   <div>Nastala chyba při načítání objednávky PP 2. Zkuste to prosím znovu.</div>;
-    }
-
-    async function tabChangeToList1(user: User) {
-        const orderList1 = await getOrderList1ByIdAndRoleOrUser(
-            currentOrder?.orderListOne ?? "",
-            userRole,
-            user.id
-        );
-
-        const PP2Specifications = await getOrderPP2SpecificationsByIdAndRoleOrUser(
-            currentOrder?.orderPP2 ?? "",
-            userRole,
-            user.id
-        );
-
-        return orderList1 && PP2Specifications ?
-                <List1
-                    orderList1={orderList1}
-                    userRole={userRole}
-                    referenceDate={currentOrder?.referenceDate}
-                    PP2Specifications={PP2Specifications}
-                    archived={currentOrder?.archived ?? true}
-                />
-            :   <div>Nastala chyba při načítání objednávky List 1. Zkuste to prosím znovu.</div>;
-    }
+    // Initial data fetch
+    const [orderList1, PP2Specifications, orderNewPCK, orderPP2] = await Promise.all([
+        getOrderList1ByIdAndRoleOrUser(currentOrder?.orderListOne ?? "", userRole, user.id),
+        getOrderPP2SpecificationsByIdAndRoleOrUser(currentOrder?.orderPP2 ?? "", userRole, user.id),
+        getOrderNewPCKByIdAndRoleOrUser(currentOrder?.orderNewPCK ?? "", userRole, user.id),
+        getOrderPP2ByIdAndRoleOrUser(currentOrder?.orderPP2 ?? "", userRole, user.id)
+    ]);
 
     return (
         <>
@@ -151,22 +100,24 @@ async function Home(props: { params: Promise<{ id: string }> }) {
 
             <Separator className="my-16" />
 
-            <Tabs
-                defaultValue="pck"
-                className="mx-auto mt-8 w-full max-w-prose space-y-8"
-            >
-                <TabsList className="w-full *:w-full print:hidden">
-                    <TabsTrigger value="pck">PCK</TabsTrigger>
-                    <TabsTrigger value="pp2">PP 2</TabsTrigger>
-                    <TabsTrigger value="list1">List 1</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="pck">{tabChangeToPCK(user)}</TabsContent>
-
-                <TabsContent value="pp2">{tabChangeToPP2(user)}</TabsContent>
-
-                <TabsContent value="list1">{tabChangeToList1(user)}</TabsContent>
-            </Tabs>
+            <Suspense fallback={<div>Načítání...</div>}>
+                <ClientTabs
+                    initialData={{
+                        pck: orderNewPCK,
+                        pp2: orderPP2,
+                        list1: orderList1,
+                        pp2Specs: PP2Specifications
+                    }}
+                    userRole={userRole}
+                    userId={user.id}
+                    orderId={currentOrder.id ?? ""}
+                    orderPP2Id={currentOrder.orderPP2 ?? ""}
+                    orderListOneId={currentOrder.orderListOne ?? ""}
+                    orderNewPCKId={currentOrder.orderNewPCK ?? ""}
+                    referenceDate={currentOrder.referenceDate ?? new Date()}
+                    archived={currentOrder.archived ?? true}
+                />
+            </Suspense>
 
             <Separator className="my-16" />
 

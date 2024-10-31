@@ -24,8 +24,10 @@ import { Button } from "@/components/ui/button";
 import { TOrder } from "@/types/dbSchemas";
 
 function ReverseArchiveButton({ currentOrder }: { currentOrder: TOrder }) {
+    const router = useRouter();
+
     async function ReverseArchiveOrder() {
-        const promise = unarchiveOrder(currentOrder);
+        const promise = unarchiveOrder(currentOrder).then(() => router.refresh());
 
         toast.promise(promise, {
             loading: "Archivace zrušena...",
@@ -48,11 +50,14 @@ function ReverseArchiveButton({ currentOrder }: { currentOrder: TOrder }) {
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Jste si opravdu jisti?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Tímto se zruší archivaci objednávky.
+                    </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Zrušit</AlertDialogCancel>
 
-                    <AlertDialogAction className="bg-transparent px-0">
+                    <AlertDialogAction asChild>
                         <Button
                             variant={"default"}
                             className="flex items-center gap-x-2"

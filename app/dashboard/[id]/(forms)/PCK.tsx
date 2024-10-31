@@ -263,7 +263,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
 
     useEffect(() => {
         if (signatureData.length > 0 && sigCanvasRef.current)
-            sigCanvasRef.current.fromData(signatureData);
+            sigCanvasRef.current?.fromData(signatureData);
     }, [signatureData]);
 
     useEffect(() => {
@@ -535,7 +535,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
             form.getValues().gasApplianceOutsideOfIkea
         );
 
-    const calculateTotalPrice = useMemo(() => {
+    const calculateTotalPrice = () => {
         const prices = [
             shipmentPrice,
             completeInstallationPrice,
@@ -549,7 +549,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
         const bail = Number(form.getValues().bail ?? 0);
 
         return total * taxRate - bail;
-    }, [shipmentPrice, completeInstallationPrice, basicInstallationPrice, installationPrice, form]);
+    };
 
     const formValues = useMemo(
         () => ({
@@ -559,10 +559,10 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
         [form]
     );
 
-    const calculatedBail = useMemo(() => {
+    const calculatedBail = () => {
         const taxRate = formValues.tax ? 1.12 : 1.21;
         return Math.floor(formValues.bail * taxRate * 100) / 100;
-    }, [formValues.bail, formValues.tax]);
+    };
 
     return (
         <motion.div
@@ -1377,7 +1377,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                     <div className="flex items-baseline justify-between gap-x-8">
                         <Typography variant="h2">Kauce</Typography>
                         <Unit
-                            value={calculatedBail}
+                            value={calculatedBail()}
                             className="text-xl font-medium tracking-wider text-foreground"
                             unit=",-"
                         />
@@ -1457,15 +1457,21 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                                 <FormLabel>Podpis</FormLabel>
 
                                 <div className="relative w-fit max-sm:w-full">
+                                    <div
+                                        className={
+                                            !userRole && archived ?
+                                                "absolute inset-0 z-50 size-full"
+                                            :   ""
+                                        }
+                                    />
                                     <FormControl>
-                                        {/* TODO: on change should submit*/}
                                         <SignatureCanvas
                                             ref={sigCanvasRef}
                                             canvasProps={{
                                                 className:
                                                     "h-40 bg-muted rounded-lg w-full sm:w-92 mt-2"
                                             }}
-                                            penColor={!userRole && archived ? "#00000000" : "#000"}
+                                            penColor={"#000"}
                                             clearOnResize={false}
                                             onEnd={handleSignatureEnd}
                                         />
@@ -1495,10 +1501,7 @@ function PCK({ orderNewPCK, userRole, referenceDate, archived }: TPCKProps) {
                         asChild
                     >
                         <Unit
-                            value={useMemo(
-                                () => calculateTotalPrice.toFixed(2),
-                                [calculateTotalPrice]
-                            )}
+                            value={calculateTotalPrice().toFixed(2)}
                             unit=",-"
                             variant="h1"
                             as="p"

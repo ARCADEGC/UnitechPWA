@@ -44,43 +44,46 @@ type TList1Props = {
 };
 
 function List1({ orderList1, userRole, referenceDate, PP2Specifications, archived }: TList1Props) {
-    const [credit, setCredit] = useState<number | null>(0);
-    const [aboveFifty, setAboveFifty] = useState<number | null>(0);
+    const [isLoading, setIsLoading] = useState(true);
+    const [prices, setPrices] = useState({
+        credit: 0,
+        aboveFifty: 0,
+        highLocker: 0,
+        lowerLocker: 0,
+        upperLocker: 0,
+        milledJoint: 0,
+        tailoredWorktop: 0,
+        worktop: 0,
+        wallPanel: 0,
+        atypical: 0,
+        unnecessary: 0,
+        kitchen: 0,
+        lights: 0,
+        ikea: 0,
+        ikeaGas: 0,
+        nonIkea: 0,
+        nonIkeaGas: 0
+    });
 
-    const [highLocker, setHighLocker] = useState<number | null>(0);
-    const [lowerLocker, setLowerLocker] = useState<number | null>(0);
-    const [upperLocker, setUpperLocker] = useState<number | null>(0);
-    const [milledJoint, setMilledJoint] = useState<number | null>(0);
-    const [tailoredWorktop, setTailoredWorktop] = useState<number | null>(0);
-    const [worktop, setWorktop] = useState<number | null>(0);
-    const [wallPanel, setWallPanel] = useState<number | null>(0);
-    const [atypical, setAtypical] = useState<number | null>(0);
-    const [unnecessary, setUnnecessary] = useState<number | null>(0);
-    const [kitchen, setKitchen] = useState<number | null>(0);
-    const [lights, setLights] = useState<number | null>(0);
-    const [ikea, setIkea] = useState<number | null>(0);
-    const [ikeaGas, setIkeaGas] = useState<number | null>(0);
-    const [nonIkea, setNonIkea] = useState<number | null>(0);
-    const [nonIkeaGas, setNonIkeaGas] = useState<number | null>(0);
-
-    const [adminCredit, setAdminCredit] = useState<number | null>(0);
-    const [adminAboveFifty, setAdminAboveFifty] = useState<number | null>(0);
-
-    const [adminHighLocker, setAdminHighLocker] = useState<number | null>(0);
-    const [adminLowerLocker, setAdminLowerLocker] = useState<number | null>(0);
-    const [adminUpperLocker, setAdminUpperLocker] = useState<number | null>(0);
-    const [adminMilledJoint, setAdminMilledJoint] = useState<number | null>(0);
-    const [adminTailoredWorktop, setAdminTailoredWorktop] = useState<number | null>(0);
-    const [adminWorktop, setAdminWorktop] = useState<number | null>(0);
-    const [adminWallPanel, setAdminWallPanel] = useState<number | null>(0);
-    const [adminAtypical, setAdminAtypical] = useState<number | null>(0);
-    const [adminUnnecessary, setAdminUnnecessary] = useState<number | null>(0);
-    const [adminKitchen, setAdminKitchen] = useState<number | null>(0);
-    const [adminLights, setAdminLights] = useState<number | null>(0);
-    const [adminIkea, setAdminIkea] = useState<number | null>(0);
-    const [adminIkeaGas, setAdminIkeaGas] = useState<number | null>(0);
-    const [adminNonIkea, setAdminNonIkea] = useState<number | null>(0);
-    const [adminNonIkeaGas, setAdminNonIkeaGas] = useState<number | null>(0);
+    const [adminPrices, setAdminPrices] = useState({
+        credit: 0,
+        aboveFifty: 0,
+        highLocker: 0,
+        lowerLocker: 0,
+        upperLocker: 0,
+        milledJoint: 0,
+        tailoredWorktop: 0,
+        worktop: 0,
+        wallPanel: 0,
+        atypical: 0,
+        unnecessary: 0,
+        kitchen: 0,
+        lights: 0,
+        ikea: 0,
+        ikeaGas: 0,
+        nonIkea: 0,
+        nonIkeaGas: 0
+    });
 
     const form = useForm<z.infer<typeof formList1Schema>>({
         resolver: zodResolver(formList1Schema),
@@ -122,284 +125,116 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
         [userRole, orderList1.id]
     );
 
-    useEffect(() => {
-        const fetchPrice = async () => {
-            if (referenceDate) {
-                setCredit(
-                    Number(
-                        await getPriceAtDate("credit", referenceDate).then((price) => price?.price)
-                    )
-                );
+    const fetchPrices = useCallback(async () => {
+        if (!referenceDate) {
+            setIsLoading(false);
+            return;
+        }
 
-                setAboveFifty(
-                    Number(
-                        await getPriceAtDate("aboveFifty", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
+        setIsLoading(true);
 
-                setHighLocker(
-                    Number(
-                        await getPriceAtDate("high_locker", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
+        try {
+            const pricePromises = [
+                "credit",
+                "aboveFifty",
+                "high_locker",
+                "lower_locker",
+                "upper_locker",
+                "milled_joint",
+                "tailored_worktop",
+                "worktop",
+                "wall_panel",
+                "atypical",
+                "unnecessary",
+                "kitchen",
+                "lights",
+                "ikea",
+                "ikea_gas",
+                "non_ikea",
+                "non_ikea_gas"
+            ].map((key) => getPriceAtDate(key, referenceDate));
 
-                setLowerLocker(
-                    Number(
-                        await getPriceAtDate("lower_locker", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
+            const results = await Promise.all(pricePromises);
 
-                setUpperLocker(
-                    Number(
-                        await getPriceAtDate("upper_locker", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
+            const newPrices = {
+                credit: Number(results[0]?.price ?? 0),
+                aboveFifty: Number(results[1]?.price ?? 0),
+                highLocker: Number(results[2]?.price ?? 0),
+                lowerLocker: Number(results[3]?.price ?? 0),
+                upperLocker: Number(results[4]?.price ?? 0),
+                milledJoint: Number(results[5]?.price ?? 0),
+                tailoredWorktop: Number(results[6]?.price ?? 0),
+                worktop: Number(results[7]?.price ?? 0),
+                wallPanel: Number(results[8]?.price ?? 0),
+                atypical: Number(results[9]?.price ?? 0),
+                unnecessary: Number(results[10]?.price ?? 0),
+                kitchen: Number(results[11]?.price ?? 0),
+                lights: Number(results[12]?.price ?? 0),
+                ikea: Number(results[13]?.price ?? 0),
+                ikeaGas: Number(results[14]?.price ?? 0),
+                nonIkea: Number(results[15]?.price ?? 0),
+                nonIkeaGas: Number(results[16]?.price ?? 0)
+            };
 
-                setMilledJoint(
-                    Number(
-                        await getPriceAtDate("milled_joint", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
+            setPrices(newPrices);
 
-                setTailoredWorktop(
-                    Number(
-                        await getPriceAtDate("tailored_worktop", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
+            // Only fetch admin prices if user is admin
+            if (userRole) {
+                const adminPricePromises = [
+                    "credit",
+                    "aboveFifty",
+                    "high_locker",
+                    "lower_locker",
+                    "upper_locker",
+                    "milled_joint",
+                    "tailored_worktop",
+                    "worktop",
+                    "wall_panel",
+                    "atypical",
+                    "unnecessary",
+                    "kitchen",
+                    "lights",
+                    "ikea",
+                    "ikea_gas",
+                    "non_ikea",
+                    "non_ikea_gas"
+                ].map((key) => getAdminPriceAtDate(key, referenceDate));
 
-                setWorktop(
-                    Number(
-                        await getPriceAtDate("worktop", referenceDate).then((price) => price?.price)
-                    )
-                );
+                const adminResults = await Promise.all(adminPricePromises);
 
-                setWallPanel(
-                    Number(
-                        await getPriceAtDate("wall_panel", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
+                const newAdminPrices = {
+                    credit: Number(adminResults[0]?.price ?? 0),
+                    aboveFifty: Number(adminResults[1]?.price ?? 0),
+                    highLocker: Number(adminResults[2]?.price ?? 0),
+                    lowerLocker: Number(adminResults[3]?.price ?? 0),
+                    upperLocker: Number(adminResults[4]?.price ?? 0),
+                    milledJoint: Number(adminResults[5]?.price ?? 0),
+                    tailoredWorktop: Number(adminResults[6]?.price ?? 0),
+                    worktop: Number(adminResults[7]?.price ?? 0),
+                    wallPanel: Number(adminResults[8]?.price ?? 0),
+                    atypical: Number(adminResults[9]?.price ?? 0),
+                    unnecessary: Number(adminResults[10]?.price ?? 0),
+                    kitchen: Number(adminResults[11]?.price ?? 0),
+                    lights: Number(adminResults[12]?.price ?? 0),
+                    ikea: Number(adminResults[13]?.price ?? 0),
+                    ikeaGas: Number(adminResults[14]?.price ?? 0),
+                    nonIkea: Number(adminResults[15]?.price ?? 0),
+                    nonIkeaGas: Number(adminResults[16]?.price ?? 0)
+                };
 
-                setAtypical(
-                    Number(
-                        await getPriceAtDate("atypical", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setUnnecessary(
-                    Number(
-                        await getPriceAtDate("unnecessary", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setKitchen(
-                    Number(
-                        await getPriceAtDate("kitchen", referenceDate).then((price) => price?.price)
-                    )
-                );
-
-                setLights(
-                    Number(
-                        await getPriceAtDate("lights", referenceDate).then((price) => price?.price)
-                    )
-                );
-
-                setIkea(
-                    Number(
-                        await getPriceAtDate("ikea", referenceDate).then((price) => price?.price)
-                    )
-                );
-
-                setIkeaGas(
-                    Number(
-                        await getPriceAtDate("ikea_gas", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setNonIkea(
-                    Number(
-                        await getPriceAtDate("non_ikea", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setNonIkeaGas(
-                    Number(
-                        await getPriceAtDate("non_ikea_gas", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-            } else {
-                toast.error("Žádné referenční datum");
+                setAdminPrices(newAdminPrices);
             }
-        };
-        fetchPrice();
-    }, [referenceDate]);
-
-    useEffect(() => {
-        const fetchPrice = async () => {
-            if (referenceDate && userRole) {
-                setAdminCredit(
-                    Number(
-                        await getAdminPriceAtDate("credit", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminAboveFifty(
-                    Number(
-                        await getAdminPriceAtDate("aboveFifty", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-                setAdminHighLocker(
-                    Number(
-                        await getAdminPriceAtDate("high_locker", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminLowerLocker(
-                    Number(
-                        await getAdminPriceAtDate("lower_locker", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminUpperLocker(
-                    Number(
-                        await getAdminPriceAtDate("upper_locker", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminMilledJoint(
-                    Number(
-                        await getAdminPriceAtDate("milled_joint", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminTailoredWorktop(
-                    Number(
-                        await getAdminPriceAtDate("tailored_worktop", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminWorktop(
-                    Number(
-                        await getAdminPriceAtDate("worktop", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminWallPanel(
-                    Number(
-                        await getAdminPriceAtDate("wall_panel", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminAtypical(
-                    Number(
-                        await getAdminPriceAtDate("atypical", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminUnnecessary(
-                    Number(
-                        await getAdminPriceAtDate("unnecessary", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminKitchen(
-                    Number(
-                        await getAdminPriceAtDate("kitchen", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminLights(
-                    Number(
-                        await getAdminPriceAtDate("lights", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminIkea(
-                    Number(
-                        await getAdminPriceAtDate("ikea", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminIkeaGas(
-                    Number(
-                        await getAdminPriceAtDate("ikea_gas", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminNonIkea(
-                    Number(
-                        await getAdminPriceAtDate("non_ikea", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-
-                setAdminNonIkeaGas(
-                    Number(
-                        await getAdminPriceAtDate("non_ikea_gas", referenceDate).then(
-                            (price) => price?.price
-                        )
-                    )
-                );
-            } else {
-                toast.error("Žádné referenční datum");
-            }
-        };
-        fetchPrice();
+        } catch (error) {
+            console.error("Error fetching prices:", error);
+            toast.error("Chyba při načítání cen");
+        } finally {
+            setIsLoading(false);
+        }
     }, [referenceDate, userRole]);
+
+    useEffect(() => {
+        fetchPrices();
+    }, [fetchPrices]);
 
     const debouncedSubmit = useCallback(
         (values: z.infer<typeof formList1Schema>) => {
@@ -425,6 +260,65 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
             debouncedSubmitWithDelay.cancel();
         };
     }, [form, debouncedSubmitWithDelay]);
+
+    const creditValue = form.watch("credit");
+    const aboveFiftyValue = form.watch("aboveFifty");
+
+    const totalPrice = useMemo(() => {
+        const total =
+            prices.credit * Number(creditValue) +
+            prices.aboveFifty * Number(aboveFiftyValue) +
+            prices.highLocker * Number(PP2Specifications.highLocker ?? 0) +
+            prices.lowerLocker * Number(PP2Specifications.lowerLocker ?? 0) +
+            prices.upperLocker * Number(PP2Specifications.upperLocker ?? 0) +
+            prices.milledJoint * Number(PP2Specifications.milledJoint ?? 0) +
+            prices.worktop * Number(PP2Specifications.worktop ?? 0) +
+            prices.wallPanel * Number(PP2Specifications.wallPanel ?? 0) +
+            prices.atypical * Number(PP2Specifications.atypical ?? 0) +
+            prices.unnecessary * Number(PP2Specifications.unnecessary ?? 0) +
+            prices.kitchen * Number(PP2Specifications.kitchen ?? 0) +
+            prices.lights * Number(PP2Specifications.lights ?? 0) +
+            prices.ikea * Number(PP2Specifications.ikea ?? 0) +
+            prices.ikeaGas * Number(PP2Specifications.ikeaGas ?? 0) +
+            prices.nonIkea * Number(PP2Specifications.nonIkea ?? 0) +
+            prices.nonIkeaGas * Number(PP2Specifications.nonIkeaGas ?? 0);
+
+        return total;
+    }, [prices, creditValue, aboveFiftyValue, PP2Specifications]);
+
+    const totalAdminPrice = useMemo(() => {
+        const total =
+            adminPrices.credit * Number(creditValue) +
+            adminPrices.aboveFifty * Number(aboveFiftyValue) +
+            adminPrices.highLocker * Number(PP2Specifications.highLocker ?? 0) +
+            adminPrices.lowerLocker * Number(PP2Specifications.lowerLocker ?? 0) +
+            adminPrices.upperLocker * Number(PP2Specifications.upperLocker ?? 0) +
+            adminPrices.milledJoint * Number(PP2Specifications.milledJoint ?? 0) +
+            adminPrices.worktop * Number(PP2Specifications.worktop ?? 0) +
+            adminPrices.wallPanel * Number(PP2Specifications.wallPanel ?? 0) +
+            adminPrices.atypical * Number(PP2Specifications.atypical ?? 0) +
+            adminPrices.unnecessary * Number(PP2Specifications.unnecessary ?? 0) +
+            adminPrices.kitchen * Number(PP2Specifications.kitchen ?? 0) +
+            adminPrices.lights * Number(PP2Specifications.lights ?? 0) +
+            adminPrices.ikea * Number(PP2Specifications.ikea ?? 0) +
+            adminPrices.ikeaGas * Number(PP2Specifications.ikeaGas ?? 0) +
+            adminPrices.nonIkea * Number(PP2Specifications.nonIkea ?? 0) +
+            adminPrices.nonIkeaGas * Number(PP2Specifications.nonIkeaGas ?? 0);
+
+        return total;
+    }, [adminPrices, creditValue, aboveFiftyValue, PP2Specifications]);
+
+    if (isLoading) {
+        return (
+            <Typography
+                variant="h2"
+                as="p"
+                className="mx-auto my-6 w-fit"
+            >
+                Načítání cen...
+            </Typography>
+        );
+    }
 
     return (
         <Form {...form}>
@@ -483,13 +377,17 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                                     )}
                                 />
                             </TableCell>
-                            <TableCell>{credit},-</TableCell>
-                            <TableCell>{credit ?? 0 * 1},-</TableCell>
+                            <TableCell>{prices.credit},-</TableCell>
+                            <TableCell>
+                                {prices.credit * Number(form.getValues().credit)},-
+                            </TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminCredit}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminCredit ?? 0 * 1},-
+                                        {adminPrices.credit}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.credit * Number(form.getValues().credit)},-
                                     </TableCell>
                                 </>
                             )}
@@ -532,30 +430,19 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                                     )}
                                 />
                             </TableCell>
-                            <TableCell>{aboveFifty},-</TableCell>
-                            <TableCell>{aboveFifty ?? 0 * 1},-</TableCell>
-                            {userRole && (
-                                <>
-                                    <TableCell className="text-right">{adminAboveFifty}</TableCell>
-                                    <TableCell className="text-right">
-                                        {adminAboveFifty ?? 0 * 1},-
-                                    </TableCell>
-                                </>
-                            )}
-                        </TableRow>
-
-                        <TableRow>
-                            <TableCell>Montáž horních skříněk</TableCell>
-                            <TableCell className="font-medium">
-                                {PP2Specifications.lowerLocker ?? 0}
+                            <TableCell>{prices.aboveFifty},-</TableCell>
+                            <TableCell>
+                                {prices.aboveFifty * Number(form.getValues().aboveFifty)},-
                             </TableCell>
-                            <TableCell>{lowerLocker},-</TableCell>
-                            <TableCell>{lowerLocker ?? 0 * 1},-</TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminLowerLocker}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminLowerLocker ?? 0 * 1},-
+                                        {adminPrices.aboveFifty}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.aboveFifty *
+                                            Number(form.getValues().aboveFifty)}
+                                        ,-
                                     </TableCell>
                                 </>
                             )}
@@ -564,15 +451,45 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                         <TableRow>
                             <TableCell>Montáž spodních skříněk</TableCell>
                             <TableCell className="font-medium">
-                                {PP2Specifications.upperLocker ?? 0}
+                                {PP2Specifications.lowerLocker ?? 0}
                             </TableCell>
-                            <TableCell>{upperLocker},-</TableCell>
-                            <TableCell>{upperLocker ?? 0 * 1},-</TableCell>
+                            <TableCell>{prices.lowerLocker},-</TableCell>
+                            <TableCell>
+                                {prices.lowerLocker * Number(PP2Specifications.lowerLocker)}
+                                ,-
+                            </TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminUpperLocker}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminUpperLocker ?? 0 * 1},-
+                                        {adminPrices.lowerLocker}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.lowerLocker *
+                                            Number(PP2Specifications.lowerLocker)}
+                                        ,-
+                                    </TableCell>
+                                </>
+                            )}
+                        </TableRow>
+
+                        <TableRow>
+                            <TableCell>Montáž horních skříněk</TableCell>
+                            <TableCell className="font-medium">
+                                {PP2Specifications.upperLocker ?? 0}
+                            </TableCell>
+                            <TableCell>{prices.upperLocker},-</TableCell>
+                            <TableCell>
+                                {prices.upperLocker * Number(PP2Specifications.upperLocker)},-
+                            </TableCell>
+                            {userRole && (
+                                <>
+                                    <TableCell className="text-right">
+                                        {adminPrices.upperLocker}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.upperLocker *
+                                            Number(PP2Specifications.upperLocker)}
+                                        ,-
                                     </TableCell>
                                 </>
                             )}
@@ -583,13 +500,19 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                             <TableCell className="font-medium">
                                 {PP2Specifications.highLocker ?? 0}
                             </TableCell>
-                            <TableCell>{highLocker},-</TableCell>
-                            <TableCell>{highLocker ?? 0 * 1},-</TableCell>
+                            <TableCell>{prices.highLocker},-</TableCell>
+                            <TableCell>
+                                {prices.highLocker * Number(PP2Specifications.highLocker)},-
+                            </TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminHighLocker}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminHighLocker ?? 0 * 1},-
+                                        {adminPrices.highLocker}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.highLocker *
+                                            Number(PP2Specifications.highLocker)}
+                                        ,-
                                     </TableCell>
                                 </>
                             )}
@@ -600,13 +523,19 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                             <TableCell className="font-medium">
                                 {PP2Specifications.milledJoint ?? 0}
                             </TableCell>
-                            <TableCell>{milledJoint},-</TableCell>
-                            <TableCell>{milledJoint ?? 0 * 1},-</TableCell>
+                            <TableCell>{prices.milledJoint},-</TableCell>
+                            <TableCell>
+                                {prices.milledJoint * Number(PP2Specifications.milledJoint)},-
+                            </TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminMilledJoint}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminMilledJoint ?? 0 * 1},-
+                                        {adminPrices.milledJoint}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.milledJoint *
+                                            Number(PP2Specifications.milledJoint)}
+                                        ,-
                                     </TableCell>
                                 </>
                             )}
@@ -617,13 +546,17 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                             <TableCell className="font-medium">
                                 {PP2Specifications.worktop ?? 0}
                             </TableCell>
-                            <TableCell>{worktop},-</TableCell>
-                            <TableCell>{worktop ?? 0 * 1},-</TableCell>
+                            <TableCell>{prices.worktop},-</TableCell>
+                            <TableCell>
+                                {prices.worktop * Number(PP2Specifications.worktop)},-
+                            </TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminWorktop}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminWorktop ?? 0 * 1},-
+                                        {adminPrices.worktop}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.worktop * Number(PP2Specifications.worktop)},-
                                     </TableCell>
                                 </>
                             )}
@@ -634,13 +567,19 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                             <TableCell className="font-medium">
                                 {PP2Specifications.wallPanel ?? 0}
                             </TableCell>
-                            <TableCell>{wallPanel},-</TableCell>
-                            <TableCell>{wallPanel ?? 0 * 1},-</TableCell>
+                            <TableCell>{prices.wallPanel},-</TableCell>
+                            <TableCell>
+                                {prices.wallPanel * Number(PP2Specifications.wallPanel)},-
+                            </TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminWallPanel}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminWallPanel ?? 0 * 1},-
+                                        {adminPrices.wallPanel}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.wallPanel *
+                                            Number(PP2Specifications.wallPanel)}
+                                        ,-
                                     </TableCell>
                                 </>
                             )}
@@ -651,13 +590,18 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                             <TableCell className="font-medium">
                                 {PP2Specifications.atypical ?? 0}
                             </TableCell>
-                            <TableCell>{atypical},-</TableCell>
-                            <TableCell>{atypical ?? 0 * 1},-</TableCell>
+                            <TableCell>{prices.atypical},-</TableCell>
+                            <TableCell>
+                                {prices.atypical * Number(PP2Specifications.atypical)},-
+                            </TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminAtypical}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminAtypical ?? 0 * 1},-
+                                        {adminPrices.atypical}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.atypical * Number(PP2Specifications.atypical)}
+                                        ,-
                                     </TableCell>
                                 </>
                             )}
@@ -668,13 +612,19 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                             <TableCell className="font-medium">
                                 {PP2Specifications.unnecessary ?? 0}
                             </TableCell>
-                            <TableCell>{unnecessary},-</TableCell>
-                            <TableCell>{unnecessary ?? 0 * 1},-</TableCell>
+                            <TableCell>{prices.unnecessary},-</TableCell>
+                            <TableCell>
+                                {prices.unnecessary * Number(PP2Specifications.unnecessary)},-
+                            </TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminUnnecessary}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminUnnecessary ?? 0 * 1},-
+                                        {adminPrices.unnecessary}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.unnecessary *
+                                            Number(PP2Specifications.unnecessary)}
+                                        ,-
                                     </TableCell>
                                 </>
                             )}
@@ -685,13 +635,17 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                             <TableCell className="font-medium">
                                 {PP2Specifications.kitchen ?? 0}
                             </TableCell>
-                            <TableCell>{kitchen},-</TableCell>
-                            <TableCell>{kitchen ?? 0 * 1},-</TableCell>
+                            <TableCell>{prices.kitchen},-</TableCell>
+                            <TableCell>
+                                {prices.kitchen * Number(PP2Specifications.kitchen)},-
+                            </TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminKitchen}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminKitchen ?? 0 * 1},-
+                                        {adminPrices.kitchen}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.kitchen * Number(PP2Specifications.kitchen)},-
                                     </TableCell>
                                 </>
                             )}
@@ -741,13 +695,17 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                             <TableCell className="font-medium">
                                 {PP2Specifications.lights ?? 0}
                             </TableCell>
-                            <TableCell>{lights},-</TableCell>
-                            <TableCell>{lights ?? 0 * 1},-</TableCell>
+                            <TableCell>{prices.lights},-</TableCell>
+                            <TableCell>
+                                {prices.lights * Number(PP2Specifications.lights)},-
+                            </TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminLights}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminLights ?? 0 * 1},-
+                                        {adminPrices.lights}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.lights * Number(PP2Specifications.lights)},-
                                     </TableCell>
                                 </>
                             )}
@@ -758,13 +716,13 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                             <TableCell className="font-medium">
                                 {PP2Specifications.ikea ?? 0}
                             </TableCell>
-                            <TableCell>{ikea},-</TableCell>
-                            <TableCell>{ikea ?? 0 * 1},-</TableCell>
+                            <TableCell>{prices.ikea},-</TableCell>
+                            <TableCell>{prices.ikea * Number(PP2Specifications.ikea)},-</TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminIkea}</TableCell>
+                                    <TableCell className="text-right">{adminPrices.ikea}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminIkea ?? 0 * 1},-
+                                        {adminPrices.ikea * Number(PP2Specifications.ikea)},-
                                     </TableCell>
                                 </>
                             )}
@@ -775,13 +733,17 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                             <TableCell className="font-medium">
                                 {PP2Specifications.nonIkea ?? 0}
                             </TableCell>
-                            <TableCell>{nonIkea},-</TableCell>
-                            <TableCell>{nonIkea ?? 0 * 1},-</TableCell>
+                            <TableCell>{prices.nonIkea},-</TableCell>
+                            <TableCell>
+                                {prices.nonIkea * Number(PP2Specifications.nonIkea)},-
+                            </TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminNonIkea}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminNonIkea ?? 0 * 1},-
+                                        {adminPrices.nonIkea}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.nonIkea * Number(PP2Specifications.nonIkea)},-
                                     </TableCell>
                                 </>
                             )}
@@ -792,13 +754,17 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                             <TableCell className="font-medium">
                                 {PP2Specifications.ikeaGas ?? 0}
                             </TableCell>
-                            <TableCell>{ikeaGas},-</TableCell>
-                            <TableCell>{ikeaGas ?? 0 * 1},-</TableCell>
+                            <TableCell>{prices.ikeaGas},-</TableCell>
+                            <TableCell>
+                                {prices.ikeaGas * Number(PP2Specifications.ikeaGas)},-
+                            </TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminIkeaGas}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminIkeaGas ?? 0 * 1},-
+                                        {adminPrices.ikeaGas}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.ikeaGas * Number(PP2Specifications.ikeaGas)},-
                                     </TableCell>
                                 </>
                             )}
@@ -809,13 +775,19 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                             <TableCell className="font-medium">
                                 {PP2Specifications.nonIkeaGas ?? 0}
                             </TableCell>
-                            <TableCell>{nonIkeaGas},-</TableCell>
-                            <TableCell>{nonIkeaGas ?? 0 * 1},-</TableCell>
+                            <TableCell>{prices.nonIkeaGas},-</TableCell>
+                            <TableCell>
+                                {prices.nonIkeaGas * Number(PP2Specifications.nonIkeaGas)},-
+                            </TableCell>
                             {userRole && (
                                 <>
-                                    <TableCell className="text-right">{adminNonIkeaGas}</TableCell>
                                     <TableCell className="text-right">
-                                        {adminNonIkeaGas ?? 0 * 1},-
+                                        {adminPrices.nonIkeaGas}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {adminPrices.nonIkeaGas *
+                                            Number(PP2Specifications.nonIkeaGas)}
+                                        ,-
                                     </TableCell>
                                 </>
                             )}
@@ -830,22 +802,7 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                                     variant="h3"
                                     as="p"
                                 >
-                                    {(highLocker ?? 0) +
-                                        (lowerLocker ?? 0) +
-                                        (upperLocker ?? 0) +
-                                        (milledJoint ?? 0) +
-                                        (tailoredWorktop ?? 0) +
-                                        (worktop ?? 0) +
-                                        (wallPanel ?? 0) +
-                                        (atypical ?? 0) +
-                                        (unnecessary ?? 0) +
-                                        (kitchen ?? 0) +
-                                        (lights ?? 0) +
-                                        (ikea ?? 0) +
-                                        (ikeaGas ?? 0) +
-                                        (nonIkea ?? 0) +
-                                        (nonIkeaGas ?? 0)}
-                                    ,-
+                                    {totalPrice} ,-
                                 </Typography>
                             </TableCell>
                             {userRole && (
@@ -856,22 +813,7 @@ function List1({ orderList1, userRole, referenceDate, PP2Specifications, archive
                                             variant="h3"
                                             as="p"
                                         >
-                                            {(adminHighLocker ?? 0) +
-                                                (adminLowerLocker ?? 0) +
-                                                (adminUpperLocker ?? 0) +
-                                                (adminMilledJoint ?? 0) +
-                                                (adminTailoredWorktop ?? 0) +
-                                                (adminWorktop ?? 0) +
-                                                (adminWallPanel ?? 0) +
-                                                (adminAtypical ?? 0) +
-                                                (adminUnnecessary ?? 0) +
-                                                (adminKitchen ?? 0) +
-                                                (adminLights ?? 0) +
-                                                (adminIkea ?? 0) +
-                                                (adminIkeaGas ?? 0) +
-                                                (adminNonIkea ?? 0) +
-                                                (adminNonIkeaGas ?? 0)}
-                                            ,-
+                                            {totalAdminPrice} ,-
                                         </Typography>
                                     </TableCell>
                                 </>
