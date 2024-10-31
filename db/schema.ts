@@ -12,7 +12,8 @@ import {
     uuid
 } from "drizzle-orm/pg-core";
 
-export const PaidStatus = pgEnum("paid_status", ["card", "cash", "unpaid"]);
+export const PaidStatus = pgEnum("paid", ["card", "cash", "unpaid"]);
+export const finishedEnum = pgEnum("finished", ["no", "yes", "canceled"]);
 
 export const order = pgTable("order", {
     id: uuid("id").unique().notNull().defaultRandom().primaryKey(),
@@ -110,8 +111,6 @@ export const OrderNewPCK = pgTable("order_new_pck", {
     bail: numeric("bail").default("0"),
     signature: json("signature")
 });
-
-export const finishedEnum = pgEnum("finished", ["no", "yes", "canceled"]);
 
 export const OrderPP2 = pgTable("order_pp2", {
     id: uuid("id").unique().notNull().defaultRandom().primaryKey(),
