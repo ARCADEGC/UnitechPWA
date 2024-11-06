@@ -11,7 +11,8 @@
         "generate": "drizzle-kit generate",
         "migrate": "drizzle-kit migrate",
         "seed": "bun run db/seed.ts",
-        "studio": "bunx drizzle-kit studio"
+        "studio": "bunx drizzle-kit studio",
+        "deploy": "bun generate && bun run build && vercel --prod"
     },
     "dependencies": {
         "@hookform/resolvers": "^3.9.0",
