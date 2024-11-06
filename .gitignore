@@ -7,7 +7,7 @@ bun.lockb
 .pnp.js
 .yarn/install-state.gz
 package-lock.json
-# db/drizzle/
+db/drizzle/
 yarn.lock
 
 # testing
